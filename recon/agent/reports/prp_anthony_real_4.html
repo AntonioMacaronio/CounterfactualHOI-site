@@ -1,0 +1,166 @@
+<!doctype html><meta charset="utf-8"><title>prp_anthony_real_4 refinement report</title><pre style="white-space: pre-wrap; font: 14px/1.45 system-ui, sans-serif; max-width: 1000px; margin: 24px auto"># Refinement of prp_anthony_real_4
+
+Model global.anthropic.claude-opus-5-5, effort high; 61 versions; 2 passes; 34.9 min.
+
+Agent summary: The result is v40 (the same as v31). The hand still passes slightly through the mug in many held frames: the reviewer&#x27;s interpenetration problems are not fixed, and neither is the missing opposed grip in 162-182.
+
+**Changes from the automatic fit:**
+- **Phases:** approach 0-17, grasp 18-32, lift 33-50, rotate 51-195, place 196-238, release 239-262, rest 263-272.
+- **Shape:** the automatic check of the mug&#x27;s depth (the side the first frame never saw) kept it unchanged. Separately, the mug&#x27;s bottom sat above its mask in both rest phases, so I made it about 5% taller (16.4 to 17.2 cm). Mask coverage at rest went from about 0.96 to 0.99. Because the shape changed, the comparison baseline is now the automatic fit for this shape (v8).
+- **Rest:** the mug is held still on 0-24 and 242-272 and lowered to the table: rest height is about 0.2 cm at the start and 0.1 cm at the end, down from 0.7–0.9. The cost is a slightly worse outline fit at the end (coverage about 0.95 vs 0.97). The joins into the moving frames (20-34, 234-246) are smoothed so the mug does not jump.
+- **Mug pose:** refitted to the mask in 136-176 and 194-212, where its rotation lagged, then smoothed. The handle still overshoots its mask a little around 150-205.
+- **Hand:** refitted with the grip term over 18-262, then again over 18-60 and 126-184, and smoothed over 250-272. This removed the finger jumps at frames 39, 151 and 261. No jump is flagged now (fastest fingertip under 6 mm/frame²), and hand jitter is below the hand tracker&#x27;s reference. In 18-60 the error against the 2D hand points fell from 14.4 to 13.5 px.
+
+**Not fixed:**
+- **Fingers inside the mug wall (132-262):** the depth is small (median 0.08–0.10 cm), but 60-140 hand triangles cross the surface per frame, where only a few would be fine for a firm grip. Nothing I tried reduced it:
+  - re-fitting only the fingers;
+  - a re-fit with a weaker grip term (crossings 69→64, but the opposed grip was lost and a fingertip jump of 8.2 mm/frame² appeared);
+  - opening or curling the fingers by 6°;
+  - pushing the hand out (it found no palm crossing to move).
+
+  I undid all of these. The crossing seems to come from the fingers wrapping the round mug, not from one wrong pose.
+- **No opposed grip in 162-182:** the mug lies on the palm with the fingers curled around its bottom. Raising the grip weight there pulled the hand in front of the mug and off the depth map, so I undid it.
+- **Hand off its 2D points in 132-201 (about 25-29 px):** these are the fingers hidden under the mug&#x27;s bottom, whose points are partly guesses. I left them.
+- **Height flag at 239-240:** these frames are where the place motion blends into the held-still rest pose; I did not fix them.
+
+Second pass, on the reviewer&#x27;s findings: I&#x27;m leaving the result at v60 (same as v48), and most of the reviewer&#x27;s problems are still open, including all four high-severity ones. This pass only fixed the finger crossings during the lift (36-44) and at the start of the rotation (88-97). I had no budget left to work on the rest.
+
+**What changed from v41**
+- **Lift, frames 22-60:** I refitted the hand with the grip term, the occlusion term and extra smoothing, then refitted the fingers alone on 33-56. Fingers no longer pass through the mug at 36-44 and the grip is opposed there. There is no finger jump: my first attempt caused one at frame 41, so I reverted it and redid it with more smoothing.
+- **Rotation, frames 82-102:** the same kind of hand refit. Hand-mug crossings dropped from 14 to 0 per frame, the grip is opposed, keypoint error is about the same and the motion is smoother. The hand now sits about 1.8 cm behind the depth map.
+
+**Still open, high severity**
+- **Fingers inside the mug, 132-263, and the thumb crossing at 187-204 and 236-239:** I only tried fixes in 132-197, and every one either did nothing or cost the match to the video:
+  - refitting the whole hand added crossings (63 → 74);
+  - refitting only the fingers changed nothing, and neither did opening the fingers;
+  - pushing the hand out of the mug raised the keypoint error from 30 to 41 px;
+  - moving the hand 1.2 cm nearer to or farther from the camera added crossings;
+  - moving it 1 cm down cut crossings from 63 to 37, but the keypoint error rose from 27 to 43 px and the grip was lost.
+
+  The mug-thickness search found no better thickness: the mug rests on the table and the hand is on the side the video shows. So these crossings seem to come from the keypoints and depth disagreeing with the mug&#x27;s position where it lies in the palm, not from a wrong mug shape. I did not work on 198-263 in this pass; my edits there in the first pass were rejected.
+- **No opposing grip, 162-182:** not addressed.
+
+**Still open, medium severity**
+- **Thumb through the mug at 49-53 and 195-196:** not resolved.
+- **Hand off the video, 22-54:** the hand is still about 40 px off its keypoints at 29-41, and drawn on the wrong side of the mug at 27-54. In the video the thumb crosses the front of the mug about 2-3 cm higher than the model&#x27;s thumb, but the detected keypoints there look unreliable, so I did not move the hand to them.
+- **Hand off its keypoints at 134-201, and off the depth map at 86-267 (up to about 1.7 cm):** not addressed.
+- **Mug orientation during placement, 198-219:** the rotation speed spike and the extra tilt at frame 210 were not checked or fixed.
+- **Mug height at 239-240:** still not on the table. Snapping it down would move it off its outline in the image, so I left it.
+
+Phases: approach 0-17, grasp 18-32, lift 33-50, rotate 51-195, place 196-238, release 239-262, rest 263-272
+
+Edits:
+- v0: initial (FoundationPose + Depth Pro 2)
+- v1: automatic fit over the whole clip: fit object to its mask + depth on 0-272: 273 frames (trust region 8.0 deg, 2.0 cm); smooth object poses on 0-272 (window 5); fit MANO (all, no contact) on 0-272: 273 frames, 600 steps; losses kp 1.45-&gt;0.73, depth 5.43-&gt;1.67, pen 3.45-&gt;0.90, occl 4.00-&gt;2.28, grip 0.00-&gt;0.00, smooth 4.40-&gt;1.22; hand shape fitted (size x0.982); occlusion order (hand behind the object where the video shows the object, in front where it shows the hand): fine as fitted (2.2% of the hand on the wrong side)
+- v2: phases: approach 0-17, grasp 18-32, lift 33-50, rotate 51-195, place 196-238, release 239-262, rest 263-272
+- v3: hold object static at frame 5&#x27;s pose on 0-24
+- v4: hold object static at frame 268&#x27;s pose on 242-272
+- v5: translate object (+0.0,+0.0,-0.7) cm [world] on 0-24
+- v6: translate object (+0.0,+0.0,-0.9) cm [world] on 242-272
+- v7: scale object x1.05 along its seen_long extent (16.4 -&gt; 17.2 cm; the object is now 15.6 x 15.7 x 8.9 cm along its long / mid / short axes); poses shifted so the side facing the camera stays, then re-fitted to mask + depth; hand: fit MANO (all) on 0-272: 273 frames, 600 steps; losses kp 0.73-&gt;0.86, depth 1.67-&gt;1.67, pen 1.21-&gt;0.49, occl 2.43-&gt;1.76, grip 0.69-&gt;0.13, smooth 1.22-&gt;0.88
+- v8: automatic fit (v1) under the new object shape: object and hand re-fitted
+- v9: hold object static at frame 5&#x27;s pose on 0-24
+- v10: hold object static at frame 268&#x27;s pose on 242-272
+- v11: translate object (+0.0,+0.0,-0.6) cm [world] on 242-272
+- v12: fit MANO (all) on 18-262: 245 frames, 600 steps; losses kp 0.92-&gt;1.13, depth 1.68-&gt;1.76, pen 0.56-&gt;0.64, occl 1.93-&gt;2.29, grip 0.14-&gt;0.10, smooth 0.86-&gt;0.81, join 1.66-&gt;0.01
+- v13: interpolate object poses between 22 and 32
+- v14: interpolate object poses between 234 and 246
+- v15: revert to v12
+- v16: interpolate object poses between 234 and 246
+- v17: smooth object poses on 20-34 (window 7)
+- v18: separate hand from the object on 125-200: moved 50 frames out along the surface normal where the palm crossed it, smoothly (median 0.3 cm, max 1.7 cm)
+- v19: revert to v17
+- v20: fit MANO (all) on 118-200: 83 frames, 600 steps; losses kp 1.91-&gt;1.75, depth 1.64-&gt;1.53, pen 1.03-&gt;1.04, occl 0.86-&gt;0.96, grip 0.16-&gt;0.14, smooth 1.23-&gt;0.61, join 1.48-&gt;0.08
+- v21: fit object to its mask + depth on 194-212: 19 frames (trust region 15.0 deg, 3.0 cm)
+- v22: smooth object poses on 184-218 (window 7)
+- v23: fit MANO (all) on 180-262: 83 frames, 600 steps; losses kp 0.98-&gt;1.28, depth 1.90-&gt;1.95, pen 0.76-&gt;0.94, occl 1.85-&gt;1.38, grip 0.20-&gt;0.14, smooth 0.78-&gt;0.94, join 0.13-&gt;0.03
+- v24: revert to v22
+- v25: fit object to its mask + depth on 136-176: 41 frames (trust region 12.0 deg, 2.5 cm)
+- v26: smooth object poses on 130-182 (window 5)
+- v27: fit MANO (all) on 126-184: 59 frames, 600 steps; losses kp 1.97-&gt;1.54, depth 1.44-&gt;1.75, pen 1.31-&gt;0.83, occl 1.04-&gt;3.24, grip 0.21-&gt;0.15, smooth 0.61-&gt;0.35, join 0.26-&gt;0.01
+- v28: fit MANO (all) on 18-60: 43 frames, 600 steps; losses kp 0.98-&gt;1.17, depth 2.52-&gt;2.98, pen 0.24-&gt;0.33, occl 8.04-&gt;8.98, grip 0.04-&gt;0.07, smooth 0.75-&gt;0.52, join 0.08-&gt;0.02
+- v29: fit MANO (all) on 154-194: 41 frames, 600 steps; losses kp 1.51-&gt;1.79, depth 1.72-&gt;3.60, pen 0.66-&gt;0.77, occl 3.45-&gt;14.26, grip 0.26-&gt;0.07, smooth 0.37-&gt;0.78, join 0.56-&gt;0.05
+- v30: revert to v28
+- v31: smooth hand (rigid motion + finger joints) on 250-272 over 8 frames: hand jitter median 1.3 -&gt; 1.5 mm/frame^2; smoothing reduced on 2 frames where it pushed the hand through the object
+- v32: fit MANO (fingers) on 196-262: 67 frames, 600 steps; losses kp 0.85-&gt;0.84, depth 2.02-&gt;2.01, pen 0.82-&gt;0.81, occl 2.08-&gt;1.62, grip 0.20-&gt;0.37, smooth 0.80-&gt;0.72, join 0.77-&gt;0.53
+- v33: revert to v31
+- v34: curl index, middle, ring by -6 deg (MANO joints) on 198-259 (falloff 5)
+- v35: revert to v31
+- v36: curl index, middle, ring by +6 deg (MANO joints) on 198-259 (falloff 5)
+- v37: revert to v31
+- v38: separate hand from the object on 198-259: moved 0 frames out along the surface normal where the palm crossed it, smoothly (median 0.0 cm, max 0.0 cm)
+- v39: fit MANO (all) on 196-262: 67 frames, 600 steps; losses kp 0.85-&gt;0.85, depth 2.02-&gt;1.77, pen 0.82-&gt;0.72, occl 2.08-&gt;1.78, grip 0.20-&gt;0.55, smooth 0.80-&gt;0.73, join 0.77-&gt;0.08
+- v40: revert to v31
+- v41: result of pass 1: v40 with the ranges the verifier rejected set back to v8
+- v42: fit MANO (all) on 22-60: 39 frames, 600 steps; losses kp 1.27-&gt;1.39, depth 3.14-&gt;2.93, pen 0.36-&gt;0.13, occl 9.91-&gt;9.55, grip 0.08-&gt;0.04, smooth 0.55-&gt;0.83, join 0.10-&gt;0.03
+- v43: revert to v41
+- v44: fit MANO (all) on 22-60: 39 frames, 600 steps; losses kp 1.27-&gt;1.42, depth 3.14-&gt;3.05, pen 0.36-&gt;0.26, occl 9.91-&gt;8.98, grip 0.08-&gt;0.02, smooth 0.55-&gt;0.41, join 0.10-&gt;0.02
+- v45: fit MANO (fingers) on 33-56: 24 frames, 600 steps; losses kp 1.76-&gt;1.81, depth 3.46-&gt;3.40, pen 0.42-&gt;0.05, occl 10.80-&gt;11.84, grip 0.03-&gt;0.03, smooth 0.52-&gt;0.38, join 0.43-&gt;0.25
+- v46: fit MANO (all) on 82-102: 21 frames, 600 steps; losses kp 0.55-&gt;0.52, depth 1.04-&gt;2.67, pen 0.59-&gt;0.03, occl 0.14-&gt;0.26, grip 0.00-&gt;0.00, smooth 0.38-&gt;0.08, join 0.16-&gt;0.01
+- v47: fit MANO (all) on 126-200: 75 frames, 600 steps; losses kp 1.54-&gt;1.70, depth 1.68-&gt;1.72, pen 0.80-&gt;0.92, occl 2.78-&gt;1.56, grip 0.17-&gt;0.06, smooth 0.46-&gt;0.66, join 0.08-&gt;0.09
+- v48: revert to v46
+- v49: fit MANO (fingers) on 128-198: 71 frames, 600 steps; losses kp 1.56-&gt;1.54, depth 1.68-&gt;1.69, pen 0.79-&gt;0.77, occl 2.88-&gt;2.49, grip 0.17-&gt;0.15, smooth 0.47-&gt;0.55, join 2.12-&gt;0.85
+- v50: revert to v48
+- v51: separate hand from the object on 130-198: moved 29 frames out along the surface normal where the palm crossed it, smoothly (median 0.9 cm, max 1.4 cm)
+- v52: revert to v48
+- v53: curl index, middle, ring by -10 deg (MANO joints) on 134-194 (falloff 6)
+- v54: revert to v48
+- v55: move hand (+0.0,+0.0,-1.0) cm [world] on 134-194
+- v56: revert to v48
+- v57: move hand (+0.0,+0.0,-1.2) cm [camera] on 134-194
+- v58: revert to v48
+- v59: move hand (+0.0,+0.0,+1.2) cm [camera] on 134-194
+- v60: revert to v48
+
+Object shape: x1.00 of the reconstructed mesh along the first frame&#x27;s viewing direction (the unseen extent), x1.05 / x1.00 across it; the object is 15.6 x 15.7 x 8.9 cm along its long / mid / short axes.
+object&#x27;s extent along the first frame&#x27;s viewing direction (the side that frame could not see), evidence per candidate (after re-fitting the object and the hand to it):
+  x1.00 (15.3 cm): at rest +0.2 / +0.1 cm from the table, IoU 0.943, depth residual 0.48 cm; while held: keypoints 12.8 px, hand 0.2 cm off the depth map, 36.5 triangles through the object, 1.9% of the hand on the wrong side of the object
+
+Depth: every frame&#x27;s depth is scaled so that its table lies on one plane (the camera is static, but the depth estimator&#x27;s scale drifts: in the frames&#x27; own depth the table is 0.18 cm rms off a plane within a frame, while its distance ranges from x0.855 to x1.052 of the reference over the clip, and the depth on the object moves with it). The tracked object and hand were moved along their viewing rays with it (object x0.970 to x1.130), and the mesh, sized in frame 0&#x27;s depth, was scaled x1.052.
+
+Table: the one plane every frame&#x27;s depth is scaled onto (the table, in all frames) (0.18 cm rms off it within a frame); its normal is up, 4.2 deg from GeoCalib&#x27;s gravity estimate.
+
+Verifier (v8 vs refined, blind A/B):
+- frames 0-17: kept (winner B, refined = B, confidence 0.72): The two reconstructions look nearly identical in the overlays and 3D views. The plots separate them. A&#x27;s object jitters with nonzero rotation while it rests on the table, whereas B&#x27;s stays still. A also shows many hand triangles passing through the object from frame 18 on, while B has none. A&#x27;s fingertip acceleration also climbs and spikes around frame 17, where B&#x27;s stays smooth. B is more physically plausible.
+- frames 18-238: kept (winner B, refined = B, confidence 0.72): Both reconstructions track the mug similarly and agree with the video, with keypoint errors of 14 vs 15 px. A pushes the hand much deeper into the object: 87.3 triangles through it on average versus 43.4 for B, and the 3D views show large red regions with fingers inside the mug at frames 150 and 194. B shows thumb or palm opposing the fingers on 83% of the lifted frames, so the mug is plausibly gripped, with less penetration and smoother hand and fingertip accelerations. B is the better reconstruction.
+- frames 239-262: kept (winner B, refined = B, confidence 0.65): B&#x27;s mug settles on the table (height ~0.1 cm) and stays still (zero rotation) during release, while A&#x27;s mug floats about 0.6 cm above the table and keeps rotating. Interpenetration is similar in the two reconstructions. B&#x27;s hand overlay aligns a bit better with the keypoints in the image. B shows a small acceleration spike around frame 261, but overall it is more physically plausible.
+- frames 263-272: kept (winner B, refined = B, confidence 0.70): B keeps the mug resting on the table (height ~0.1 cm) with near-zero rotation while it is released. A&#x27;s mug floats about 0.6 cm above the table and rotates by roughly 0.5–0.9°/frame, which is drift. In B the hand&#x27;s crossings end slightly earlier and its tip-acceleration curve is smoother, apart from a small dip. Both overlays fit the video similarly.
+
+Merge of the kept and the reverted ranges: no seams to smooth. Finger jumps left (fastest fingertip over 8 mm/frame^2): none.
+
+Independent reviewer, before the agent could finish: overall bad; [high] 132-197: During the in-hand rotation the index, middle and ring fingers sink into the mug wall (penetration ~0.07-0.10, n_cross up to 140). The red intersections are visible at frame 147, and frames 157-185 and 187-191 are also flagged. (hint: Add a penetration penalty or collision projection during the hand-object optimization. Push the fingertips out to the mug surface while keeping contact.); [high] 198-241: While placing the mug, several fingers, including the thumb in 202-204 and 236-239, are inside the object. This is clearly red at frames 210 and 224, with n_cross ~70. (hint: Resolve the interpenetration with a signed-distance constraint. Refit the fingers around the outside of the mug as the video shows.); [medium] 242-259: During release the index, middle and ring fingers stay inside the mug wall (red at frame 251, n_cross 64) while the mug rests on the table. (hint: Enforce non-penetration through the release. Let the fingers lift off the surface instead of passing through it.); [high] 36-54: At lift and early rotation the thumb, middle and ring fingers pass through the mug surface (red thumb at frame 39). There is also no opposing grip in frames 40-43 and 49-53 while the mug is lifted. (hint: Refit the thumb so it opposes the fingers on the outside of the mug. Add a contact and opposition term while the object is airborne.); [high] 162-182: There is no opposing grip (thumb or palm against the fingers) while the mug is held mid-air during the rotation. (hint: Constrain the palm or thumb to stay in contact on the side of the mug opposite the fingers, matching the video grasp.); [medium] 88-97: The thumb, index and middle fingers pass through the object&#x27;s surface during the rotation. (hint: Add local collision resolution for the fingertips in these frames.); [medium] 22-43: The hand is far off its 2D keypoints (29 px mean error, flagged 30-42) and is drawn in front of the object where the video shows the object (27-37). (hint: Increase the keypoint reprojection weight. Fix the hand/object depth ordering using the occlusion masks.); [medium] 132-201: The hand drifts off its keypoints (24-29 px) and off the depth map (162-175) during the late rotation. It is also drawn in front of the object in 167-174. (hint: Re-track the hand pose with stronger 2D and depth data terms. Check the hand-object occlusion ordering.); [medium] 239-240: The object is not seated on the table at rest: it is either in the table or above it. (hint: Snap the mug&#x27;s base to the table plane during the place and rest phases.); [low] 18-107: The wrist and fingertip paths show jagged, zig-zag segments, especially the wrist (black) and thumb paths, which indicates jitter. (hint: Apply temporal smoothing to the hand pose parameters over the held span.)
+
+Reviewer on this pass&#x27;s result (the next pass works on it): overall bad; [high] 36-44: During lift the thumb, middle and ring fingers pass through the mug surface; frame 39 shows red interpenetration where the fingers meet the mug body. (hint: Add a penetration penalty and push the fingers out to the surface while keeping contact.); [high] 40-53: No opposing grip while the mug is lifted and starting to rotate (40-43, 49-53). The thumb is also inside the object at 43-44 and 48-54. (hint: Put the thumb or palm on the opposite side of the mug from the fingers so the grip is a real opposing grasp.); [medium] 27-54: The hand does not match the video. It is off its 2D keypoints (mean error about 29 px at 30-42) and drawn in front of the object where the video shows the object (27-37, 42-54). It is hidden behind the object at 52-53. (hint: Increase the keypoint reprojection weight and add a depth-ordering/occlusion term against the object mask.); [medium] 88-97: The thumb, index and middle fingers pass through the object&#x27;s surface during rotation. (hint: Resolve the collision by projecting the fingertips onto the mug surface.); [high] 132-197: Through most of the in-hand rotation the index, middle and ring fingers are inside the mug (up to 140 crossings per frame). Frame 147 shows red fingertips inside the mug cavity, and contact distance is 0. (hint: Re-optimize the hand pose with hard non-penetration against the mug mesh, including the inner wall and rim.); [high] 162-182: No opposing grip while the mug is lifted and rotated in the hand. (hint: Enforce a thumb/palm-vs-fingers contact constraint during the held span.); [medium] 134-201: The hand is off its keypoints (about 25-29 px error) and off the depth map in places. It is drawn in front of the object at 167-174. (hint: Increase the 2D keypoint and depth fitting weights for these frames and re-track.); [high] 198-259: During place and release the index, middle and ring fingers (and at times the thumb) pass through the mug. Frames 210, 224 and 251 show red fingertips inside the mug, and the interior is visible through the rim. (hint: Keep the fingers on the outer wall of the mug during placement and add a collision constraint.); [medium] 206-267: The hand is off the depth map at several intervals during place and release (206-221, 230-236, 261-267). (hint: Add a depth consistency term for the hand.); [medium] 239-240: The object is not sitting on the table at the end of placement; it is in or above the table. (hint: Constrain the mug&#x27;s bottom to the table plane once it is placed.); [low] 18-107: The fingertip paths over the held span show loops and kinks rather than smooth curves, indicating jitter. (hint: Apply temporal smoothing to the hand pose parameters.); [low] 264-272: Hand and fingertip acceleration is elevated at rest (2.36 / 2.84), indicating jitter after release. (hint: Smooth the hand trajectory in the rest phase.)
+
+Verifier (v41 vs refined, blind A/B):
+- frames 24-51: kept (winner B, refined = B, confidence 0.85): B has the thumb or palm against the fingers on 100% of lifted frames, versus 68% for A. B has almost no interpenetration: 1.2 triangles through the object versus 32.1 for A, which spikes above 100 around frames 35-42 (red in A&#x27;s frame 42 views). B also has a lower keypoint error and smoother fingertip motion, with no tip-acceleration spikes.
+- frames 85-97: kept (winner B, refined = B, confidence 0.85): Both grip the mug with thumb against fingers on all lifted frames. A shows substantial interpenetration (red regions, ~70 triangles through the object, peaking above 100), and its hand acceleration is jittier. B has minimal penetration, smoother motion and lower keypoint error (15 vs 18 px), and its hand overlay matches the video well.
+
+Merge of the kept and the reverted ranges: no seams to smooth. Finger jumps left (fastest fingertip over 8 mm/frame^2): none.
+
+Independent reviewer, before the agent could finish: overall bad; [high] 132-263: The index, middle and ring fingers sink into the mug body for most of the late rotation, place and release phases. Red interpenetration is visible at frames 147, 210, 224 and 251. Penetration depth is about 0.07–0.10, with up to 140 crossings per window. (hint: Add a penetration penalty and project the fingertips back onto the mug&#x27;s outer surface while keeping them in contact.); [high] 162-182: There is no opposing grip while the mug is lifted and rotated. Neither the thumb nor the palm opposes the fingers, so the mug would not be held in simulation. (hint: Re-optimize the grasp so the thumb or palm presses on the side of the mug opposite the fingers, as the video shows.); [high] 187-204: The thumb also passes through the mug surface, together with the index finger (and the ring and middle fingers at 200-204). (hint: Enforce non-penetration for the thumb and keep it on the outer surface.); [high] 236-239: The thumb, index, middle and ring fingers all penetrate the mug during placement. (hint: Apply a collision constraint for all fingers during placement.); [medium] 49-53: The thumb passes through the object surface at the start of the rotation. (hint: Push the thumb out to surface contact.); [medium] 195-196: The thumb briefly passes through the object surface. (hint: Apply a collision constraint to the thumb.); [medium] 22-54: During the lift the hand is off its 2D keypoints (about 33 px error, flagged 29-41). It is also drawn in front of the object where the video shows the object (27-54), and hidden behind it where the video shows the hand (43-48, 52-53). The depth ordering of hand and mug is wrong. (hint: Weight the keypoint reprojection term more heavily and fix the hand-object depth ordering using the occlusion masks.); [medium] 134-201: The hand is off its keypoints (24–29 px error) in several windows during the late rotation. It is also drawn in front of the object at 167-174. (hint: Refit the hand pose to the 2D keypoints there.); [medium] 86-267: The hand is repeatedly off the depth map (86-97, 121-136, 162-175, 206-221, 230-236, 261-267). Hand depth error reaches about 1.7 cm. (hint: Add a depth-consistency term to the hand fit.); [medium] 198-219: The object&#x27;s angular speed spikes to 5.06 during placement, and at frame 210 the reconstructed mug looks more tilted than in the video. This suggests a wrong or jumping orientation. (hint: Smooth the object rotation and re-check its pose against the video silhouette.); [medium] 239-240: At rest the object is not on the table; it sits in or above it. (hint: Constrain the mug&#x27;s base to the table plane once it is placed.); [low] 264-272: Hand and fingertip acceleration rise (2.36 and 2.84) after release, indicating jitter. (hint: Temporally smooth the hand trajectory after release.); [low] 18-107: In the path plot, the fingertip paths (red, green, blue) show small zig-zags near the mug while it is held. (hint: Apply temporal smoothing to the fingertip trajectories.)
+
+Independent reviewer on the final result (what is still wrong): (votes over 3 reviews: bad, bad, bad) overall bad; [high] 136-259: Index, middle and ring fingertips pass into the mug wall through most of the late rotate, place and release phases. Red fingertip regions are visible inside the mug at frames 147, 210, 224 and 251, with up to 140 surface crossings per segment. (hint: Add a penetration penalty and project the fingertips onto the mug&#x27;s outer surface. Keep contact at the surface rather than inside it.); [high] 162-182: No opposing grip (thumb or palm against fingers) while the mug is held in the air and rotated. A robot hand could not hold the mug this way. (hint: Enforce thumb or palm contact opposite the fingers during the held span. Re-fit the thumb pose to the video.); [medium] 187-204: Thumb passes through the object surface along with the index finger (and the ring and middle fingers at 200-204). (hint: Resolve the thumb penetration with a contact-aware refinement of the thumb joints.); [medium] 236-239: Thumb, index, middle and ring fingers all pass through the mug while it is being set down. (hint: Apply the penetration constraint during placement and keep the fingers on the surface.); [medium] 49-53: Thumb passes through the object surface at the start of rotation. (hint: Push the thumb out of the mesh and add a non-penetration term.); [medium] 132-201: Hand does not match its 2D keypoints (keypoint error about 25-29 px), with flagged spans at 134-143, 148-161, 174-191 and 194-201. This coincides with the penetration and the lost grip. (hint: Raise the 2D keypoint reprojection weight and re-optimize the hand pose over this span.); [medium] 29-41: Hand does not match its keypoints during the lift (keypoint error about 33 px). (hint: Re-fit the hand to the 2D keypoints during the lift.); [medium] 27-54: Depth ordering is wrong: the hand is drawn in front of the object where the video shows the object, and hidden behind it at 43-48 and 52-53. (hint: Use occlusion masks or depth to correct the relative depth of hand and mug.); [low] 167-174: Hand is drawn in front of the object where the video shows the object. (hint: Correct the hand depth using occlusion cues.); [low] 86-267: Hand is repeatedly off the depth map (86-97, 121-136, 162-175, 206-221, 230-236, 261-267). (hint: Add a depth alignment term for the hand.); [medium] 239-240: Object is not resting on the table at placement; it is in the table or above it. (hint: Constrain the mug&#x27;s bottom to the table plane at contact and rest.); [low] 18-107: Fingertip paths, especially the red and green ones near the mug, show zig-zag jitter over the held span. (hint: Temporally smooth the finger joint trajectories.); [low] 198-272: Fingertip acceleration rises during place and release (about 2-2.4), and hand acceleration is high at rest (2.36), indicating jitter. (hint: Apply temporal smoothing to the hand trajectory during the place, release and rest phases.)
+
+| metric (median over frames) | initial | automatic fit (v1) | final |
+|---|---|---|---|
+| coverage | 0.93 | 0.95 | 0.96 |
+| spill | 0.04 | 0.02 | 0.03 |
+| depth_res_cm | 0.51 | 0.44 | 0.48 |
+| hand_kp_px | 19.56 | 13.68 | 14.31 |
+| hand_depth_bias_cm | -1.53 | -0.97 | -0.36 |
+| contact_cm | 0.00 | 0.00 | 0.04 |
+| penetration_cm | 0.12 | 0.09 | 0.00 |
+| n_cross | 191.00 | 80.00 | 0.00 |
+| hand_over_obj | 0.01 | 0.01 | 0.00 |
+| obj_over_hand | 0.00 | 0.00 | 0.00 |
+| obj_height_cm | 14.82 | 14.54 | 14.19 |
+| ang_speed_deg_per_frame | 1.52 | 1.65 | 1.51 |
+| hand_accel_mm | 1.76 | 1.14 | 0.69 |
+| tip_accel_mm | 2.81 | 3.09 | 1.42 |
+| finger_accel_deg | 0.49 | 0.40 | 0.24 |
+| obj_ang_accel_deg | 1.15 | 0.45 | 0.57 |
+| thumb_gap_cm | -0.08 | 0.15 | 0.19 |
+| n_touching | 4.00 | 3.00 | 4.00 |
+| opposed | 1.00 | 0.00 | 1.00 |
+</pre>

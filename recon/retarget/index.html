@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CounterfactualHOI: physically plausible retargeted motions (FlashDexRetarget)</title>
+<style>
+  body { font-family: -apple-system, system-ui, sans-serif; margin: 24px; color: #222; background: #fafafa; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  p.sub { margin: 0 0 14px; color: #555; font-size: 14px; max-width: 1150px; }
+  .tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+  .tab { font: inherit; font-size: 15px; padding: 6px 22px; border: 1px solid #bbb; border-radius: 6px; background: #fff; cursor: pointer; }
+  .tab.active { background: #2d5be3; border-color: #2d5be3; color: #fff; }
+  .cmp { display: none; } .cmp.active { display: block; }
+  .clips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .clip { font: inherit; font-size: 13px; padding: 4px 12px; border: 1px solid #bbb; border-radius: 14px; background: #fff; cursor: pointer; }
+  .clip.active { background: #1f2937; border-color: #1f2937; color: #fff; }
+  .clip.pending { color: #999; }
+  .pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  figure { margin: 0; background: #fff; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; }
+  iframe { width: 100%; height: 560px; border: 0; display: block; background: #f3f3f3; }
+  figcaption { padding: 8px 12px 10px; font-size: 13px; color: #444; border-top: 1px solid #eee; }
+  p.cap { font-size: 14px; color: #333; line-height: 1.5; }
+  p.status { font-size: 14px; color: #333; background: #fff7e6; border: 1px solid #f0d9a8; border-radius: 6px;
+             padding: 8px 12px; max-width: 1150px; }
+  table.sum { border-collapse: collapse; font-size: 13px; margin-top: 18px; background: #fff; }
+  table.sum th, table.sum td { border: 1px solid #ddd; padding: 4px 10px; text-align: right; }
+  table.sum td:first-child, table.sum th:first-child { text-align: left; }
+  @media (max-width: 1000px) { .pair { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body style="margin:0"><style>
+  body { font-family: -apple-system, system-ui, sans-serif; margin: 0; color: #222; background: #fafafa; }
+  .nav { background: #1f2937; padding: 10px 24px; display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+  .nav b { color: #fff; margin-right: 12px; }
+  .nav a { color: #cbd5e1; text-decoration: none; font-size: 14px; }
+  .nav a:hover { color: #fff; }
+  </style><div class="nav"><b>CounterfactualHOI</b><a href="../../index.html">Home</a><a href="../../recon/daid/index.html">1 · Do-as-I-Do</a><a href="../../recon/choir/index.html">2 · Open-CHOIR</a><a href="../../recon/ours/index.html">3 · Our pipeline</a><a href="../../recon/agent/index.html">4 · Agent refinement</a><a href="../../recon/retarget/index.html">5 · Retargeted motions</a></div><div style="margin:24px">
+<h1>Physically plausible retargeted motions: FlashDexRetarget on the Sharpa Wave hand</h1>
+<p class="sub">Each refined reconstruction (left) is retargeted with
+<a href="https://holiday-robot.github.io/FlashDexRetarget/">FlashDexRetarget</a>: a kinematic retarget of the human
+hand to the Sharpa Wave hand (22 DoF on a floating wrist) gives the reference, and one reinforcement-learning policy,
+trained on all 10 clips at once, drives the hand in physics simulation so the simulated object follows the
+reconstructed one (right). <b>Progress</b> (from <a href="https://yuxuank.com/AdaDex/">AdaDex</a>) is the share of the
+clip tracked before the object first deviates by more than 5 cm or 20° from the reconstruction; a clip succeeds when
+the whole of it is tracked. Do-as-I-Do (tab 4) retargets the same reconstructions by sampling-based physics
+optimization instead (its numbers are on the round-5 reconstructions). The two viewers play independently: drag each time slider.</p>
+<p class="status"><b>Status</b>: FlashDexRetarget run <code>cfhoi_r7_flat-1123-152421</code>, trained on the round 7 reconstructions, policy after 250M env steps (of a 300M budget). Progress per clip: pp_1 100%, pp_2 100%, pp_3 89%, pp_4 100%, pp_5 100%, prp_1 18%, prp_2 90%, prp_3 1%, prp_4 23%, prp_5 67% (mean 69%; 4/10 clips tracked end to end; position-only progress mean 100%; FDR's own success, time-mean error within 3 cm / 30°, on 9/10 clips). Still training: numbers update with each export. AdaDex progress counts until the object first leaves 5 cm or 20° of the reconstruction. The reconstructed object orientation is off by 12-22° on average, and several reconstructed rest poses are not stable on the table in simulation (they settle 15-23°), so progress stays well below the position-only number.</p>
+<div class="tabs">
+  <button class="tab" data-tab="pp">pp · pick and place</button>
+  <button class="tab" data-tab="prp">prp · pick, rotate in the hand, place</button>
+</div>
+<section class="cmp" id="tab-pp">
+<div class="clips"><button class="clip" data-vid="pp_anthony_real_1" data-set="pp">pp_1 · small metal case</button> <button class="clip" data-vid="pp_anthony_real_2" data-set="pp">pp_2 · blue tape roll</button> <button class="clip" data-vid="pp_anthony_real_3" data-set="pp">pp_3 · black spatula</button> <button class="clip" data-vid="pp_anthony_real_4" data-set="pp">pp_4 · gray mug</button> <button class="clip" data-vid="pp_anthony_real_5" data-set="pp">pp_5 · dish soap bottle</button></div>
+<div class="pair">
+  <figure><iframe class="left" title="refined"></iframe><figcaption><b>Refined reconstruction</b> (human hand + object): the reference</figcaption></figure>
+  <figure><iframe class="right" title="retargeted"></iframe><figcaption><b>FlashDexRetarget</b>: the Sharpa Wave hand in physics simulation, driven by one RL policy trained on all 10 clips (translucent orange: the reconstructed object it tracks; orange lines: the human hand)</figcaption></figure>
+</div>
+<p class="cap"></p>
+</section>
+<section class="cmp" id="tab-prp">
+<div class="clips"><button class="clip" data-vid="prp_anthony_real_1" data-set="prp">prp_1 · small metal case</button> <button class="clip" data-vid="prp_anthony_real_2" data-set="prp">prp_2 · blue tape roll</button> <button class="clip" data-vid="prp_anthony_real_3" data-set="prp">prp_3 · black spatula</button> <button class="clip" data-vid="prp_anthony_real_4" data-set="prp">prp_4 · gray mug</button> <button class="clip" data-vid="prp_anthony_real_5" data-set="prp">prp_5 · dish soap bottle</button></div>
+<div class="pair">
+  <figure><iframe class="left" title="refined"></iframe><figcaption><b>Refined reconstruction</b> (human hand + object): the reference</figcaption></figure>
+  <figure><iframe class="right" title="retargeted"></iframe><figcaption><b>FlashDexRetarget</b>: the Sharpa Wave hand in physics simulation, driven by one RL policy trained on all 10 clips (translucent orange: the reconstructed object it tracks; orange lines: the human hand)</figcaption></figure>
+</div>
+<p class="cap"></p>
+</section>
+<table class="sum"><tr><th>clip</th><th>FDR progress</th><th>FDR progress (pos.)</th><th>FDR success</th><th>FDR obj err (cm / °)</th><th>FDR within 2 cm</th><th>DAID within 2 cm (r5)</th><th>DAID progress (pos., r5)</th></tr><tr><td>pp_1</td><td>100%</td><td>100%</td><td>yes</td><td>1.1 / 5</td><td>88%</td><td>39%</td><td>42%</td></tr><tr><td>pp_2</td><td>100%</td><td>100%</td><td>yes</td><td>0.9 / 6</td><td>89%</td><td>79%</td><td>43%</td></tr><tr><td>pp_3</td><td>89%</td><td>100%</td><td>no</td><td>1.0 / 9</td><td>97%</td><td>66%</td><td>100%</td></tr><tr><td>pp_4</td><td>100%</td><td>100%</td><td>yes</td><td>0.7 / 6</td><td>100%</td><td>39%</td><td>41%</td></tr><tr><td>pp_5</td><td>100%</td><td>100%</td><td>yes</td><td>1.1 / 8</td><td>97%</td><td>55%</td><td>36%</td></tr><tr><td>prp_1</td><td>18%</td><td>100%</td><td>no</td><td>0.6 / 13</td><td>100%</td><td>30%</td><td>15%</td></tr><tr><td>prp_2</td><td>90%</td><td>100%</td><td>no</td><td>0.8 / 6</td><td>91%</td><td>42%</td><td>20%</td></tr><tr><td>prp_3</td><td>1%</td><td>100%</td><td>no</td><td>0.8 / 14</td><td>95%</td><td>34%</td><td>20%</td></tr><tr><td>prp_4</td><td>23%</td><td>100%</td><td>no</td><td>0.7 / 9</td><td>100%</td><td>1%</td><td>3%</td></tr><tr><td>prp_5</td><td>67%</td><td>98%</td><td>no</td><td>1.1 / 31</td><td>96%</td><td>6%</td><td>16%</td></tr></table>
+<script>
+  const D = {"pp_anthony_real_1": {"left": "ref/pp_anthony_real_1.html", "right": "pp_anthony_real_1.html", "cap": "<b>FlashDexRetarget</b>: tracks <b>100%</b> of the clip before the object first leaves 5 cm / 20\u00b0 of the reconstruction (whole clip: success; position only, 5 cm: 100%); object error mean 1.1 cm / 5\u00b0 (max 3 cm), within 2 cm on 88% of frames; fingertips 3.6 cm from the human's; policy after 250M env steps, trained on the round-7 reconstructions<br><b>Do-as-I-Do</b> (round-5 reconstruction, tab 4): within 2 cm on 39% of frames, median 16.2 cm / 8\u00b0, progress 42% (position only)"}, "pp_anthony_real_2": {"left": "ref/pp_anthony_real_2.html", "right": "pp_anthony_real_2.html", "cap": "<b>FlashDexRetarget</b>: tracks <b>100%</b> of the clip before the object first leaves 5 cm / 20\u00b0 of the reconstruction (whole clip: success; position only, 5 cm: 100%); object error mean 0.9 cm / 6\u00b0 (max 5 cm), within 2 cm on 89% of frames; fingertips 2.2 cm from the human's; policy after 250M env steps, trained on the round-7 reconstructions<br><b>Do-as-I-Do</b> (round-5 reconstruction, tab 4): within 2 cm on 79% of frames, median 1.2 cm / 3\u00b0, progress 43% (position only)"}, "pp_anthony_real_3": {"left": "ref/pp_anthony_real_3.html", "right": "pp_anthony_real_3.html", "cap": "<b>FlashDexRetarget</b>: tracks <b>89%</b> of the clip before the object first leaves 5 cm / 20\u00b0 of the reconstruction (then fails; position only, 5 cm: 100%); object error mean 1.0 cm / 9\u00b0 (max 3 cm), within 2 cm on 97% of frames; fingertips 2.0 cm from the human's; policy after 250M env steps, trained on the round-7 reconstructions<br><b>Do-as-I-Do</b> (round-5 reconstruction, tab 4): within 2 cm on 66% of frames, median 1.5 cm / 6\u00b0, progress 100% (position only)"}, "pp_anthony_real_4": {"left": "ref/pp_anthony_real_4.html", "right": "pp_anthony_real_4.html", "cap": "<b>FlashDexRetarget</b>: tracks <b>100%</b> of the clip before the object first leaves 5 cm / 20\u00b0 of the reconstruction (whole clip: success; position only, 5 cm: 100%); object error mean 0.7 cm / 6\u00b0 (max 2 cm), within 2 cm on 100% of frames; fingertips 2.2 cm from the human's; policy after 250M env steps, trained on the round-7 reconstructions<br><b>Do-as-I-Do</b> (round-5 reconstruction, tab 4): within 2 cm on 39% of frames, median 20.7 cm / 7\u00b0, progress 41% (position only)"}, "pp_anthony_real_5": {"left": "ref/pp_anthony_real_5.html", "right": "pp_anthony_real_5.html", "cap": "<b>FlashDexRetarget</b>: tracks <b>100%</b> of the clip before the object first leaves 5 cm / 20\u00b0 of the reconstruction (whole clip: success; position only, 5 cm: 100%); object error mean 1.1 cm / 8\u00b0 (max 3 cm), within 2 cm on 97% of frames; fingertips 4.1 cm from the human's; policy after 250M env steps, trained on the round-7 reconstructions<br><b>Do-as-I-Do</b> (round-5 reconstruction, tab 4): within 2 cm on 55% of frames, median 1.8 cm / 5\u00b0, progress 36% (position only)"}, "prp_anthony_real_1": {"left": "ref/prp_anthony_real_1.html", "right": "prp_anthony_real_1.html", "cap": "<b>FlashDexRetarget</b>: tracks <b>18%</b> of the clip before the object first leaves 5 cm / 20\u00b0 of the reconstruction (then fails; position only, 5 cm: 100%); object error mean 0.6 cm / 13\u00b0 (max 2 cm), within 2 cm on 100% of frames; fingertips 2.8 cm from the human's; policy after 250M env steps, trained on the round-7 reconstructions<br><b>Do-as-I-Do</b> (round-5 reconstruction, tab 4): within 2 cm on 30% of frames, median 5.3 cm / 41\u00b0, progress 15% (position only)"}, "prp_anthony_real_2": {"left": "ref/prp_anthony_real_2.html", "right": "prp_anthony_real_2.html", "cap": "<b>FlashDexRetarget</b>: tracks <b>90%</b> of the clip before the object first leaves 5 cm / 20\u00b0 of the reconstruction (then fails; position only, 5 cm: 100%); object error mean 0.8 cm / 6\u00b0 (max 3 cm), within 2 cm on 91% of frames; fingertips 2.4 cm from the human's; policy after 250M env steps, trained on the round-7 reconstructions<br><b>Do-as-I-Do</b> (round-5 reconstruction, tab 4): within 2 cm on 42% of frames, median 2.1 cm / 5\u00b0, progress 20% (position only)"}, "prp_anthony_real_3": {"left": "ref/prp_anthony_real_3.html", "right": "prp_anthony_real_3.html", "cap": "<b>FlashDexRetarget</b>: tracks <b>1%</b> of the clip before the object first leaves 5 cm / 20\u00b0 of the reconstruction (then fails; position only, 5 cm: 100%); object error mean 0.8 cm / 14\u00b0 (max 2 cm), within 2 cm on 95% of frames; fingertips 2.0 cm from the human's; policy after 250M env steps, trained on the round-7 reconstructions<br><b>Do-as-I-Do</b> (round-5 reconstruction, tab 4): within 2 cm on 34% of frames, median 3.3 cm / 7\u00b0, progress 20% (position only)"}, "prp_anthony_real_4": {"left": "ref/prp_anthony_real_4.html", "right": "prp_anthony_real_4.html", "cap": "<b>FlashDexRetarget</b>: tracks <b>23%</b> of the clip before the object first leaves 5 cm / 20\u00b0 of the reconstruction (then fails; position only, 5 cm: 100%); object error mean 0.7 cm / 9\u00b0 (max 2 cm), within 2 cm on 100% of frames; fingertips 2.5 cm from the human's; policy after 250M env steps, trained on the round-7 reconstructions<br><b>Do-as-I-Do</b> (round-5 reconstruction, tab 4): within 2 cm on 1% of frames, median 27.2 cm / 122\u00b0, progress 3% (position only)"}, "prp_anthony_real_5": {"left": "ref/prp_anthony_real_5.html", "right": "prp_anthony_real_5.html", "cap": "<b>FlashDexRetarget</b>: tracks <b>67%</b> of the clip before the object first leaves 5 cm / 20\u00b0 of the reconstruction (then fails; position only, 5 cm: 98%); object error mean 1.1 cm / 31\u00b0 (max 17 cm), within 2 cm on 96% of frames; fingertips 2.4 cm from the human's; policy after 250M env steps, trained on the round-7 reconstructions<br><b>Do-as-I-Do</b> (round-5 reconstruction, tab 4): within 2 cm on 6% of frames, median 14.3 cm / 64\u00b0, progress 16% (position only)"}};
+  const cur = {};
+  function load(set, on) {
+    const sec = document.getElementById('tab-' + set);
+    const l = sec.querySelector('iframe.left'), r = sec.querySelector('iframe.right');
+    if (!on) { l.removeAttribute('src'); r.removeAttribute('src'); return; }
+    const vid = cur[set], d = D[vid];
+    l.src = d.left; if (d.right) r.src = d.right; else r.removeAttribute('src');
+    sec.querySelector('p.cap').innerHTML = '<b>' + vid + '</b><br>' + d.cap;
+    sec.querySelectorAll('.clip').forEach(c => c.classList.toggle('active', c.dataset.vid === vid));
+  }
+  document.querySelectorAll('.clip').forEach(c => c.addEventListener('click', () => { cur[c.dataset.set] = c.dataset.vid; load(c.dataset.set, true); }));
+  function show(name) {
+    document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+    document.querySelectorAll('.cmp').forEach(s => {
+      const set = s.id.slice(4), on = set === name;
+      s.classList.toggle('active', on);
+      if (!cur[set]) cur[set] = Object.keys(D).find(v => v.startsWith(set + '_') && D[v].right) || Object.keys(D).find(v => v.startsWith(set + '_'));
+      load(set, on);
+    });
+    history.replaceState(null, '', '#' + name);
+  }
+  document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => show(b.dataset.tab)));
+  show(location.hash.slice(1) === 'prp' ? 'prp' : 'pp');
+</script>
+</div></body>
+</html>

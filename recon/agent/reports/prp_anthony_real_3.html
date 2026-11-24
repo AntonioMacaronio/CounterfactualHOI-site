@@ -1,0 +1,159 @@
+<!doctype html><meta charset="utf-8"><title>prp_anthony_real_3 refinement report</title><pre style="white-space: pre-wrap; font: 14px/1.45 system-ui, sans-serif; max-width: 1000px; margin: 24px auto"># Refinement of prp_anthony_real_3
+
+Model global.anthropic.claude-opus-5-5, effort high; 40 versions; 2 passes; 29.9 min.
+
+Agent summary: Final version is v21 (same as v19). Most of the reviewer&#x27;s points are fixed, but the object still sits about 1 cm into the table at rest (0-14 and 183-203), which I could not fix with these tools. A simulated copy would start slightly sunk.
+
+**What I fixed:**
+- **Phases:** approach 0-14, grasp 15-30, lift 31-55, rotate 56-140, place 141-175, release 176-192, rest 193-203.
+- **Grip:** I refitted the hand on 15-192 with the grip term. The thumb and fingers now hold the handle from opposite sides through lift, rotate and place (thumb gap about 0.2–0.3 cm, 3–5 fingers touching). Keypoint error stayed about the same.
+- **Finger crossings while held:** I refitted the fingers on 96-108. I opened the middle, ring and pinky fingers by 12° on 149-159, which cut the crossings there from 21 to 5 triangles. The keypoint error also improved slightly.
+- **Rest:** I held the object still on 0-16 and 194-203 and smoothed it on 12-30, which removed the step where the hold ends.
+- **Jitter:** I smoothed the hand on 8-26, which halved the kink at frame 16. Over 15-104 the hand moves more smoothly than the hand tracker&#x27;s own output (median 0.4 vs 2.4 mm/frame²). No fingertip jumps anywhere.
+
+**Why the 1 cm sink is still there:** the outline and depth say the object&#x27;s pose is right. The sink is in the mesh&#x27;s unseen underside: it has a protrusion under the neck that the mask doesn&#x27;t show. I tried three things and undid each:
+- **Thickness search:** thinner versions down to ×0.3 still sat 0.7–1.7 cm into the table and fit worse.
+- **Moving it up 1 cm:** coverage fell from 0.98 to about 0.8.
+- **Moving it 1.5 cm toward the camera:** height became 0, but the object then sat about 1.5 cm in front of the depth map, so I undid that too.
+
+There is no tool to remove a local part of the mesh.
+
+**Other items I left on purpose:**
+- **Rotation jump at 54-57:** this is the real quick turn in the video, so I didn&#x27;t smooth it away.
+- **Minor flags I couldn&#x27;t improve:**
+  - Frames 33-34 (grip not opposed): two refits didn&#x27;t clear it; one moved the hand far off its keypoints, so I undid both.
+  - Frames 21-27 (hand drawn in front of the object): no fix tried.
+  - Frames 101-103 and 151-157: a few triangles of finger contact remain.
+  - Frames 153-169: keypoint error of about 17 px.
+
+A stronger refit of 15-42 with higher occlusion and grip weights raised the keypoint error from 11 to 31 px and made the hand jumpy, so I undid it.
+
+Second pass, on the reviewer&#x27;s findings: I&#x27;m finishing with v39 because the budget ran out. The reviewer&#x27;s six remaining problems are not fixed; I made no edits after the review.
+
+**Changed in v39 (compared with v24):**
+- **Rest height (0-26 and 172-203):** I moved the object 1.25-1.3 cm toward the camera along the viewing ray. Its lowest point is now at about 0 cm before the grasp and about -0.3 cm after the release, and its outline still matches the video. The cost is that the object&#x27;s depth error rose from about 0.4 cm to about 1.3-1.5 cm. I didn&#x27;t keep two alternatives:
+  - Moving the object straight up pulled its outline off the video (coverage fell from 0.98 to 0.82).
+  - Re-fitting its thickness changed nothing: every candidate still sat 0.7-1.7 cm inside the table.
+  - The likely cause is the small foot under the paddle&#x27;s neck in the reconstructed mesh, which is the part that sinks into the table. None of my tools can correct a local shape error like that.
+- **Place and release (138-203):** I re-fit the hand there with stronger smoothing and the occlusion term, then re-fit the final rest frames (188-203) without the grip term. The place phase now has an opposed grip.
+- **Placement (148-161):** the middle, ring and pinky fingers passed through the handle. I opened them by 15° and re-fit them; nothing passes through there now.
+- **Grasp (20-38):** re-fitting only the fingers removed the thumb passing through the handle at 25-30 (my object move had caused it). The range now has an opposed grip in its median, and the hand&#x27;s keypoint error rose only from 11.0 to 11.8 px.
+- **Smoothness:** the fastest fingertip stays under 4 mm/frame², with no finger jumps.
+
+**Not fixed (the reviewer&#x27;s findings on v39):**
+- **Frames 21-27:** the hand is drawn in front of visible parts of the spatula. Both re-fits of the whole hand that I tried (stronger grip, occlusion term) pulled it far off its keypoints (up to about 40 px), so I reverted them.
+- **Frames 33-34:** still no thumb-versus-fingers grip at lift-off.
+- **Frames 34-50:** the object&#x27;s orientation during the lift looks wrong against the video. This is new, and I didn&#x27;t re-fit it.
+- **Frames 54-57:** the object&#x27;s rotation still jumps.
+- **Frames 51-135:** the grip during the in-hand rotation is loose fingertips, and the wrist and fingertip paths over 15-104 still zig-zag.
+- **Frames 101-103:** the hand still passes through the object&#x27;s surface.
+
+**Other remaining issues:**
+- In the last rest frames the hand sits about 1.4 cm in front of the depth map.
+- Its keypoint error is high in frames 202-203, where the hand is motion-blurred and leaving the frame.
+
+Phases: approach 0-14, grasp 15-30, lift 31-55, rotate 56-140, place 141-175, release 176-192, rest 193-203
+
+Edits:
+- v0: initial (FoundationPose + Depth Pro 2)
+- v1: automatic fit over the whole clip: fit object to its mask + depth on 0-203: 194 frames (trust region 8.0 deg, 2.0 cm); smooth object poses on 0-203 (window 5); fit MANO (all, no contact) on 0-203: 204 frames, 600 steps; losses kp 1.63-&gt;0.31, depth 7.87-&gt;1.68, pen 2.41-&gt;0.11, occl 5.55-&gt;2.46, grip 0.00-&gt;0.00, smooth 5.29-&gt;0.47; hand shape fitted (size x0.989); occlusion order (hand behind the object where the video shows the object, in front where it shows the hand): fine as fitted (1.7% of the hand on the wrong side)
+- v2: phases: approach 0-14, grasp 15-30, lift 31-55, rotate 56-140, place 141-175, release 176-192, rest 193-203
+- v3: fit MANO (all) on 15-192: 178 frames, 600 steps; losses kp 0.31-&gt;0.42, depth 1.71-&gt;2.09, pen 0.13-&gt;0.01, occl 2.78-&gt;1.78, grip 2.45-&gt;0.42, smooth 0.43-&gt;0.36, join 1.30-&gt;0.01
+- v4: translate object (+0.0,+0.0,+0.9) cm [world] on 0-27
+- v5: translate object (+0.0,+0.0,+1.0) cm [world] on 174-203
+- v6: revert to v3
+- v7: fit MANO (all) on 142-176: 35 frames, 600 steps; losses kp 0.76-&gt;0.78, depth 2.80-&gt;2.87, pen 0.04-&gt;0.10, occl 5.17-&gt;4.74, grip 0.01-&gt;0.03, smooth 0.61-&gt;0.57, join 0.28-&gt;0.02
+- v8: hold object static at frame 8&#x27;s pose on 0-16
+- v9: hold object static at frame 198&#x27;s pose on 194-203
+- v10: smooth object poses on 12-30 (window 9)
+- v11: fit MANO (all) on 15-42: 28 frames, 600 steps; losses kp 0.60-&gt;2.29, depth 4.58-&gt;5.61, pen 0.00-&gt;0.01, occl 1.92-&gt;4.26, grip 2.28-&gt;1.65, smooth 0.57-&gt;1.60, join 0.33-&gt;0.22
+- v12: revert to v10
+- v13: fit MANO (fingers) on 29-40: 12 frames, 600 steps; losses kp 0.38-&gt;0.39, depth 3.04-&gt;3.01, pen 0.00-&gt;0.00, occl 0.32-&gt;0.27, grip 0.00-&gt;0.00, smooth 0.41-&gt;0.45, join 0.74-&gt;0.55
+- v14: fit MANO (fingers) on 96-108: 13 frames, 600 steps; losses kp 0.27-&gt;0.28, depth 1.02-&gt;1.03, pen 0.01-&gt;0.02, occl 0.33-&gt;0.29, grip 0.01-&gt;0.01, smooth 0.06-&gt;0.06, join 0.15-&gt;0.09
+- v15: fit MANO (fingers) on 144-164: 21 frames, 600 steps; losses kp 0.95-&gt;0.90, depth 3.02-&gt;2.85, pen 0.17-&gt;0.21, occl 7.57-&gt;6.44, grip 0.00-&gt;0.06, smooth 0.74-&gt;0.77, join 1.20-&gt;0.83
+- v16: revert to v14
+- v17: separate hand from the object on 146-162: moved 0 frames out along the surface normal where the palm crossed it, smoothly (median 0.0 cm, max 0.0 cm)
+- v18: curl middle, ring, pinky by -12 deg (MANO joints) on 149-159 (falloff 5)
+- v19: smooth hand (rigid motion + finger joints) on 8-26 over 8 frames: hand jitter median 1.1 -&gt; 1.1 mm/frame^2
+- v20: move object -1.5 cm along the viewing ray on 0-14
+- v21: revert to v19
+- v22: fit MANO (all) on 30-38: 9 frames, 600 steps; losses kp 0.33-&gt;0.34, depth 2.63-&gt;2.58, pen 0.00-&gt;0.00, occl 0.11-&gt;0.15, grip 0.00-&gt;0.00, smooth 0.47-&gt;0.56, join 0.92-&gt;0.17
+- v23: revert to v21
+- v24: result of pass 1: v23 with the ranges the verifier rejected set back to v1
+- v25: translate object (+0.0,+0.0,+0.9) cm [world] on 0-26
+- v26: revert to v24
+- v27: move object -1.5 cm along the viewing ray on 0-26
+- v28: revert to v24
+- v29: move object -1.2 cm along the viewing ray on 0-26
+- v30: move object -1.3 cm along the viewing ray on 172-203
+- v31: fit MANO (all) on 138-203: 66 frames, 600 steps; losses kp 0.52-&gt;0.69, depth 2.62-&gt;2.44, pen 1.14-&gt;0.05, occl 3.43-&gt;2.66, grip 0.28-&gt;0.01, smooth 0.86-&gt;0.47, join 0.16-&gt;0.00
+- v32: curl middle, ring, pinky by -15 deg (MANO joints) on 148-161 (falloff 5)
+- v33: fit MANO (all, no contact) on 188-203: 16 frames, 600 steps; losses kp 0.71-&gt;0.55, depth 2.33-&gt;2.20, pen 0.00-&gt;0.00, occl 0.07-&gt;0.09, grip 0.00-&gt;0.00, smooth 0.75-&gt;0.96, join 0.29-&gt;0.02
+- v34: fit MANO (fingers) on 145-163: 19 frames, 600 steps; losses kp 0.92-&gt;0.79, depth 2.98-&gt;2.63, pen 0.09-&gt;0.01, occl 9.07-&gt;7.92, grip 0.19-&gt;0.06, smooth 0.71-&gt;0.42, join 0.63-&gt;0.41
+- v35: fit MANO (all) on 14-50: 37 frames, 600 steps; losses kp 0.56-&gt;1.30, depth 3.86-&gt;5.42, pen 0.05-&gt;0.00, occl 1.86-&gt;4.22, grip 1.43-&gt;0.89, smooth 0.43-&gt;0.84, join 0.23-&gt;0.11
+- v36: revert to v34
+- v37: fit MANO (all) on 19-38: 20 frames, 600 steps; losses kp 0.67-&gt;2.56, depth 5.03-&gt;7.23, pen 0.10-&gt;0.02, occl 2.60-&gt;5.91, grip 0.71-&gt;0.80, smooth 0.54-&gt;1.45, join 0.91-&gt;0.24
+- v38: revert to v34
+- v39: fit MANO (fingers) on 20-38: 19 frames, 600 steps; losses kp 0.68-&gt;0.72, depth 5.12-&gt;4.96, pen 0.10-&gt;0.00, occl 2.59-&gt;3.22, grip 0.50-&gt;0.24, smooth 0.54-&gt;0.58, join 1.00-&gt;0.59
+
+Object shape: x1.00 of the reconstructed mesh along the first frame&#x27;s viewing direction (the unseen extent), x1.00 / x1.00 across it; the object is 21.3 x 7.7 x 3.4 cm along its long / mid / short axes.
+object&#x27;s extent along the first frame&#x27;s viewing direction (the side that frame could not see), evidence per candidate (after re-fitting the object and the hand to it):
+  x1.00 ( 9.7 cm): at rest -0.9 / -1.0 cm from the table, IoU 0.947, depth residual 0.46 cm; while held: keypoints 8.4 px, hand 0.2 cm off the depth map, 0.0 triangles through the object, 1.1% of the hand on the wrong side of the object -&gt; score 2.0
+  x0.80 ( 7.7 cm): at rest -1.6 / -0.8 cm from the table, IoU 0.948, depth residual 0.40 cm; while held: keypoints 9.1 px, hand 0.3 cm off the depth map, 1.8 triangles through the object, 1.3% of the hand on the wrong side of the object -&gt; score 3.1
+  x0.65 ( 6.3 cm): at rest -1.7 / -0.8 cm from the table, IoU 0.931, depth residual 0.45 cm; while held: keypoints 9.2 px, hand 0.3 cm off the depth map, 5.6 triangles through the object, 1.5% of the hand on the wrong side of the object -&gt; score 6.0
+  x0.50 ( 4.8 cm): at rest -1.6 / -0.9 cm from the table, IoU 0.906, depth residual 0.71 cm; while held: keypoints 9.0 px, hand 0.3 cm off the depth map, 10.4 triangles through the object, 1.6% of the hand on the wrong side of the object -&gt; score 10.6
+  x0.40 ( 3.9 cm): at rest -1.4 / -0.7 cm from the table, IoU 0.905, depth residual 0.92 cm; while held: keypoints 9.7 px, hand 0.4 cm off the depth map, 12.9 triangles through the object, 2.3% of the hand on the wrong side of the object -&gt; score 12.1
+  x0.30 ( 2.9 cm): at rest -1.4 / -0.7 cm from the table, IoU 0.887, depth residual 1.36 cm; while held: keypoints 9.5 px, hand 0.5 cm off the depth map, 13.4 triangles through the object, 2.4% of the hand on the wrong side of the object -&gt; score 15.7
+
+Depth: every frame&#x27;s depth is scaled so that its table lies on one plane (the camera is static, but the depth estimator&#x27;s scale drifts: in the frames&#x27; own depth the table is 0.17 cm rms off a plane within a frame, while its distance ranges from x0.905 to x1.027 of the reference over the clip, and the depth on the object moves with it). The tracked object and hand were moved along their viewing rays with it (object x0.980 to x1.093), and the mesh, sized in frame 0&#x27;s depth, was scaled x0.998.
+
+Table: plane of the depth points within 20 cm of the object in frames [2, 190] (8000 points, 0.13 cm rms off the plane); its normal is up, 3.4 deg from GeoCalib&#x27;s gravity estimate. table re-fitted from frames [2, 8, 13, 190, 196, 202]: 8000 depth points around the object, 0.13 cm rms off the plane (the patches&#x27; heights on it: -0.0, +0.0 cm); its normal turned 0.0 deg (now 3.4 deg from GeoCalib&#x27;s gravity). Up for edits and views is this normal.
+
+Verifier (v1 vs refined, blind A/B):
+- frames 17-59: kept (winner A, refined = A, confidence 0.75): A holds the spatula with the thumb or palm opposing the fingers on 93% of the lifted frames and has no interpenetration. B shows a large spike of hand triangles through the object around frames 46-51, also visible as red in its frame 50 3D views, plus fingertip jitter in the same frames. B&#x27;s keypoint error is slightly lower, but A is more physically plausible and the object is genuinely held.
+- frames 89-175: kept (winner B, refined = B, confidence 0.80): B keeps the spatula gripped, with the thumb or palm opposing the fingers on all lifted frames. It has far less interpenetration: 2.8 hand triangles through the object on average versus 25.8 for A, whose crossings spike to around 100 during the rotation. Keypoint error is the same for both (10 px). A shows smoother hand acceleration in the place phase, but its hand passes through the handle for most of the rotation.
+- frames 176-192: REVERTED (winner B, refined = A, confidence 0.70): Both reconstructions fit the video about equally well. A shows acceleration spikes in the hand and fingertips around frame 191, followed by a drop, and an angular speed spike at frame 194. B&#x27;s motion is smooth throughout. A&#x27;s paths also show more hooks and zig-zags, so B is more plausible.
+- frames 193-194: REVERTED (winner B, refined = A, confidence 0.70): The two reconstructions look nearly identical in the overlays and the 3D views. The plots separate them. A has a hand and fingertip acceleration spike around frame 191, then a sudden drop, which points to jitter. A also has an object rotation speed spike at frame 194. B&#x27;s curves are smooth throughout. B keeps a small residual rotation while the object rests, but it is minor compared with A&#x27;s spikes.
+- frames 203-203: kept (winner B, refined = B, confidence 0.60): The two reconstructions are nearly identical in the overlays and the 3D views, and the hand paths match. The difference is the object&#x27;s rotation while it rests on the table. A shows a small but nonzero angular speed of about 0.2–0.5 degrees per frame, while B&#x27;s stays at zero. A resting object should not rotate, so B is more plausible.
+
+Merge of the kept and the reverted ranges: no seams to smooth. Finger jumps left (fastest fingertip over 10 mm/frame^2): none.
+
+Independent reviewer, before the agent could finish: overall bad; [medium] 0-14: Object not resting on the table before pickup: obj_height about -0.95 cm, so it sits sunk into the table plane. (hint: Constrain the object&#x27;s resting pose to lie exactly on the table plane (height 0) and re-fit its depth and scale.); [medium] 183-203: After release the object is again below or inside the table (height -0.86 to -1.14 cm) instead of resting on it. (hint: Snap the object to the table surface once it is released and hold it static there.); [low] 15-18: Hand not touching the object at grasp onset. (hint: Close the gap between fingertips and handle so contact begins smoothly.); [medium] 21-27: Hand is drawn in front of the object in places where the video shows the object, so the depth ordering is wrong during the grasp. (hint: Fix the relative depth of hand and object using the occlusion masks.); [high] 33-34: No opposing grip (thumb or palm vs fingers) just as the lift starts. (hint: Make sure the thumb opposes the fingers on the handle before the object leaves the table.); [medium] 54-57: Rotation jump in the object pose during in-hand rotation (ang_speed peaks near 6 deg per frame). (hint: Temporally smooth the object rotation and reject outlier pose estimates.); [high] 101-103: Hand passes through the object&#x27;s surface during rotation. (hint: Add a penetration penalty and push the fingers out to the object&#x27;s surface.); [medium] 148-149: Hand is hidden behind the object where the video shows the hand in front. (hint: Correct the hand/object depth ordering from the occlusion cues.); [high] 149-159: Middle, ring and pinky fingers penetrate the handle during placement; red interpenetration is visible in frame 152 from behind. (hint: Resolve the interpenetration by moving the fingers onto the handle surface while keeping contact.); [medium] 153-169: Poor hand alignment with the video (keypoint error about 18 px) and elevated jitter during placement. (hint: Re-fit the hand keypoints for these frames and smooth the trajectory.); [medium] 15-104: Wrist and fingertip paths show zig-zags and sharp kinks (jitter), especially on the wrist (black) and the index/middle tips. (hint: Apply temporal smoothing to the hand pose over the held span.); [low] 187-203: High hand acceleration at rest and hand off the depth map at frames 191-194. (hint: Smooth the hand trajectory and constrain its depth to the observed depth map.)
+
+Reviewer on this pass&#x27;s result (the next pass works on it): overall bad; [medium] 0-14: Object not resting on the table before grasp (obj_height about -0.95 cm, i.e. sunk into or misplaced relative to the table plane). (hint: Constrain the object&#x27;s resting pose to lie on the table plane; refine its depth and scale.); [medium] 183-203: Object not on the table at rest after release (height about -1 cm, below or inside the table). (hint: Snap the object onto the table support plane during rest and release frames.); [low] 15-18: Hand not touching the object at the start of the grasp phase. (hint: Close the hand onto the handle earlier, or adjust the grasp onset timing.); [medium] 21-27: Hand is drawn in front of the object where the video shows the object visible, so the depth ordering is wrong. (hint: Use occlusion-aware depth ordering: push the hand back or bring the object forward in depth.); [high] 33-34: No opposing grip at lift onset. The fingers rest on top of the handle without thumb or palm opposition while the object starts to rise. (hint: Place the thumb under or opposite the fingers on the handle before the object leaves the table.); [medium] 54-57: Rotation jump in the object pose (ang_speed up to ~6 deg/frame in a discontinuous spike). (hint: Temporally smooth the object orientation and enforce continuity with the hand grip.); [medium] 15-104: Fingertip and wrist paths show zig-zags and loops during the held span, indicating jitter in finger articulation while the grip should be stable. (hint: Apply temporal smoothing to the finger joints while the object is held; keep contacts fixed relative to the object.); [high] 101-103: Hand passes through the object&#x27;s surface during the rotation. (hint: Add a penetration penalty and project the fingers onto the handle surface.); [medium] 148-149: Hand hidden behind the object where the video shows the hand in front. (hint: Correct the relative hand and object depth using the video occlusion masks.); [high] 151-157: Middle and ring fingers penetrate the object during placement; hand keypoint error is also high (~18 px) in 153-169. (hint: Resolve the interpenetration and refit the hand to 2D keypoints during the place phase.); [high] 172-173: Index, middle and pinky pass through the object&#x27;s surface at release. (hint: Enforce a non-penetration constraint as the fingers open.); [medium] 174-194: Hand is off the depth map (hand_depth bias about -2 cm) during release and rest, so the hand floats in front. (hint: Re-anchor the hand depth to observed depth and smooth the transition out of the grasp.)
+
+Verifier (v24 vs refined, blind A/B):
+- frames 0-14: kept (winner A, refined = A, confidence 0.62): The two reconstructions are very similar in their overlays and 3D views. The main difference is the object&#x27;s height above the table. A&#x27;s lowest point sits at about -0.1 cm, which is essentially resting on the table. B&#x27;s sits at about -0.9 cm, meaning it sinks into the table. Contact, interpenetration and jitter are comparable, with only a slightly higher fingertip acceleration for A late in the sequence, so A is more physically plausible.
+- frames 15-37: kept (winner A, refined = A, confidence 0.65): Grip quality, interpenetration and keypoint error are essentially identical for the two. However, B&#x27;s object sits about 1 cm below the table surface during the approach and grasp phases, so it penetrates the table. A&#x27;s object rests at table height, which makes A more physically plausible. A shows a slightly larger fingertip-acceleration bump around frame 22, but it is minor.
+- frames 143-175: kept (winner B, refined = B, confidence 0.75): Both reconstructions grip the spatula handle similarly, with matching object poses. A has large interpenetration spikes (up to about 65 triangles near frame 172, plus 40 around frame 157) and visible red in its 3D views. Its hand and fingertip acceleration spikes also show jitter. B keeps close contact with almost no penetration, smoother motion, and slightly lower keypoint error. B&#x27;s object also rests at the table level rather than dipping below it.
+- frames 176-192: kept (winner A, refined = A, confidence 0.72): The image overlays look about the same, but the plots favour A. A keeps the spatula near the table surface (about −0.4 to +0.2 cm), while B sinks it about 1 cm into the table. B also shows a burst of hand–object interpenetration (about 67 triangles) and accompanying hand and fingertip acceleration spikes around frames 170–175, whereas A stays smooth with no interpenetration.
+- frames 193-203: kept (winner A, refined = A, confidence 0.60): Both reconstructions look nearly identical in the overlays and the 3D views. The main difference is the object&#x27;s height. A rests about 0.3–0.4 cm below the table, while B sinks about 1.0–1.15 cm into it, so A is more physically plausible. Hand acceleration is similar in both: A has a small step near frame 189, and B is slightly higher in the middle of the clip.
+
+Merge of the kept and the reverted ranges: no seams to smooth. Finger jumps left (fastest fingertip over 10 mm/frame^2): none.
+
+Independent reviewer, before the agent could finish: overall bad; [low] 15-17: The hand is not touching the object at the start of the grasp, although the approach is ending and contact should be forming. (hint: Bring the fingertips onto the handle so that contact begins at the grasp onset.); [medium] 21-27: The hand is drawn in front of parts of the spatula that are visible in the video, so the occlusion ordering or the hand depth is wrong during the grasp. (hint: Enforce depth and occlusion consistency with the object mask, moving the hand behind or beside the visible object pixels.); [high] 33-34: There is no opposing thumb-versus-fingers grip right at lift-off, so the object would leave the table without a stable grasp. (hint: Close the thumb against the fingers around the handle before the object height increases.); [high] 34-50: During the lift (frames 39 and 47), the object orientation in 3D appears rotated relative to the video, where the spatula is held nearly upright. The blade is pitched differently, and the side views show the spatula edge-on, which does not match the video. (hint: Re-fit the object rotation to the video mask and silhouette during the lift.); [medium] 54-57: The object rotation jumps (ang_speed peak in frames 51-67), which is a non-physical sudden reorientation. (hint: Temporally smooth the object rotation and enforce consistency with the in-hand contacts.); [medium] 51-135: During in-hand rotation, the grip appears to be mostly fingertips wrapped loosely around the handle. The wrist and fingertip paths over frames 15-104 show zig-zag jitter, especially in the wrist and the red and green traces. (hint: Smooth the hand trajectories and keep stable finger contacts on the handle throughout the rotation.); [high] 101-103: The hand passes through the object&#x27;s surface. (hint: Add a penetration penalty and push the fingers out to the handle surface.); [low] 187-195: At rest, the hand is off the depth map (depth bias around -1.2 to -1.5 cm and hand depth error of -1.5). (hint: Re-align the hand depth to the observed depth after release.); [low] 202-203: The hand is off its 2D keypoints. (hint: Increase the keypoint reprojection weight in the final frames.); [low] 0-16: A depth bias of about -1.5 cm is present before the grasp and again during release, so the object may be slightly misplaced relative to the table. (hint: Snap the object onto the table plane at rest and correct the depth offset.)
+
+Independent reviewer on the final result (what is still wrong): (votes over 3 reviews: bad, bad, bad) overall bad; [high] 33-34: Grip becomes non-opposing right as lift-off begins: thumb/palm and fingers are not on opposite sides of the handle when the object starts to rise. (hint: Constrain the thumb to oppose the fingers on the handle from the last grasp frame through lift-off. Optimize the contacts so the handle is pinched before obj_height rises.); [high] 54-57: Rotation jump: the object orientation changes abruptly (ang_speed peaks at ~5.9 deg/frame in 51-67), which is inconsistent with a smooth in-hand rotation. (hint: Re-fit the object pose over 54-57 with a temporal smoothness prior on rotation, and check for a symmetry flip of the spatula.); [high] 101-103: Hand passes through the object&#x27;s surface during the rotate phase. (hint: Add a penetration penalty and push the fingers out to the handle surface while keeping contact.); [medium] 102-118: High angular speed (6.47) together with tip trajectory zig-zags in the paths image (frames 15-104) indicates jittery fingertip and object motion during rotation. (hint: Temporally smooth the fingertip and object pose trajectories, for example with low-pass filtering plus a contact-consistency term.); [low] 15-17: Hand is not touching the object at the start of the grasp: a gap remains just before the grasp phase. (hint: Close the approach so the fingers make contact by frame 17.); [medium] 21-27: Hand is rendered in front of the object where the video shows the object occluding it, so the depth ordering of hand vs spatula is wrong. (hint: Use occlusion masks or depth ordering to move the hand behind or around the object surface.); [medium] 170-203: Large negative depth bias (about -1.2 to -1.6) during release and rest: hand and object sit at the wrong depth relative to the observed depth. (hint: Re-align the global depth scale and offset for the release and rest frames to the depth map.); [low] 187-203: Hand drifts off the depth map (187-195) and off its keypoints (202-203) during rest, with elevated hand acceleration. (hint: Refit the hand to keypoints and depth in the rest frames, and smooth the wrist motion.); [medium] 187-203: Object height at rest is negative (-0.40), so the spatula sinks below the table plane. (hint: Constrain the object to rest on the table plane once released.)
+
+| metric (median over frames) | initial | automatic fit (v1) | final |
+|---|---|---|---|
+| coverage | 0.97 | 0.98 | 0.98 |
+| spill | 0.05 | 0.03 | 0.04 |
+| depth_res_cm | 0.41 | 0.46 | 0.54 |
+| hand_kp_px | 24.95 | 9.47 | 9.76 |
+| hand_depth_bias_cm | -2.90 | -0.72 | -0.28 |
+| contact_cm | 0.00 | 0.17 | 0.15 |
+| penetration_cm | 0.02 | 0.00 | 0.00 |
+| n_cross | 24.00 | 0.00 | 0.00 |
+| hand_over_obj | 0.02 | 0.00 | 0.00 |
+| obj_over_hand | 0.00 | 0.00 | 0.00 |
+| obj_height_cm | 7.83 | 7.76 | 7.76 |
+| ang_speed_deg_per_frame | 1.79 | 1.59 | 1.52 |
+| hand_accel_mm | 2.43 | 0.77 | 0.63 |
+| tip_accel_mm | 3.47 | 1.16 | 0.95 |
+| finger_accel_deg | 0.40 | 0.18 | 0.14 |
+| obj_ang_accel_deg | 1.55 | 0.45 | 0.45 |
+| thumb_gap_cm | 4.40 | 2.74 | 0.32 |
+| n_touching | 0.00 | 2.00 | 4.00 |
+| opposed | 0.00 | 0.00 | 1.00 |
+</pre>

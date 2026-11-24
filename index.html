@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CounterfactualHOI — project progress</title>
+<style>
+  body { font-family: -apple-system, system-ui, sans-serif; margin: 0; color: #222; background: #fafafa; }
+  .nav { background: #1f2937; padding: 10px 24px; display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+  .nav b { color: #fff; margin-right: 12px; }
+  .nav a { color: #cbd5e1; text-decoration: none; font-size: 14px; }
+  .nav a:hover { color: #fff; }
+  main { max-width: 1180px; margin: 0 auto; padding: 24px; }
+  h1 { font-size: 26px; margin: 8px 0 4px; } h2 { font-size: 21px; margin: 34px 0 6px; }
+  p, li { font-size: 15px; line-height: 1.5; color: #333; }
+  .sub { color: #555; font-size: 15px; margin-top: 0; }
+  table { border-collapse: collapse; font-size: 14px; background: #fff; margin: 8px 0; }
+  th, td { border: 1px solid #ddd; padding: 6px 10px; text-align: left; }
+  th { background: #f1f5f9; }
+  .status { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 10px; margin-left: 6px; }
+  .done { background: #dcfce7; color: #166534; } .wip { background: #fef9c3; color: #854d0e; } .todo { background: #e5e7eb; color: #374151; }
+  .card { background: #fff; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; }
+  .feature iframe { width: 100%; height: 540px; border: 0; display: block; }
+  .card figcaption { padding: 8px 12px; font-size: 13px; color: #444; border-top: 1px solid #eee; }
+  .two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .gallery video, .card img, .card video { width: 100%; display: block; background: #000; }
+  .more { font-size: 15px; font-weight: 600; }
+  .verdict { border-left: 4px solid #94a3b8; padding: 2px 12px; margin: 10px 0; background: #fff; }
+  figure { margin: 0; }
+  @media (max-width: 900px) { .gallery, .two { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="nav"><b>CounterfactualHOI</b><a href="index.html">Home</a><a href="recon/daid/index.html">1 · Do-as-I-Do</a><a href="recon/choir/index.html">2 · Open-CHOIR</a><a href="recon/ours/index.html">3 · Our pipeline</a><a href="recon/agent/index.html">4 · Agent refinement</a><a href="recon/retarget/index.html">5 · Retargeted motions</a></div>
+<main>
+<h1>CounterfactualHOI</h1>
+<p class="sub">Training a dexterous hand policy from RGB, using counterfactual (video-generated) demonstrations of
+picking up, in-hand manipulating and setting down objects. Alvin, Anthony, Hyunsoo, Jayaram. Updated
+2026-11-24.</p>
+
+<p><b>Pipeline.</b> 1.0 generate counterfactual videos with MiniMax H3 <span class="status done">100 videos</span> ·
+1.1 reconstruct the hand and object in 4D <span class="status done">10/10 real videos</span> ·
+1.2 agentic refinement <span class="status done">10/10</span> ·
+1.3 retarget to the Sharpa hand <span class="status wip">FlashDexRetarget</span> ·
+1.4 train a policy <span class="status wip">started</span></p>
+
+<p>Step 1.1 went through three reconstruction methods, then an agentic refinement of the third. Each viewer shows the hand (blue), the object, the scene
+from the first frame (colored points) and the real camera's frustum with the current video frame, rotated so
+gravity points down. Drag to orbit, scroll to zoom; playback bar at the bottom.</p>
+
+<h2>1 · Do-as-I-Do on IMG_5710 and three MiniMax H3 edits</h2>
+<p>Our first method: <a href="https://github.com/malik-group/do-as-i-do">Do-as-I-Do</a>'s reconstruction (HaWoR hand, SAM3D object,
+silhouette-scored object tracking, a fitted table). Input: one real clip (a hand picks up a case, spins it in
+the palm, sets it down) and three MiniMax H3 edits that swap the object for an apple, a lemon and a wooden block.</p>
+<div class="two">
+<figure class="card"><video src="videos/daid_inputs_grid2x2.mp4" controls muted loop playsinline preload="metadata"></video>
+<figcaption>The 4 input videos: real IMG_5710 (top left) and the MiniMax H3 apple, lemon and wood-block edits.</figcaption></figure>
+<figure class="card feature"><iframe src="recon/daid/real.html?initialCameraPosition=-0.6305%2C-0.2516%2C-0.1515&amp;initialCameraLookAt=-0.4337%2C0.1096%2C-0.1544&amp;initialCameraUp=-0.0093%2C-0.4641%2C0.8857&amp;initialCameraFov=1.3090" title="Do-as-I-Do real" loading="lazy"></iframe><figcaption><b>Do-as-I-Do · real IMG_5710</b> — Drag to orbit, scroll to zoom; playback bar at the bottom.</figcaption></figure>
+</div>
+<table><tr><th>clip</th><th>QC</th></tr><tr><td>Real reference video: AirPods case</td><td>table 0.97×0.58 m · silhouette IoU 0.82 · rotation flips (&gt;20°/frame) 4% · up = GeoCalib gravity, 25.8° from the table normal ⚠</td></tr><tr><td>Generated (MiniMax H3): red apple</td><td>table 0.48×0.42 m · silhouette IoU 0.60 · rotation flips (&gt;20°/frame) 2% · up = GeoCalib gravity, 1.2° from the table normal</td></tr><tr><td>Generated (MiniMax H3): wooden block</td><td>table 0.79×0.62 m · silhouette IoU 0.63 · rotation flips (&gt;20°/frame) 10% · up = GeoCalib gravity, 32.7° from the table normal ⚠</td></tr><tr><td>Generated (MiniMax H3): lemon</td><td>table 0.52×0.35 m · silhouette IoU 0.77 · rotation flips (&gt;20°/frame) 2% · up = GeoCalib gravity, 2.1° from the table normal</td></tr></table>
+<p class="verdict">What went wrong: the object's rotation flips by 50–160° from one frame to the next (its poses are
+scored by silhouette only), the hand sits 1.3–2.4 cm inside the object on most in-hand frames, and gravity from
+GeoCalib was 26–33° off on two of the four clips.</p>
+<p class="more"><a href="recon/daid/index.html">→ All 4 Do-as-I-Do viewers</a></p>
+
+<h2>2 · Open-CHOIR on the 10 real videos</h2>
+<p><a href="https://github.com/hxwork/CHOIR">Open-CHOIR</a> (SIGGRAPH Asia 2026): SAM2 masks, SAM3D object,
+Dyn-HaMR hand, then grasp-aware depth correction and contact-aware temporal fitting. Run on our 10 real videos:
+5 objects (a RealSense-style camera, a tape roll, a spatula, a mug, a dish-soap bottle), each picked up and placed
+(pp) and picked up, rotated and placed (prp).</p>
+<figure class="card feature"><iframe src="recon/choir/prp_anthony_real_4.html?initialCameraPosition=0.1704%2C0.1509%2C-0.0222&amp;initialCameraLookAt=0.0727%2C0.5306%2C-0.3391&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="CHOIR prp_anthony_real_4" loading="lazy"></iframe><figcaption><b>Open-CHOIR · prp_anthony_real_4</b> (gray mug, picked up, rotated in the hand, set down) — mask IoU first / last 0.72 / 0.74; object ends +3.2 cm from the table</figcaption></figure>
+<p class="verdict">What went wrong: the object's depth drifts. It starts on the table but ends 3–20 cm in front
+of it when set down farther away, and its silhouette matches the video poorly (IoU 0.31–0.74 where the hand is off
+the object). Its SAM2 masks also drifted (a "hand" covering the whole table, a hand mask swallowing the held mug),
+and its copy of SAM3D drops the object's texture and 95% of its triangles.</p>
+<p class="more"><a href="recon/choir/index.html">→ All 10 CHOIR viewers (pp / prp tabs)</a></p>
+
+<h2>3 · Our pipeline on the same 10 videos</h2>
+<p>Metric video depth from Depth Pro 2, scaled so it agrees with the MANO hand (the hand's known size is the
+metric reference); per-frame SAM3 masks from text prompts; a textured SAM3D mesh of the object, sized and tracked
+through the video by FoundationPose on that depth (re-registering from the mask when a frame-by-frame check says
+the fit slipped); the hand moved onto the depth map. Hand, object and table share one metric depth.</p>
+<figure class="card feature"><iframe src="recon/ours/prp_anthony_real_4.html?initialCameraPosition=0.1739%2C0.1215%2C-0.0496&amp;initialCameraLookAt=0.0812%2C0.4810%2C-0.3497&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="ours prp_anthony_real_4" loading="lazy"></iframe><figcaption><b>Our pipeline · prp_anthony_real_4</b> (same clip) — mask IoU first / last 0.94 / 0.95; object ends +1.0 cm from the table</figcaption></figure>
+<p>Both methods scored on the same SAM3 masks: object silhouette IoU on the first and last frames (the hand is off
+the object there), and where the object ends up relative to the table once it is set down (0 is right).</p>
+<table><tr><th>clip</th><th>CHOIR mask IoU first / last</th><th>ours mask IoU first / last</th><th>CHOIR object vs table at end</th><th>ours object vs table at end</th><th>depth scale from the hand</th></tr><tr><td>pp_anthony_real_1</td><td>0.44 / 0.74</td><td><b>0.92 / 0.95</b></td><td>+0.2 cm</td><td><b>-0.4 cm</b></td><td>1.169</td></tr><tr><td>pp_anthony_real_2</td><td>0.59 / 0.45</td><td><b>0.93 / 0.89</b></td><td>+20.0 cm</td><td><b>+1.8 cm</b></td><td>1.009</td></tr><tr><td>pp_anthony_real_3</td><td>0.57 / 0.55</td><td><b>0.89 / 0.80</b></td><td>+12.5 cm</td><td><b>-0.5 cm</b></td><td>1.045</td></tr><tr><td>pp_anthony_real_4</td><td>0.69 / 0.73</td><td><b>0.84 / 0.85</b></td><td>+6.0 cm</td><td><b>+1.1 cm</b></td><td>1.005</td></tr><tr><td>pp_anthony_real_5</td><td>0.61 / 0.47</td><td><b>0.91 / 0.89</b></td><td>+8.4 cm</td><td><b>+2.1 cm</b></td><td>1.022</td></tr><tr><td>prp_anthony_real_1</td><td>0.52 / 0.31</td><td><b>0.94 / 0.84</b></td><td>+6.3 cm</td><td><b>+1.5 cm</b></td><td>0.992</td></tr><tr><td>prp_anthony_real_2</td><td>0.55 / 0.50</td><td><b>0.91 / 0.92</b></td><td>+5.5 cm</td><td><b>+2.5 cm</b></td><td>1.060</td></tr><tr><td>prp_anthony_real_3</td><td>0.58 / 0.57</td><td><b>0.91 / 0.84</b></td><td>+8.6 cm</td><td><b>+2.0 cm</b></td><td>1.046</td></tr><tr><td>prp_anthony_real_4</td><td>0.72 / 0.74</td><td><b>0.94 / 0.95</b></td><td>+3.2 cm</td><td><b>+1.0 cm</b></td><td>0.994</td></tr><tr><td>prp_anthony_real_5</td><td>0.52 / 0.51</td><td><b>0.92 / 0.89</b></td><td>+6.0 cm</td><td><b>+2.3 cm</b></td><td>0.946</td></tr></table>
+<p class="more"><a href="recon/ours/index.html">→ All 10 viewers of our pipeline (pp / prp tabs, with QC frames)</a></p>
+
+<h2>4 · Agentic refinement of our reconstructions</h2>
+<p>An agent refines the reconstruction by looking at it against the video and editing its parameters with tools. The
+hand is only ever the MANO hand model's parameters (per frame its global orientation, position and 15 joint
+rotations, plus one hand shape per clip): no tool edits mesh vertices, so the hand always stays a valid human hand
+that a retargeter can read. The object is its pose per frame and its shape: the mesh is reconstructed from the first
+frame only, so its extent along the direction that frame looked along (the side it never saw) is a guess, and a
+scale along that direction (and across it) is part of the reconstruction.</p>
+<p><b>One table for the whole clip.</b> The camera is static (background points move less than 4 px over a clip),
+but the depth estimator's metric scale is not: in each frame's own depth map the table is flat to about 2 mm, yet its
+distance from the camera changes from frame to frame by 7–20% over a clip, mostly while the hand is in the scene, and
+the depth on the object and the hand changes with it (while the object rests, the depth on it follows the table's with
+slope 1, as if it moved up to 9 cm along the view). The table does not move, so it calibrates every frame: each
+frame's depth is scaled so that its table lies on one common plane, and the tracked object (its poses and the size of
+its mesh, which was measured in the first frame) and the hand are carried along. After that the table measured right
+around the object agrees with the one plane to about a millimetre wherever the object rests, and the object's two
+resting places agree on its height. Up is that plane's normal (3.2–4.2° from GeoCalib's gravity estimate on our
+clips). Per clip:</p>
+<ol>
+<li><b>Automatic fit (no LLM).</b> The object's 6-DoF pose is fitted frame by frame to its SAM3 mask outside the
+hand and the depth (a search within a trust region, smoothed over time), and its poses are lightly smoothed (5
+frames) to remove the pose tracker's frame-to-frame noise. Then <b>fit_mano</b>, a gradient-based fit
+of all the hand's MANO parameters over the whole clip at once (Adam on the GPU, ~15 s per clip): the detected 2D hand
+keypoints, the hand's SAM3 mask, the depth map (weighted by the image area each part of the hand covers), MANO's
+hand-pose prior and a pull to the hand tracker's pose, smoothness over time (joint angles, and the positions of
+the joints, the fingertips and the wrist: without the fingertips the fit follows the keypoints' frame-to-frame noise
+there), no penetration into the object (its signed distance field, at the hand's vertices and triangle centres with a 1.5 mm
+margin, so fingers cannot slip through a thin wall or handle) or the table, and the clip's hand shape. A second fit
+adds the occlusion order the video shows (the hand behind the object where the object is seen, in front of it where
+the hand is seen) and is kept only where it does not cost keypoint fit. Once the agent has labelled the phases, a
+search over the object's unseen extent runs where the scene says it is off (the object rests in the table or floats
+above it, or the hand is on the wrong side of it): each candidate gets the object and the hand re-fitted and is
+scored on the table, the mask and depth fit and the hand's fit.</li>
+<li><b>Agent.</b> Claude (Opus 5.5) sees overlays of the rendered hand and object on the frames (with the SAM3 mask,
+the detected keypoints and the object's axes), the 3D scene from any side (hand red where it passes through the
+object, green where it touches), wrist and fingertip paths over time (jitter shows as zig-zags), and per-frame plots
+and numbers, including whether the hand really grips the object (thumb or palm against fingers). It labels the motion
+phases (approach, grasp, lift, carry, rotate, place, release, rest) and fixes what the automatic fit cannot: it re-runs
+fit_mano over the held phases with a grip term (the thumb and the closest fingers on the object's surface, the
+thumb's contact facing the fingers'), with more smoothing where the hand still jitters, moves or rotates the hand,
+turns fingers' MANO joints, pushes the palm out of the object, holds the object static or smooths it at rest, and
+fixes flips, jumps and lag with object edits or FoundationPose's re-registration hypotheses. It can scale the
+object's mesh (an object too thick on its unseen side cannot be gripped as the video shows, whatever the hand does)
+and re-fit the table plane. Every edit is a new
+version with before / after images and numbers, including the acceleration of the fastest fingertip around the edited
+frames and a warning when the edit made the hand or the object jump; it reverts what does not help. A fit over a
+frame range keeps the frames just outside it fixed and joins them smoothly.</li>
+<li><b>Reviewer.</b> When the agent wants to finish, an independent reviewer (fresh context) judges the result in
+absolute terms, every phase next to the video and from four sides, and the agent must fix what it finds or say why it
+cannot. The final result is reviewed three more times; the majority verdict and all three votes are in each clip's
+caption.</li>
+<li><b>Verifier.</b> A separate blind A/B judge compares the agent's result with the automatic fit on each changed
+range (overlays, 3D views from three sides, fingertip paths, a plot of the motion) and keeps the automatic fit wherever
+the agent's version looks worse. The span in which the hand holds the object is judged as one range, and what
+decides there is whether the object is really held. Kept and rejected ranges are joined smoothly, and the result is
+checked for frames where the hand jumps more than either version does.</li>
+<li><b>Second pass.</b> The reviewer checks that merged result, and the agent gets a second pass on what it still
+finds, verified against the first pass's result.</li>
+</ol>
+<figure class="card feature"><iframe src="recon/agent/prp_anthony_real_4.html?initialCameraPosition=0.1835%2C0.1263%2C-0.0563&amp;initialCameraLookAt=0.0858%2C0.5084%2C-0.3751&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="agent prp_anthony_real_4" loading="lazy"></iframe><figcaption><b>Agent-refined · prp_anthony_real_4</b> (same clip) — hand keypoint error 20 → 14 px, object mask IoU 0.90 → 0.94; <a href="recon/agent/reports/prp_anthony_real_4.html">the agent's report</a>, <a href="recon/agent/qc/prp_anthony_real_4.jpg">before / after frames</a></figcaption></figure>
+<p>Medians over each clip's frames, initial reconstruction → final.</p>
+<table><tr><th>clip</th><th>hand keypoint error (px)</th><th>object mask IoU</th><th>hand triangles through the object while held</th><th>hand jitter while held (mm/frame²)</th><th>frames where a fingertip jumps</th><th>lifted frames with a real grip</th><th>flagged frames</th><th>verifier kept (chunks)</th><th>reviewer on the result</th><th>agent time</th></tr><tr><td>pp_anthony_real_1</td><td>30.3 → <b>15.2</b></td><td>0.94 → <b>0.96</b></td><td>0 → <b>0</b></td><td>3.4 → <b>1.2</b></td><td>5 → <b>0</b></td><td>0% → <b>88%</b></td><td>113 → <b>44</b></td><td>6 / 8</td><td>acceptable (0 high, 6 medium)</td><td>26 min</td></tr><tr><td>pp_anthony_real_2</td><td>33.5 → <b>8.2</b></td><td>0.92 → <b>0.94</b></td><td>0 → <b>0</b></td><td>2.2 → <b>0.8</b></td><td>8 → <b>0</b></td><td>0% → <b>97%</b></td><td>135 → <b>5</b></td><td>1 / 2</td><td>good (0 high, 0 medium)</td><td>3 min</td></tr><tr><td>pp_anthony_real_3</td><td>37.5 → <b>9.0</b></td><td>0.87 → <b>0.91</b></td><td>0 → <b>0</b></td><td>2.1 → <b>1.0</b></td><td>3 → <b>0</b></td><td>0% → <b>100%</b></td><td>86 → <b>2</b></td><td>4 / 4</td><td>good (0 high, 0 medium)</td><td>8 min</td></tr><tr><td>pp_anthony_real_4</td><td>32.5 → <b>10.3</b></td><td>0.90 → <b>0.92</b></td><td>143 → <b>0</b></td><td>2.1 → <b>0.6</b></td><td>3 → <b>0</b></td><td>91% → <b>91%</b></td><td>121 → <b>78</b></td><td>5 / 6</td><td>acceptable (0 high, 2 medium)</td><td>29 min</td></tr><tr><td>pp_anthony_real_5</td><td>41.7 → <b>12.5</b></td><td>0.88 → <b>0.89</b></td><td>95 → <b>0</b></td><td>3.1 → <b>1.5</b></td><td>2 → <b>0</b></td><td>0% → <b>100%</b></td><td>77 → <b>1</b></td><td>4 / 4</td><td>good (0 high, 0 medium)</td><td>10 min</td></tr><tr><td>prp_anthony_real_1</td><td>27.9 → <b>8.6</b></td><td>0.85 → <b>0.94</b></td><td>45 → <b>0</b></td><td>1.9 → <b>0.7</b></td><td>12 → <b>0</b></td><td>72% → <b>99%</b></td><td>262 → <b>47</b></td><td>9 / 10</td><td>acceptable (3 high, 3 medium)</td><td>32 min</td></tr><tr><td>prp_anthony_real_2</td><td>20.2 → <b>6.8</b></td><td>0.90 → <b>0.92</b></td><td>118 → <b>0</b></td><td>2.0 → <b>0.8</b></td><td>7 → <b>0</b></td><td>49% → <b>98%</b></td><td>159 → <b>3</b></td><td>4 / 4</td><td>acceptable (0 high, 1 medium)</td><td>9 min</td></tr><tr><td>prp_anthony_real_3</td><td>24.9 → <b>9.8</b></td><td>0.92 → <b>0.94</b></td><td>53 → <b>0</b></td><td>2.3 → <b>0.6</b></td><td>6 → <b>0</b></td><td>62% → <b>98%</b></td><td>204 → <b>31</b></td><td>8 / 10</td><td>bad (3 high, 4 medium)</td><td>29 min</td></tr><tr><td>prp_anthony_real_4</td><td>19.6 → <b>14.3</b></td><td>0.90 → <b>0.94</b></td><td>230 → <b>2</b></td><td>1.6 → <b>0.7</b></td><td>21 → <b>0</b></td><td>79% → <b>88%</b></td><td>273 → <b>185</b></td><td>6 / 6</td><td>bad (2 high, 7 medium)</td><td>34 min</td></tr><tr><td>prp_anthony_real_5</td><td>24.9 → <b>9.1</b></td><td>0.87 → <b>0.94</b></td><td>172 → <b>0</b></td><td>2.1 → <b>0.7</b></td><td>6 → <b>0</b></td><td>95% → <b>100%</b></td><td>259 → <b>46</b></td><td>4 / 6</td><td>acceptable (0 high, 3 medium)</td><td>37 min</td></tr></table>
+<p>Blind A/B judgements over every frame of the 10 clips, in chunks (the span in which the hand holds the object is one chunk; the rest is split at phase boundaries, ≤ 60 frames), by the same judge as the verifier, which sees overlays, 3D views from three sides and a motion plot. <i>Automatic fit vs final</i> is not an independent test: the verifier already used that judge to keep the automatic fit wherever the agent's edit lost. The previous round used the depth maps as estimated (the scale drift above was in its object and hand trajectories) and a table plane fitted through the first and the last frame's depth.</p><table><tr><th>A</th><th>B</th><th>A better</th><th>B better</th><th>tie</th><th>clips</th></tr><tr><td>initial (no refinement)</td><td>automatic fit + agent (final)</td><td>0</td><td>40</td><td>0</td><td>10</td></tr><tr><td>automatic fit only (no agent)</td><td>automatic fit + agent (final)</td><td>7</td><td>31</td><td>2</td><td>10</td></tr><tr><td>previous round (the depth maps as estimated, the table fitted through two frames)</td><td>automatic fit + agent (final)</td><td>10</td><td>30</td><td>0</td><td>10</td></tr></table>
+<p class="verdict">Summary: median hand keypoint error 29 → 9 px; hand triangles
+through the object while held 74 → 0; hand jitter while held
+2.1 → 0.8 mm/frame² (the hand tracker's own motion is the first number); frames
+where a fingertip jumps, summed over the 10 clips, 73 → 0 (a median hides these: a jump lasts two or
+three frames); lifted
+frames with the thumb or palm against the fingers 55% → 98% (a hook grip through a
+mug's handle is not counted, see the reviewer); object mask IoU 0.90 → 0.94.
+The object's extent along the first frame's viewing direction was changed on: pp_1 8.5 → 4.3 cm, pp_3 8.4 → 6.7 cm, prp_1 7.1 → 5.7 cm, prp_5 11.4 → 12.8 cm. The agent scaled an extent across that view on: pp_5 ×1.07, prp_4 ×1.05. Before that, the depth anchoring scaled every mesh as a whole, by ×0.94 to ×1.05 (the first frame's depth scale against the clip's). 
+Against the previous round, the judge preferred this round on 30 chunks and the previous one on 10 (0 ties); on the spans in which the hand holds the object, on 6 of 10 clips. 
+<b>Reviewer on each final result (majority of three reviews):</b> <b>good</b>: pp_2, pp_3, pp_5; <b>acceptable</b>: pp_1, pp_4, prp_1, prp_2, prp_5; <b>bad</b>: prp_3, prp_4.</p>
+<p class="more"><a href="recon/agent/index.html">→ Before / after, side by side for each clip (and all 10 refined viewers, with captions, QC frames and the agent's reports)</a></p>
+
+<h2>Generated counterfactual videos (MiniMax H3)</h2>
+<div class="gallery"><figure class="card"><video src="videos/IMG_5690_identity_identity.mp4" controls muted loop playsinline preload="metadata"></video><figcaption>IMG_5690 · identity · identity — left: real source, right: MiniMax H3 generation</figcaption></figure>
+<figure class="card"><video src="videos/IMG_5690_object_tall_can.mp4" controls muted loop playsinline preload="metadata"></video><figcaption>IMG_5690 · object · tall_can (size) — left: real source, right: MiniMax H3 generation</figcaption></figure>
+<figure class="card"><video src="videos/IMG_5690_object_hand_tall_can.mp4" controls muted loop playsinline preload="metadata"></video><figcaption>IMG_5690 · object_hand · tall_can (size) — left: real source, right: MiniMax H3 generation</figcaption></figure>
+<figure class="card"><video src="videos/IMG_5690_object_diet_coke.mp4" controls muted loop playsinline preload="metadata"></video><figcaption>IMG_5690 · object · diet_coke (appearance) — left: real source, right: MiniMax H3 generation</figcaption></figure>
+<figure class="card"><video src="videos/IMG_5703_prism_case_large.mp4" controls muted loop playsinline preload="metadata"></video><figcaption>IMG_5703 · prism · case_large (size) — left: real source, right: MiniMax H3 generation</figcaption></figure>
+<figure class="card"><video src="videos/IMG_5703_prism_red_cube.mp4" controls muted loop playsinline preload="metadata"></video><figcaption>IMG_5703 · prism · red_cube (shape) — left: real source, right: MiniMax H3 generation</figcaption></figure>
+<figure class="card"><video src="videos/IMG_5703_prism_apple.mp4" controls muted loop playsinline preload="metadata"></video><figcaption>IMG_5703 · prism · apple (shape) — left: real source, right: MiniMax H3 generation</figcaption></figure>
+<figure class="card"><video src="videos/IMG_5710_prism_apple.mp4" controls muted loop playsinline preload="metadata"></video><figcaption>IMG_5710 · prism · apple (shape) — left: real source, right: MiniMax H3 generation</figcaption></figure>
+<figure class="card"><video src="videos/IMG_5710_prism_wood_block.mp4" controls muted loop playsinline preload="metadata"></video><figcaption>IMG_5710 · prism · wood_block (shape) — left: real source, right: MiniMax H3 generation</figcaption></figure>
+<figure class="card"><video src="videos/IMG_5710_prism_lemon.mp4" controls muted loop playsinline preload="metadata"></video><figcaption>IMG_5710 · prism · lemon (shape) — left: real source, right: MiniMax H3 generation</figcaption></figure></div>
+
+
+<h2>5 · Retargeted motions (Sharpa Wave hand, physically simulated)</h2>
+<p>The agent-refined reconstructions (section 4: MANO hand + object poses) are turned into physically plausible robot
+motions with <a href="https://holiday-robot.github.io/FlashDexRetarget/">FlashDexRetarget</a>: a kinematic retarget
+of the human hand to the Sharpa Wave hand (22 DoF, floating wrist) gives a reference per clip, then one
+reference-conditioned RL policy (FlashSAC, Isaac Lab) is trained over all 10 clips in simulation to make the simulated
+object follow the reconstructed one. The object, table and gravity are simulated; the hand has to really hold the
+object. Where an object's reconstructed underside (SAM3D cannot see it) made it tip over at rest in simulation
+(the metal case, the soap bottle), its collision mesh is flattened under the object at its reconstructed rest
+pose; the visual mesh and the trajectories are unchanged. The viewers show the policy's rollout of each clip next
+to the refined reconstruction it tracks. The policy was trained on the previous refinement round (r7), which is what its page shows on the left; section 4 above is a newer round, and retargeting it is the next step.
+<b>Status: early snapshot</b>, the policy after 250M environment steps (still training; this section is refreshed from later evaluations). Over the 10 clips the policy tracks a median <b>90%</b> of each clip before the object first leaves 5 cm / 20° of the reconstruction (AdaDex's progress); <b>4/10</b> clips stay within it for the whole clip; the object is within 2 cm of the reconstruction on a median 96% of frames (Do-as-I-Do's sampling-based retargeting of the round-5 reconstructions: 39%).</p>
+<p class="more"><a href="recon/retarget/index.html">→ Refined reconstruction (left) vs retargeted motion (right), pp and prp tabs</a></p>
+
+<h2>First retargeting test (IMG_5710)</h2>
+<p>Do-as-I-Do retargeting run on the Do-as-I-Do reconstruction of IMG_5710. Dataset processing, scene generation
+and IK work; the physics stage (MuJoCo Warp) ran 64 min and stopped early at step 1900/2567: the hand does not lift
+the case and pushes it off its pedestal at ~4.5 s (final object error 0.13 m).</p>
+<figure class="card"><img src="img/retarget_IMG5710.jpg" alt="retargeting snapshots"><figcaption>Simulated Sharpa hand and object at 8 times of the rollout.</figcaption></figure>
+</main>
+</body>
+</html>

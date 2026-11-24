@@ -1,0 +1,154 @@
+<!doctype html><meta charset="utf-8"><title>prp_anthony_real_5 refinement report</title><pre style="white-space: pre-wrap; font: 14px/1.45 system-ui, sans-serif; max-width: 1000px; margin: 24px auto"># Refinement of prp_anthony_real_5
+
+Model global.anthropic.claude-opus-5-5, effort high; 53 versions; 2 passes; 37.3 min.
+
+Agent summary: Final result is v35 (same as v33). I fixed two of the reviewer&#x27;s six points and partly fixed the finger penetration; the hand still sits 23-32 px off its keypoints from frame 194 to 249, and my attempts to fit it closer made it worse.
+
+What the first pass did:
+- Shape: the bottle is 1.25x deeper on the side the first frame couldn&#x27;t see (now 20.7 x 7.8 x 6.8 cm). At rest it sits on the table (about -0.2 cm).
+- Grip: the hand was re-fitted with the grip term for frames 21-188.
+- Putting down: in the automatic fit the hand floated at the bottle cap around frames 190-210, about 125 px off its keypoints. I moved it down and back and re-fitted it, and moved the fingers behind the bottle neck in frames 215-247, as the video shows.
+- At rest: the bottle is held still in frames 0-38 and 234-258, blended in and out.
+
+Changes in response to the review:
+- **Rotation jump, frames 132-135:** fixed. I smoothed the bottle&#x27;s poses over frames 116-154; its angular acceleration dropped from 1.3 to 0.9 deg/frame² in that window and the plot shows no spike. The grip stays opposed with no crossing.
+- **Fingertip jitter, frames 204-250:** smoothed the hand over this range. Fingertip acceleration now peaks at about 4.6 mm/frame² (frames 242-249) and 9 at its worst single frame (249), under the 11 that counts as a jump.
+- **Fingers through the bottle, frames 188-250:** re-fitting the fingers cut the median from 8 crossing hand triangles to 3. Frames 202-217 still have about 15, under 1 mm deep. Pushing the hand out along the bottle&#x27;s surface changed nothing, because it only acts on the palm and here the fingers cross.
+
+Not fixed:
+- **Hand off its keypoints while putting down and letting go:** frames 194-201 and 210-217 are about 32 px off, and 218-249 about 23-25 px. A full hand re-fit over frames 192-222 raised the error (28 to 29 px) and pulled the hand back up towards the cap at frame 207, so I reverted it. I can&#x27;t raise the keypoint weight in the fit. In the video the hand holds the bottle&#x27;s shoulder and neck here, not its body, and the model hand is at the shoulder too, just offset. The fits keep pushing it off the neck; the model&#x27;s neck may be a little too thick because of the 1.25x scale.
+- **Hand off the depth map, frames 136-165:** about 2 cm behind the depth map. The hand touches the bottle with an opposed grip there and its keypoint error is about 13-16 px. Moving it to the depth map would pull it off the bottle or through it, so I treat this as the depth evidence disagreeing.
+- **Grip:** the thumb and fingers briefly stop gripping from opposite sides around frame 143 and again around 215-218, while the bottle is being put down.
+
+Second pass, on the reviewer&#x27;s findings: Final version: v52. I thinned the bottle along its unseen side to 0.9 of its depth (now 20.1 x 7.5 x 5.7 cm). This re-fitted the object and the hand over the whole clip. The last review still found three medium problems, and I ran out of budget before fixing any of them. I also checked v52 itself very little: only three overlay frames (0, 129, 258) plus the scaling tool&#x27;s summary numbers. I made no 3D views, motion views or plots of it.
+
+Why I thinned the bottle: in placing (frames 189-216), any hand pose that matched the keypoints went through the bottle, so the fit pushed the hand up over the cap. During the rotation the rendered bottle also stuck out about 1 cm past its mask. 5.7 cm deep is also closer to a real dish-soap bottle. The thickness search only tested the existing shape and offered no alternative, so I chose the factor myself.
+
+What changed with the re-fit (whole-clip medians):
+- Keypoint error fell from 12.2 to 9.1 px.
+- Hand depth bias fell from 0.32 to 0.22 cm.
+- Flags fell from 193 to 62, with no hand-through-object crossings and an opposed grip while held.
+- The fastest fingertip peaks at 4.5 mm/frame², under the 11 that counts as a jump.
+- The costs: coverage went from 0.97 to 0.96, depth residual from 0.52 to 0.56 cm, and the object&#x27;s rotation is a bit faster and less smooth (ang_speed 1.62 → 1.82 deg/frame).
+
+I also tried 0.8. It fitted the keypoints better but left the bottle about 1 cm above the table in every rest phase, so I reverted it.
+
+The re-fit replaced my earlier hand fixes, including the one in placing (189-216) that had brought keypoint error from about 123 to 21 px. I did not check per frame whether that range is still good.
+
+Problems the reviewer still finds in v52, none fixed:
+- **Finger jitter, frames 21-110:** the fingertip paths zig-zag. The next step would be finger-only smoothing (smooth_hand, about 10 frames) over 26-108, then checking for hand-object crossings.
+- **Rotation, frames 131-152:** the object&#x27;s rotation jumps at frame 134. The hand is hidden behind the bottle where the video shows it (131-136) and off the depth map (137-152). The next steps would be to interpolate the object across about 131-137, then move the hand to the depth map and re-fit it with the occlusion term.
+- **Place and release, frames 228-247:** the hand is drawn in front of the bottle where the video shows the bottle. It is off its keypoints at 229-231 (18.5 px in release) and about 1.35 cm in front of the depth map at 232-241. A stronger occlusion fit I tried here earlier, on the unscaled bottle, raised keypoint error to about 41 px and caused fingertip jumps, so I dropped it. This one may not be fixable without moving the hand off its keypoints.
+
+Rest height: thinning raises the bottle&#x27;s base, so the old 0.2 cm sink into the table is probably gone, but the bottle may now float slightly. I did not measure it.
+
+Phases: approach 0-20, grasp 21-44, lift 45-70, rotate 71-185, place 186-228, release 229-248, rest 249-258
+
+Edits:
+- v0: initial (FoundationPose + Depth Pro 2)
+- v1: automatic fit over the whole clip: fit object to its mask + depth on 0-258: 259 frames (trust region 8.0 deg, 2.0 cm); smooth object poses on 0-258 (window 5); fit MANO (all, no contact) on 0-258: 259 frames, 600 steps; losses kp 1.76-&gt;1.02, depth 2.93-&gt;1.78, pen 60.66-&gt;0.01, occl 5.43-&gt;5.57, grip 0.00-&gt;0.00, smooth 5.22-&gt;0.43; hand shape fitted (size x1.005); occlusion order (hand behind the object where the video shows the object, in front where it shows the hand): fine as fitted (2.8% of the hand on the wrong side)
+- v2: phases: approach 0-20, grasp 21-44, lift 45-70, rotate 71-185, place 186-228, release 229-248, rest 249-258
+- v3: object thickness x1.25 along the first frame&#x27;s viewing direction (11.4 -&gt; 14.3 cm; the object is now 20.7 x 7.8 x 6.8 cm along its long / mid / short axes; score 5.4 -&gt; 2.8); object poses re-fitted to mask + depth, hand re-fitted to it
+- v4: fit MANO (all) on 21-248: 228 frames, 600 steps; losses kp 1.08-&gt;1.43, depth 2.53-&gt;2.64, pen 0.01-&gt;0.03, occl 7.94-&gt;4.52, grip 0.94-&gt;0.09, smooth 0.38-&gt;0.65, join 1.71-&gt;0.04
+- v5: move hand (+0.0,+7.0,+0.0) cm [camera] on 192-210
+- v6: fit MANO (all) on 184-248: 65 frames, 600 steps; losses kp 3.26-&gt;3.58, depth 2.94-&gt;3.76, pen 20.26-&gt;0.09, occl 11.26-&gt;10.83, grip 0.87-&gt;0.23, smooth 3.23-&gt;1.17, join 0.20-&gt;0.10
+- v7: revert to v5
+- v8: move hand to its depth on 190-228: along the camera ray by the hand&#x27;s depth error (median 1.4 cm, max 3.6 cm), smoothed, fading out over 6 frames beyond the range
+- v9: fit MANO (all) on 184-248: 65 frames, 600 steps; losses kp 3.26-&gt;3.09, depth 2.32-&gt;2.50, pen 10.59-&gt;0.22, occl 8.52-&gt;10.14, grip 1.14-&gt;0.16, smooth 3.65-&gt;1.64, join 0.79-&gt;0.27
+- v10: move hand (+0.0,-5.0,+0.0) cm [camera] on 220-244
+- v11: fit MANO (all) on 212-252: 41 frames, 600 steps; losses kp 3.49-&gt;3.14, depth 4.15-&gt;2.76, pen 12.00-&gt;0.12, occl 3.28-&gt;8.75, grip 0.88-&gt;0.46, smooth 4.01-&gt;2.28, join 2.40-&gt;0.28
+- v12: fit MANO (all) on 184-252: 69 frames, 600 steps; losses kp 2.56-&gt;2.61, depth 2.33-&gt;2.30, pen 0.14-&gt;0.14, occl 8.02-&gt;8.23, grip 0.18-&gt;0.22, smooth 1.68-&gt;1.26, join 0.11-&gt;0.05
+- v13: revert to v3
+- v14: fit MANO (all) on 21-188: 168 frames, 600 steps; losses kp 0.40-&gt;0.54, depth 2.09-&gt;2.15, pen 0.00-&gt;0.01, occl 2.14-&gt;2.21, grip 0.64-&gt;0.06, smooth 0.19-&gt;0.27, join 0.92-&gt;0.01
+- v15: move hand (+0.0,+7.0,+1.5) cm [camera] on 192-208
+- v16: fit MANO (all) on 186-218: 33 frames, 600 steps; losses kp 3.65-&gt;1.54, depth 1.91-&gt;2.15, pen 9.95-&gt;0.16, occl 16.88-&gt;7.79, grip 2.50-&gt;0.27, smooth 5.55-&gt;1.08, join 2.99-&gt;0.27
+- v17: move hand to its depth on 216-245: along the camera ray by the hand&#x27;s depth error (median 1.9 cm, max 2.3 cm), smoothed, fading out over 6 frames beyond the range
+- v18: fit MANO (all) on 208-250: 43 frames, 600 steps; losses kp 1.27-&gt;3.21, depth 2.90-&gt;2.77, pen 8.77-&gt;0.28, occl 17.52-&gt;8.30, grip 1.18-&gt;0.31, smooth 1.12-&gt;3.08, join 1.59-&gt;0.36
+- v19: revert to v17
+- v20: fit MANO (fingers) on 210-250: 41 frames, 600 steps; losses kp 1.24-&gt;2.32, depth 2.92-&gt;2.85, pen 9.19-&gt;0.28, occl 17.90-&gt;7.13, grip 1.31-&gt;0.27, smooth 1.14-&gt;2.05, join 1.81-&gt;1.13
+- v21: fit MANO (all) on 204-224: 21 frames, 600 steps; losses kp 2.10-&gt;2.12, depth 2.97-&gt;2.60, pen 0.44-&gt;0.53, occl 9.11-&gt;11.15, grip 0.25-&gt;0.40, smooth 2.38-&gt;1.65, join 0.70-&gt;0.13
+- v22: fit object to its mask + depth on 128-142: 15 frames (trust region 12.0 deg, 1.5 cm)
+- v23: revert to v21
+- v24: hold object static at frame 10&#x27;s pose on 0-38
+- v25: hold object static at frame 252&#x27;s pose on 234-258
+- v26: interpolate object poses between 34 and 46
+- v27: interpolate object poses between 226 and 238
+- v28: fit MANO (all) on 30-52: 23 frames, 600 steps; losses kp 0.69-&gt;0.72, depth 2.38-&gt;2.40, pen 0.16-&gt;0.01, occl 6.70-&gt;6.90, grip 0.22-&gt;0.10, smooth 0.22-&gt;0.24, join 0.32-&gt;0.04
+- v29: smooth hand (rigid motion + finger joints) on 204-250 over 10 frames: hand jitter median 1.3 -&gt; 1.3 mm/frame^2; smoothing reduced on 12 frames where it pushed the hand through the object
+- v30: smooth object poses on 124-146 (window 7)
+- v31: smooth object poses on 116-154 (window 5)
+- v32: separate hand from the object on 188-250: moved 0 frames out along the surface normal where the palm crossed it, smoothly (median 0.0 cm, max 0.0 cm)
+- v33: fit MANO (fingers) on 188-250: 63 frames, 600 steps; losses kp 1.98-&gt;1.99, depth 2.48-&gt;2.43, pen 0.48-&gt;0.14, occl 7.46-&gt;8.07, grip 0.21-&gt;0.23, smooth 1.27-&gt;1.17, join 5.86-&gt;3.20
+- v34: fit MANO (all) on 192-222: 31 frames, 600 steps; losses kp 2.09-&gt;2.26, depth 2.40-&gt;2.36, pen 0.22-&gt;0.22, occl 10.06-&gt;9.77, grip 0.30-&gt;0.27, smooth 1.06-&gt;1.23, join 0.97-&gt;0.06
+- v35: revert to v33
+- v36: result of pass 1: v35 with the ranges the verifier rejected set back to v3
+- v37: attach hand to object on 189-212 (relative position of frame 188), fading out over 6 frames beyond the range
+- v38: fit MANO (all) on 184-222: 39 frames, 600 steps; losses kp 2.92-&gt;6.00, depth 2.03-&gt;7.17, pen 16.66-&gt;0.06, occl 17.83-&gt;9.08, grip 1.81-&gt;0.22, smooth 2.34-&gt;2.78, join 0.45-&gt;0.38
+- v39: revert to v36
+- v40: revert to v37
+- v41: fit MANO (all, no contact) on 184-222: 39 frames, 600 steps; losses kp 2.92-&gt;5.41, depth 2.03-&gt;5.80, pen 16.66-&gt;0.05, occl 17.83-&gt;8.54, grip 0.00-&gt;0.00, smooth 2.34-&gt;2.23, join 0.45-&gt;0.20
+- v42: revert to v40
+- v43: separate hand from the object on 186-218: moved 32 frames out along the surface normal where the palm crossed it, smoothly (median 2.5 cm, max 3.0 cm)
+- v44: fit MANO (all) on 184-226: 43 frames, 600 steps; losses kp 2.24-&gt;1.25, depth 4.06-&gt;2.31, pen 7.13-&gt;0.08, occl 14.97-&gt;10.39, grip 2.01-&gt;0.23, smooth 5.58-&gt;0.71, join 0.20-&gt;0.09
+- v45: fit MANO (all) on 216-250: 35 frames, 600 steps; losses kp 1.25-&gt;3.04, depth 2.48-&gt;2.81, pen 0.05-&gt;0.24, occl 29.52-&gt;10.59, grip 1.03-&gt;0.25, smooth 1.07-&gt;2.41, join 2.05-&gt;0.31
+- v46: revert to v44
+- v47: fit MANO (all) on 22-184: 163 frames, 600 steps; losses kp 0.54-&gt;0.62, depth 2.19-&gt;2.30, pen 0.02-&gt;0.01, occl 2.41-&gt;2.29, grip 0.08-&gt;0.08, smooth 0.25-&gt;0.16, join 0.27-&gt;0.00
+- v48: smooth hand (finger joints) on 26-182 over 10 frames: hand jitter median 0.5 -&gt; 0.5 mm/frame^2; smoothing reduced on 5 frames where it pushed the hand through the object
+- v49: scale object x0.80 along its unseen extent (14.3 -&gt; 11.4 cm; the object is now 19.6 x 7.3 x 5.1 cm along its long / mid / short axes); poses shifted so the side facing the camera stays, then re-fitted to mask + depth; hand: fit MANO (all) on 0-258: 259 frames, 600 steps; losses kp 0.71-&gt;0.33, depth 2.24-&gt;1.42, pen 0.24-&gt;0.00, occl 6.13-&gt;4.58, grip 0.76-&gt;0.02, smooth 0.35-&gt;0.32
+- v50: automatic fit (v36) under the new object shape: object and hand re-fitted
+- v51: revert to v48
+- v52: scale object x0.90 along its unseen extent (14.3 -&gt; 12.8 cm; the object is now 20.1 x 7.5 x 5.7 cm along its long / mid / short axes); poses shifted so the side facing the camera stays, then re-fitted to mask + depth; hand: fit MANO (all) on 0-258: 259 frames, 600 steps; losses kp 0.71-&gt;0.39, depth 2.24-&gt;1.70, pen 0.15-&gt;0.00, occl 5.90-&gt;4.48, grip 0.38-&gt;0.01, smooth 0.35-&gt;0.33
+
+Object shape: x1.12 of the reconstructed mesh along the first frame&#x27;s viewing direction (the unseen extent), x1.00 / x1.00 across it; the object is 20.1 x 7.5 x 5.7 cm along its long / mid / short axes.
+object&#x27;s extent along the first frame&#x27;s viewing direction (the side that frame could not see), evidence per candidate (after re-fitting the object and the hand to it):
+  x1.00 (14.3 cm): at rest -0.2 / -0.4 cm from the table, IoU 0.935, depth residual 0.52 cm; while held: keypoints 11.4 px, hand 0.6 cm off the depth map, 0.1 triangles through the object, 3.5% of the hand on the wrong side of the object
+
+Depth: every frame&#x27;s depth is scaled so that its table lies on one plane (the camera is static, but the depth estimator&#x27;s scale drifts: in the frames&#x27; own depth the table is 0.19 cm rms off a plane within a frame, while its distance ranges from x0.931 to x1.068 of the reference over the clip, and the depth on the object moves with it). The tracked object and hand were moved along their viewing rays with it (object x0.944 to x1.059), and the mesh, sized in frame 0&#x27;s depth, was scaled x0.955.
+
+Table: the one plane every frame&#x27;s depth is scaled onto (the table, in all frames) (0.19 cm rms off it within a frame); its normal is up, 3.4 deg from GeoCalib&#x27;s gravity estimate.
+
+Verifier (v3 vs refined, blind A/B):
+- frames 0-20: REVERTED (winner A, refined = B, confidence 0.60): The two reconstructions look nearly identical in frames 0-20 and in the 3D views. The plots separate them. B keeps the object perfectly still (zero rotation, constant height), which is good for a resting bottle. However, B shows hand interpenetration (n_cross up to about 15) from frame 25, plus acceleration spikes in the hand and fingertip around frame 22. A has slight rotation jitter of about 1 degree per frame and some sinking (height around -0.5 cm) late on. Overall, B&#x27;s interpenetration and jitter spikes are the worse errors.
+- frames 21-89: kept (winner A, refined = A, confidence 0.72): A keeps the thumb or palm opposed to the fingers on all lifted frames, so the bottle is actually gripped throughout. B has that opposition on only 53% of lifted frames; in its 3D views at frame 34 the thumb sticks out away from the bottle. A&#x27;s drawbacks are minor: a brief interpenetration spike around frames 25-30, before the lift, and slightly more fingertip jitter. B&#x27;s somewhat better keypoint fit (8 px vs 10 px) does not outweigh its inadequate grip.
+- frames 116-156: kept (winner B, refined = B, confidence 0.70): B has the thumb or palm opposing the fingers on 98% of the lifted frames, against 71% for A, so B actually grips the bottle throughout the hold. B&#x27;s interpenetration is small: 0.7 triangles on average, coming from a brief spike around frame 143. Keypoint error is equal at 13 px. B&#x27;s rotation is also smoother, without A&#x27;s spike to about 14 deg/frame.
+- frames 174-228: kept (winner A, refined = A, confidence 0.62): Both reconstructions grip the bottle with thumb or palm opposing the fingers on all lifted frames, and both average 20 px keypoint error. B has far less interpenetration (0.3 vs 6.3 triangles). However, in frames 195 and 206 B&#x27;s hand outline floats well above and to the right of the real hand. Its 3D views there show the hand perched over the cap rather than wrapped around the bottle, which plainly contradicts the video. B also shows a hand-acceleration spike around frame 195. A&#x27;s hand follows the video consistently, and its interpenetration is modest, so A matches better overall.
+- frames 229-248: kept (winner B, refined = B, confidence 0.55): A keeps the bottle jittering in rotation (1–2.5°/frame) and sinking about 0.6 cm into the table while it should be resting during the release. B keeps the object stable on the table. B does have a brief hand–object interpenetration and a fingertip acceleration spike, but the object stability matters more here. The overlays fit similarly well.
+- frames 249-258: REVERTED (winner B, refined = A, confidence 0.65): Both reconstructions match the video closely and look nearly identical in the overlays and 3D views. A shows a penetration spike of about 12 triangles around frame 244, a fingertip acceleration spike at frame 249, and a zig-zag in its red fingertip path. B has no penetration and smoother hand and fingertip motion. However, B&#x27;s object rotates slightly (about 1 deg/frame) and sits about 0.5 cm into the table while resting, whereas A&#x27;s object stays perfectly still. On balance, B&#x27;s smoother hand motion and lack of interpenetration make it slightly better.
+
+Merge of the kept and the reverted ranges: kept range 229-248 rejected as well: joining it to its rejected neighbours left the hand jumping (fingertip acceleration 12 mm/frame^2 at frames 246); kept range 174-228 rejected as well: joining it to its rejected neighbours left the hand jumping (fingertip acceleration 11 mm/frame^2 at frames 223-224). Finger jumps left (fastest fingertip over 11 mm/frame^2): none.
+
+Independent reviewer, before the agent could finish: overall acceptable; [medium] 189-230: During placement the hand drifts off its 2D keypoints (hand_kp_px 18–28 px; flagged 193-199 and 211-221). In frame 214 the hand sits over the cap/top instead of wrapping the body as in the video. (hint: Increase the keypoint reprojection weight during placement and re-solve the hand pose so the fingers wrap the bottle body as in the video.); [medium] 190-226: Thumb, index and middle repeatedly pass through the bottle surface (flags 190-201, 205-208, 209-210, 212-215, 216-226; n_cross 10–11 per window). Penetration is shallow (~0.03–0.05 cm) but persistent. (hint: Add a penetration penalty or project the fingertips onto the object surface while keeping contact.); [medium] 210-230: Fingertip and hand jitter during the final placement: tip_accel 4.48 and hand_accel 1.67, the highest in the sequence. (hint: Apply temporal smoothing to the finger joint angles over this span.); [medium] 132-135: Rotation jump in the object pose during the in-hand rotation (ang_speed peaks at 5.16 in 126-146). (hint: Enforce rotational continuity, e.g. a slerp-smoothing or velocity prior, and re-fit these frames.); [medium] 136-165: Hand is off the depth map during rotation (hand_depth bias ~1.9–2.1 cm; kp error up to 15.6 px). The hand is likely floating slightly off its true depth relative to the bottle. (hint: Re-align the hand depth to the depth map while keeping contact with the object.); [low] 21-110: Fingertip paths show zig-zags, especially the index (red) and middle (green), indicating jitter while the bottle is held. (hint: Smooth the fingertip trajectories while the hand–object contact is held fixed.); [low] 26-29: Thumb penetrates the object surface at grasp onset. (hint: Push the thumb out to the bottle surface.); [medium] 231-251: During release the hand is off its keypoints (25.7 px; flags 225-237, 243-246), and the index/thumb/pinky pass through the object at 244-248. (hint: Re-fit the release frames to the keypoints with a penetration penalty.); [low] 38-243: Occlusion ordering is inconsistent with the video: the hand is hidden behind the object where it is visible (38-63, 131-147, 206-243) and drawn in front where the object is visible (60-63, 196-217). This suggests depth-ordering errors between hand and bottle. (hint: Use the occlusion masks as a depth-ordering constraint between hand and object.)
+
+Reviewer on this pass&#x27;s result (the next pass works on it): overall bad; [high] 189-216: During placing, while the bottle is still lifted (height about 6.8 cm), the hand sits far from its keypoints (mean 123 px; flagged 192-216). At frame 200 it hovers over the cap with the fingers curled in the air, so there is no wrap around the body as the video shows. The object is effectively ungripped while lifted. (hint: Re-fit the hand to the 2D keypoints over 189-216 with a strong keypoint term. Constrain the palm and fingers to stay in contact around the bottle&#x27;s upper body, carrying the grasp over from frame 188.); [medium] 210-247: The hand is placed too high, wrapping the cap and neck instead of the upper body the video shows. It is drawn in front of the object where the video shows the object (217-247), sits off the depth map (219-242) and off its keypoints (230-234). Hand depth error is about -1.7 to -1.9 cm. (hint: Shift the hand down the bottle to match the overlay. Apply depth and silhouette occlusion terms so the visible bottle regions are not covered by the hand.); [medium] 21-110: The fingertip paths (red, green, blue, yellow) zig-zag over the held span, showing jitter in finger poses while the grip should be stable. (hint: Temporally smooth the finger articulation, or lock the in-hand finger configuration relative to the object during the hold and rotation.); [medium] 38-73: The hand is hidden behind the object where the video shows the hand (38-63, 71-73) and drawn in front where the video shows the object (60-63). This is a hand/object depth-ordering error during grasp and lift. (hint: Add an occlusion-consistency loss using the segmentation masks. Adjust the hand depth relative to the bottle.); [medium] 126-167: The hand is off the depth map (136-165) with a hand depth bias of about +2 cm, and hidden behind the object at 130-140. Keypoint error rises to 13-16 px. Angular speed spikes to 5.15 deg/frame in 126-146. (hint: Re-weight the depth term for the hand during the rotation. Smooth the object rotation to remove the speed spike.); [low] 26-29: The thumb is flagged as passing through the object&#x27;s surface during the grasp. (hint: Add a penetration penalty and push the thumb out to the surface.); [low] 143-145: The hand is flagged as passing through the object&#x27;s surface during the rotation. (hint: Resolve with a collision term against the bottle mesh.); [low] 83-87: The hand is off the depth map for a short span during the rotation. (hint: Apply depth consistency or interpolate the hand pose from neighbouring frames.); [low] 0-41: The object rests about 0.2 cm below the table surface before lift-off. (hint: Snap the resting object&#x27;s base to the table plane.)
+
+Verifier (v52 vs refined, blind A/B):
+
+
+Merge of the kept and the reverted ranges: no seams to smooth. Finger jumps left (fastest fingertip over 11 mm/frame^2): none.
+
+Independent reviewer, before the agent could finish: overall acceptable; [medium] 21-110: Fingertip paths (especially thumb/magenta and index/red) zig-zag over the grasp, lift and early rotate span, which shows jitter in the finger poses while the object is held. (hint: Apply temporal smoothing to the finger joint angles over the held span while keeping the contact constraints satisfied.); [medium] 131-152: During the in-hand rotation, the hand is rendered hidden behind the object where the video shows it (131-136). There is an object rotation jump at frame 134, and the hand is off the depth map (137-152). Angular speed peaks at 5.27 deg/frame and depth residual is high (0.80). (hint: Interpolate the object rotation across frame 134. Re-fit hand depth against the depth map in 131-152 so the hand lies on the visible side of the bottle as in the video.); [medium] 228-247: During place and release, the hand is drawn in front of the object where the video shows the object. It is also off its keypoints (229-231) and off the depth map (232-241). Keypoint error is 18.46 px and hand-depth bias is -1.35 in release. (hint: Re-weight 2D keypoint and depth terms for the hand in 228-247. Enforce the correct occlusion order so the fingers stay on the far side of the bottle as in the video.); [low] 210-230: The place phase shows a fingertip acceleration spike (2.32) and a high depth residual (0.98), so the hand is jerky while setting the bottle down. (hint: Smooth the fingertip trajectories during placement.); [low] 15-16: The hand is off the depth map during the approach. (hint: Re-align hand depth to the depth map for these frames.)
+
+Independent reviewer on the final result (what is still wrong): (votes over 3 reviews: acceptable, acceptable, acceptable) overall acceptable; [medium] 131-136: During the in-hand rotation the object&#x27;s orientation jumps at frame 134. Angular speed peaks at 5.27 in 126-146. Over 131-136 the hand is rendered hidden behind the bottle while the video shows it in front, so the hand/object depth ordering is wrong. (hint: Re-estimate the object pose around 126-146 with a temporal rotation smoothness prior. Enforce the video&#x27;s occlusion order: hand in front of the bottle.); [medium] 137-152: The hand drifts off the depth map while it is cradling the rotating bottle. Depth residual is 0.80 with a bias of about -0.6, so the hand depth relative to the object is unreliable in this span. (hint: Add a depth-consistency term for the hand and keep the hand–object relative pose fixed by contact while the grip is stable.); [medium] 228-247: During place and release the hand is drawn in front of the object where the video shows the object. The hand also leaves its keypoints at 229-231, and keypoint error rises to 18.5 px over 231-251. Finger placement on the cap and shoulder during release is therefore poorly constrained. (hint: Re-fit the hand to the 2D keypoints with occlusion-aware rendering over 225-250 and correct the hand depth so the bottle occludes it where the video shows.); [low] 232-241: The hand is off the depth map during release. Hand depth error is -1.35 and fingertip acceleration rises to 1.7-2.3. (hint: Smooth the hand depth trajectory through release and weight the depth term more strongly.); [low] 21-110: The wrist and fingertip paths over the held span are visibly jagged, with zig-zags in the red, green, yellow and black tracks, rather than smooth curves. This indicates frame-to-frame jitter. (hint: Apply temporal smoothing or acceleration regularization to the hand pose over the held span.); [low] 15-16: The hand is briefly off the depth map during the approach. (hint: Interpolate the hand depth across these frames.)
+
+| metric (median over frames) | initial | automatic fit (v1) | final |
+|---|---|---|---|
+| coverage | 0.90 | 0.93 | 0.96 |
+| spill | 0.03 | 0.02 | 0.03 |
+| depth_res_cm | 0.43 | 0.55 | 0.56 |
+| hand_kp_px | 24.90 | 9.13 | 9.08 |
+| hand_depth_bias_cm | -1.69 | -0.09 | 0.22 |
+| contact_cm | 0.00 | 0.15 | 0.15 |
+| penetration_cm | 1.98 | 0.00 | 0.00 |
+| n_cross | 154.00 | 0.00 | 0.00 |
+| hand_over_obj | 0.02 | 0.00 | 0.00 |
+| obj_over_hand | 0.01 | 0.01 | 0.01 |
+| obj_height_cm | 9.79 | 9.31 | 8.98 |
+| ang_speed_deg_per_frame | 1.96 | 1.39 | 1.82 |
+| hand_accel_mm | 2.27 | 0.66 | 0.69 |
+| tip_accel_mm | 3.67 | 0.96 | 0.94 |
+| finger_accel_deg | 0.55 | 0.19 | 0.18 |
+| obj_ang_accel_deg | 1.86 | 0.58 | 1.03 |
+| thumb_gap_cm | 2.02 | 1.70 | 0.28 |
+| n_touching | 4.00 | 2.00 | 5.00 |
+| opposed | 1.00 | 0.00 | 1.00 |
+</pre>

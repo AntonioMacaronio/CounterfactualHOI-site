@@ -1,0 +1,283 @@
+{
+ "video_id": "pp_anthony_real_3",
+ "frames": 86,
+ "phases": [
+  {
+   "start": 0,
+   "end": 12,
+   "label": "approach"
+  },
+  {
+   "start": 13,
+   "end": 23,
+   "label": "grasp"
+  },
+  {
+   "start": 24,
+   "end": 31,
+   "label": "lift"
+  },
+  {
+   "start": 32,
+   "end": 45,
+   "label": "carry"
+  },
+  {
+   "start": 46,
+   "end": 54,
+   "label": "place"
+  },
+  {
+   "start": 55,
+   "end": 70,
+   "label": "release"
+  },
+  {
+   "start": 71,
+   "end": 85,
+   "label": "rest"
+  }
+ ],
+ "hand_jitter_ref_mm": 2.2856229035937017,
+ "depth_anchor": {
+  "frames": 86,
+  "frames_interpolated": 0,
+  "table_rms_cm": 0.16909151194487862,
+  "table_distance_vs_reference": [
+   0.9758154036299924,
+   1.0016848075856517,
+   1.0447383249774749
+  ],
+  "normal_spread_deg": 0.398435373860328,
+  "reference_spread_iqr": 0.021428185621614058,
+  "mesh_scale": 0.9975120205182167,
+  "object_factor": [
+   0.9630059989806102,
+   0.998867646115339,
+   1.0209788811440808
+  ],
+  "object_factor_last": 1.008332126733888,
+  "hand_factor": [
+   0.9628734516367424,
+   0.9984642603296454,
+   1.0203364349939836
+  ],
+  "tilt_vs_geocalib_deg": 3.172596438991367
+ },
+ "object_scale": [
+  0.8,
+  1.0,
+  1.0
+ ],
+ "object_extent_cm": [
+  [
+   8.392278949501069,
+   19.93046464396783,
+   5.722782252302102
+  ],
+  [
+   6.713823159600856,
+   19.93046464396783,
+   5.722782252302102
+  ]
+ ],
+ "all": {
+  "iou": [
+   0.8731751804460113,
+   0.9110042238016057
+  ],
+  "coverage": [
+   0.971561108220719,
+   0.963777490297542
+  ],
+  "spill": [
+   0.06770159551530833,
+   0.039548138051872114
+  ],
+  "depth_res_cm": [
+   0.3320962190628052,
+   0.47824084758758545
+  ],
+  "hand_kp_px": [
+   37.50728218974507,
+   9.029391520721603
+  ],
+  "hand_depth_bias_cm": [
+   -5.028313159942627,
+   -0.25876760482788086
+  ],
+  "penetration_cm": [
+   0.0,
+   0.0
+  ],
+  "contact_cm": [
+   1.6504183570210147,
+   0.18817489953028144
+  ],
+  "n_cross": [
+   0.0,
+   0.0
+  ],
+  "hand_accel_mm": [
+   2.2856229035937017,
+   0.9273403881100931
+  ],
+  "hand_rel_accel_mm": [
+   3.11598082158032,
+   1.0118887639472474
+  ],
+  "tip_accel_mm": [
+   3.862831875143062,
+   1.515444121063835
+  ],
+  "finger_accel_deg": [
+   0.4647028096125905,
+   0.14284110888936963
+  ],
+  "obj_accel_cm": [
+   0.11536078366536312,
+   0.07428312240364812
+  ],
+  "obj_ang_accel_deg": [
+   0.9891217776207106,
+   0.32505051915374916
+  ]
+ },
+ "held": {
+  "iou": [
+   0.8749264092087343,
+   0.9184754565441737
+  ],
+  "coverage": [
+   0.9912413135783564,
+   0.9656019376627512
+  ],
+  "spill": [
+   0.07640150015604807,
+   0.03378299259879142
+  ],
+  "depth_res_cm": [
+   0.3368288278579712,
+   0.2650246024131775
+  ],
+  "hand_kp_px": [
+   39.70724399602685,
+   10.313944078935506
+  ],
+  "hand_depth_bias_cm": [
+   -5.152177810668945,
+   -0.13770312070846558
+  ],
+  "penetration_cm": [
+   0.0,
+   0.0
+  ],
+  "contact_cm": [
+   1.3648349292804727,
+   0.15098179674657547
+  ],
+  "n_cross": [
+   0.0,
+   0.0
+  ],
+  "hand_accel_mm": [
+   2.0751991968487755,
+   1.0265148642365385
+  ],
+  "hand_rel_accel_mm": [
+   3.11598082158032,
+   1.1350320891052297
+  ],
+  "tip_accel_mm": [
+   2.9287559353870822,
+   1.7429026886889187
+  ],
+  "finger_accel_deg": [
+   0.5294200584354665,
+   0.15696028384254962
+  ],
+  "obj_accel_cm": [
+   0.1627921431937702,
+   0.148647739488049
+  ],
+  "obj_ang_accel_deg": [
+   1.4326404383280118,
+   0.39876819352658055
+  ]
+ },
+ "rest_abs_height_cm": [
+  1.214453282866862,
+  0.16732795305658965
+ ],
+ "rest_height_spread_cm": [
+  0.5312924935884145,
+  0.16446403251582087
+ ],
+ "grip_lifted": [
+  0.0,
+  1.0
+ ],
+ "reviewer": {
+  "overall": "good",
+  "problems": [
+   {
+    "start": 7,
+    "end": 8,
+    "issue": "Depth flagged as off during the approach. Depth residual and bias are about 1.9 cm, so the object/hand sit slightly too close to the camera. The hand is not yet in contact, so the effect is limited.",
+    "severity": "low",
+    "fix_hint": "Re-weight the depth term or smooth the object depth over frames 0-12 so the bias goes toward zero before contact."
+   },
+   {
+    "start": 0,
+    "end": 19,
+    "issue": "Object height is about -0.35 cm at rest before the lift, so the spatula sinks slightly into the table plane.",
+    "severity": "low",
+    "fix_hint": "Add a table-contact constraint that clamps the object's lowest point to the support plane while it is at rest."
+   },
+   {
+    "start": 70,
+    "end": 85,
+    "issue": "Object height is about -0.15 cm after placement, so it sits slightly below the table. Hand acceleration also rises after release (about 2-3 m/s\u00b2 with the hand free), suggesting mild jitter.",
+    "severity": "low",
+    "fix_hint": "Snap the object onto the table plane after release and temporally smooth the free hand's trajectory in the rest phase."
+   },
+   {
+    "start": 13,
+    "end": 16,
+    "issue": "There is a small kink or hook at the start of the wrist and fingertip paths (thumb/index/red curves) as the grasp closes. Fingertip acceleration is about 2.1 there.",
+    "severity": "low",
+    "fix_hint": "Apply light temporal smoothing to the fingertip trajectories around grasp onset."
+   }
+  ],
+  "votes": [
+   "good",
+   "good",
+   "good"
+  ],
+  "n_high": 0,
+  "n_medium": 0,
+  "n_low": 4
+ },
+ "flagged_frames": [
+  86,
+  2
+ ],
+ "jump_threshold_mm": 11.588495625429186,
+ "jump_frames": [
+  3,
+  0
+ ],
+ "tip_accel_max_mm": [
+  16.08678329615487,
+  4.261488861505963
+ ],
+ "n_versions": 14,
+ "agent_minutes": 8.5,
+ "verifier": [
+  "verify [0, 12]: winner B (refined = B), confidence 0.62, keep True: The image overlays look nearly identical for A and B. In A the object sits about 1.7 cm below the table surface throughout the approach, while in B it is about 0.3 cm below, much closer to resting on ",
+  "verify [13, 54]: winner B (refined = B), confidence 0.80, keep True: B holds the spatula with thumb or palm opposing the fingers on 100% of lifted frames; A does so on 0%. A's contact distance also rises to about 1 cm during place, so its hand does not really grip the ",
+  "verify [55, 70]: winner B (refined = B), confidence 0.60, keep True: The overlays of A and B look about equally aligned. During release, A's spatula gradually sinks below the table, to about -1 cm. B keeps the object resting near table height with no drift, and its rot",
+  "verify [71, 85]: winner A (refined = A), confidence 0.70, keep True: In the rest phase, A keeps the object's height close to the table (about -0.15 cm) and its rotation at zero. B's object sits below the table (-0.6 to -1.2 cm) and keeps rotating at 0.5\u20131.8\u00b0/frame whil"
+ ],
+ "reverted": 0
+}

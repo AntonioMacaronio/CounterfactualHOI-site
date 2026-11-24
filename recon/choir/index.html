@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CounterfactualHOI: Open-CHOIR 4D hand–object reconstructions of the real videos</title>
+<style>
+  body { font-family: -apple-system, system-ui, sans-serif; margin: 24px; color: #222; background: #fafafa; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  p.sub { margin: 0 0 14px; color: #555; font-size: 14px; max-width: 1150px; }
+  .tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+  .tab { font: inherit; font-size: 15px; padding: 6px 22px; border: 1px solid #bbb; border-radius: 6px;
+          background: #fff; cursor: pointer; }
+  .tab.active { background: #2d5be3; border-color: #2d5be3; color: #fff; }
+  .grid { display: none; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+  .grid.active { display: grid; }
+  figure { margin: 0; background: #fff; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; }
+  iframe { width: 100%; height: 480px; border: 0; display: block; }
+  .ph { height: 480px; display: flex; align-items: center; justify-content: center; color: #999; }
+  figcaption { padding: 8px 12px 10px; font-size: 13px; color: #444; border-top: 1px solid #eee; }
+  @media (max-width: 1000px) { .grid.active { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body style="margin:0"><style>
+  body { font-family: -apple-system, system-ui, sans-serif; margin: 0; color: #222; background: #fafafa; }
+  .nav { background: #1f2937; padding: 10px 24px; display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+  .nav b { color: #fff; margin-right: 12px; }
+  .nav a { color: #cbd5e1; text-decoration: none; font-size: 14px; }
+  .nav a:hover { color: #fff; }
+  </style><div class="nav"><b>CounterfactualHOI</b><a href="../../index.html">Home</a><a href="../../recon/daid/index.html">1 · Do-as-I-Do</a><a href="../../recon/choir/index.html">2 · Open-CHOIR</a><a href="../../recon/ours/index.html">3 · Our pipeline</a><a href="../../recon/agent/index.html">4 · Agent refinement</a><a href="../../recon/retarget/index.html">5 · Retargeted motions</a></div><div style="margin:24px">
+<h1>Open-CHOIR 4D hand–object reconstructions of the real videos</h1>
+<p class="sub">One tab per recording set; the same five objects in each (small metal case, blue tape roll, black spatula, gray mug, dish soap bottle). Each viewer shows CHOIR's final contact-optimized MANO hand (blue) and
+SAM3D object (orange), the frame-0 depth points of the scene (hand/object pixels removed) and the real camera's
+frustum with the current video frame. The scene is rotated so GeoCalib's gravity points down (grid = table height);
+the depth points are rescaled so the object rests on the table in the first frame, so where it ends up relative to
+the table at the end shows CHOIR's depth drift.
+Drag to orbit, scroll to zoom; the playback bar is at the bottom of each viewer.</p>
+<div class="tabs">
+  <button class="tab" data-tab="pp">pp</button>
+  <button class="tab" data-tab="prp">prp</button>
+</div>
+<section class="grid" id="tab-pp">
+    <figure>
+      <iframe data-src="pp_anthony_real_1.html?initialCameraPosition=0.2579%2C0.2138%2C-0.0217&amp;initialCameraLookAt=0.1220%2C0.7453%2C-0.4652&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="pp_anthony_real_1 · small metal case"></iframe>
+      <figcaption><b>pp_anthony_real_1 · small metal case</b><br>113 frames @ 30 fps · up = GeoCalib gravity (camera pitch -31°), 4.0° from the table plane in the depth points · object ends 0 cm above the table</figcaption>
+    </figure>
+    <figure>
+      <iframe data-src="pp_anthony_real_2.html?initialCameraPosition=0.1587%2C0.2075%2C-0.0332&amp;initialCameraLookAt=0.0279%2C0.7202%2C-0.4610&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="pp_anthony_real_2 · blue tape roll"></iframe>
+      <figcaption><b>pp_anthony_real_2 · blue tape roll</b><br>135 frames @ 30 fps · up = GeoCalib gravity (camera pitch -31°), 2.3° from the table plane in the depth points · object ends 20 cm above the table ⚠</figcaption>
+    </figure>
+    <figure>
+      <iframe data-src="pp_anthony_real_3.html?initialCameraPosition=0.2241%2C0.2167%2C-0.0287&amp;initialCameraLookAt=0.0867%2C0.7530%2C-0.4762&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="pp_anthony_real_3 · black spatula"></iframe>
+      <figcaption><b>pp_anthony_real_3 · black spatula</b><br>86 frames @ 30 fps · up = GeoCalib gravity (camera pitch -31°), 3.3° from the table plane in the depth points · object ends 13 cm above the table ⚠</figcaption>
+    </figure>
+    <figure>
+      <iframe data-src="pp_anthony_real_4.html?initialCameraPosition=0.2457%2C0.2513%2C0.0476&amp;initialCameraLookAt=0.1115%2C0.7763%2C-0.3905&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="pp_anthony_real_4 · gray mug"></iframe>
+      <figcaption><b>pp_anthony_real_4 · gray mug</b><br>122 frames @ 30 fps · up = GeoCalib gravity (camera pitch -30°), 2.9° from the table plane in the depth points · object ends 6 cm above the table ⚠</figcaption>
+    </figure>
+    <figure>
+      <iframe data-src="pp_anthony_real_5.html?initialCameraPosition=0.2168%2C0.2399%2C0.0303&amp;initialCameraLookAt=0.0858%2C0.7520%2C-0.3971&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="pp_anthony_real_5 · dish soap bottle"></iframe>
+      <figcaption><b>pp_anthony_real_5 · dish soap bottle</b><br>77 frames @ 30 fps · up = GeoCalib gravity (camera pitch -30°), 2.8° from the table plane in the depth points · object ends 8 cm above the table ⚠</figcaption>
+    </figure>
+</section>
+<section class="grid" id="tab-prp">
+    <figure>
+      <iframe data-src="prp_anthony_real_1.html?initialCameraPosition=0.1455%2C0.1334%2C-0.0464&amp;initialCameraLookAt=0.0502%2C0.5047%2C-0.3563&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="prp_anthony_real_1 · small metal case"></iframe>
+      <figcaption><b>prp_anthony_real_1 · small metal case</b><br>264 frames @ 30 fps · up = GeoCalib gravity (camera pitch -31°), 4.0° from the table plane in the depth points · object ends 6 cm above the table ⚠</figcaption>
+    </figure>
+    <figure>
+      <iframe data-src="prp_anthony_real_2.html?initialCameraPosition=0.2350%2C0.2462%2C0.0047&amp;initialCameraLookAt=0.0923%2C0.8051%2C-0.4615&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="prp_anthony_real_2 · blue tape roll"></iframe>
+      <figcaption><b>prp_anthony_real_2 · blue tape roll</b><br>162 frames @ 30 fps · up = GeoCalib gravity (camera pitch -31°), 3.2° from the table plane in the depth points · object ends 5 cm above the table ⚠</figcaption>
+    </figure>
+    <figure>
+      <iframe data-src="prp_anthony_real_3.html?initialCameraPosition=0.1382%2C0.1178%2C-0.0959&amp;initialCameraLookAt=0.0312%2C0.5338%2C-0.4432&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="prp_anthony_real_3 · black spatula"></iframe>
+      <figcaption><b>prp_anthony_real_3 · black spatula</b><br>204 frames @ 30 fps · up = GeoCalib gravity (camera pitch -31°), 3.2° from the table plane in the depth points · object ends 9 cm above the table ⚠</figcaption>
+    </figure>
+    <figure>
+      <iframe data-src="prp_anthony_real_4.html?initialCameraPosition=0.1704%2C0.1509%2C-0.0222&amp;initialCameraLookAt=0.0727%2C0.5306%2C-0.3391&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="prp_anthony_real_4 · gray mug"></iframe>
+      <figcaption><b>prp_anthony_real_4 · gray mug</b><br>273 frames @ 30 fps · up = GeoCalib gravity (camera pitch -30°), 4.0° from the table plane in the depth points · object ends 3 cm above the table</figcaption>
+    </figure>
+    <figure>
+      <iframe data-src="prp_anthony_real_5.html?initialCameraPosition=0.1210%2C0.2009%2C0.0081&amp;initialCameraLookAt=0.0081%2C0.6415%2C-0.3596&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="prp_anthony_real_5 · dish soap bottle"></iframe>
+      <figcaption><b>prp_anthony_real_5 · dish soap bottle</b><br>259 frames @ 30 fps · up = GeoCalib gravity (camera pitch -30°), 2.7° from the table plane in the depth points · object ends 6 cm above the table ⚠</figcaption>
+    </figure>
+</section>
+<script>
+  function show(name) {
+    document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+    document.querySelectorAll('.grid').forEach(g => {
+      const on = g.id === 'tab-' + name;
+      g.classList.toggle('active', on);
+      // Load this tab's viewers, unload the other tab's (keeps the number of live WebGL contexts at 5).
+      g.querySelectorAll('iframe').forEach(f => {
+        if (on && !f.getAttribute('src')) f.src = f.dataset.src;
+        if (!on && f.getAttribute('src')) f.removeAttribute('src');
+      });
+    });
+    history.replaceState(null, '', '#' + name);
+  }
+  document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => show(b.dataset.tab)));
+  show(location.hash.slice(1) === 'prp' ? 'prp' : 'pp');
+</script>
+</div></body>
+</html>

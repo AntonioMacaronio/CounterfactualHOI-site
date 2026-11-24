@@ -1,0 +1,87 @@
+<!doctype html><meta charset="utf-8"><title>pp_anthony_real_3 refinement report</title><pre style="white-space: pre-wrap; font: 14px/1.45 system-ui, sans-serif; max-width: 1000px; margin: 24px auto"># Refinement of pp_anthony_real_3
+
+Model global.anthropic.claude-opus-5-5, effort high; 15 versions; 1 pass; 9.1 min.
+
+Agent summary: I fixed both rest-height problems the reviewer flagged, but only by letting the object&#x27;s depth disagree with the depth map by 1–2 cm in those frames.
+
+**Setup.** I labeled the phases as approach 0-12, grasp 13-23, lift 24-31, carry 32-45, place 46-54, release 55-70 and rest 71-85. The automatic thickness search then made the spatula thinner (×0.8 along the side the first frame never saw, 8.4 → 6.7 cm).
+
+**Grip.** I refit the hand over 13-58 with the grip term at weight 3. The thumb and fingers now grip from opposite sides on frames 17-55, with no part of the hand passing through the object. The keypoint error rose about 3 px, which is acceptable.
+
+**Rest heights.**
+- **Before the grasp (0-10, fading out to 18):** I moved the object 2 cm toward the camera along the viewing ray. Its outline in the image is unchanged and its lowest point went from about -1.7 to -0.35 cm. Directly snapping it up to the table and tilting it ±5° both pulled the outline off the real spatula, so I reverted those.
+- **After the release (64-85, fading out from 56):** I moved it 1 cm toward the camera along the ray, giving a height of about -0.15 cm. Over 72-85 I held it at frame 80&#x27;s pose, which removed its jitter.
+- **The cost:** in these frames the object&#x27;s visible surface is now 1–2 cm nearer than the depth map says (depth residual about 1–1.9 cm, up from about 0.3). I traded that for the table contact because estimated depth on a black object is uncertain.
+
+**Hand after the release.** The second shift pushed fingers into the object on frames 57-68. I refit the hand over 54-74, which removed every crossing (n_cross 0).
+
+**Smoothness.** Fingertip acceleration peaks at 4.3 mm/frame², well below the 12 that counts as a jump. Hand jitter is under the hand tracker&#x27;s own.
+
+**Still open.** During the grasp, just before the lift (about frames 18-21), the object still dips to about -0.8 cm into the table while the hand is gripping it.
+
+Phases: approach 0-12, grasp 13-23, lift 24-31, carry 32-45, place 46-54, release 55-70, rest 71-85
+
+Edits:
+- v0: initial (FoundationPose + Depth Pro 2)
+- v1: automatic fit over the whole clip: fit object to its mask + depth on 0-85: 86 frames (trust region 8.0 deg, 2.0 cm); smooth object poses on 0-85 (window 5); fit MANO (all, no contact) on 0-85: 86 frames, 600 steps; losses kp 2.19-&gt;0.25, depth 10.78-&gt;1.31, pen 0.00-&gt;0.00, occl 5.67-&gt;0.44, grip 0.00-&gt;0.00, smooth 7.33-&gt;0.51; hand shape fitted (size x0.991); occlusion order (hand behind the object where the video shows the object, in front where it shows the hand): fine as fitted (0.6% of the hand on the wrong side)
+- v2: phases: approach 0-12, grasp 13-23, lift 24-31, carry 32-45, place 46-54, release 55-70, rest 71-85
+- v3: object thickness x0.80 along the first frame&#x27;s viewing direction (8.4 -&gt; 6.7 cm; the object is now 20.2 x 6.1 x 3.3 cm along its long / mid / short axes; score 4.8 -&gt; 3.2); object poses re-fitted to mask + depth, hand re-fitted to it
+- v4: snap object onto the table on 0-20 (per_frame; median shift -1.7 cm)
+- v5: revert to v3
+- v6: rotate object +5.0 deg about object_mid on 0-12 (falloff 4)
+- v7: revert to v5
+- v8: rotate object -5.0 deg about object_mid on 0-12 (falloff 4)
+- v9: revert to v5
+- v10: fit MANO (all) on 13-58: 46 frames, 600 steps; losses kp 0.20-&gt;0.35, depth 1.11-&gt;1.27, pen 0.00-&gt;0.00, occl 1.03-&gt;0.00, grip 3.04-&gt;0.32, smooth 0.36-&gt;0.59, join 0.08-&gt;0.14
+- v11: hold object static at frame 80&#x27;s pose on 72-85
+- v12: move object -2.0 cm along the viewing ray on 0-10
+- v13: move object -1.0 cm along the viewing ray on 64-85
+- v14: fit MANO (all) on 54-74: 21 frames, 600 steps; losses kp 0.12-&gt;0.17, depth 1.29-&gt;1.29, pen 0.62-&gt;0.00, occl 0.00-&gt;0.12, grip 0.06-&gt;0.00, smooth 0.70-&gt;0.75, join 1.74-&gt;0.13
+
+Object shape: x0.80 of the reconstructed mesh along the first frame&#x27;s viewing direction (the unseen extent), x1.00 / x1.00 across it; the object is 20.2 x 6.1 x 3.3 cm along its long / mid / short axes.
+object&#x27;s extent along the first frame&#x27;s viewing direction (the side that frame could not see), evidence per candidate (after re-fitting the object and the hand to it):
+  x1.00 ( 8.4 cm): at rest -1.4 / -1.1 cm from the table, IoU 0.902, depth residual 0.35 cm; while held: keypoints 7.3 px, hand 0.7 cm off the depth map, 0.0 triangles through the object, 1.1% of the hand on the wrong side of the object -&gt; score 4.8
+  x0.80 ( 6.7 cm): at rest -1.8 / -0.7 cm from the table, IoU 0.915, depth residual 0.28 cm; while held: keypoints 7.2 px, hand 0.7 cm off the depth map, 0.0 triangles through the object, 1.1% of the hand on the wrong side of the object -&gt; score 3.2
+  x0.65 ( 5.5 cm): at rest -2.1 / -1.2 cm from the table, IoU 0.922, depth residual 0.44 cm; while held: keypoints 7.3 px, hand 0.7 cm off the depth map, 0.0 triangles through the object, 1.0% of the hand on the wrong side of the object -&gt; score 4.0
+  x0.50 ( 4.2 cm): at rest -2.0 / -0.9 cm from the table, IoU 0.920, depth residual 0.65 cm; while held: keypoints 7.4 px, hand 0.6 cm off the depth map, 0.0 triangles through the object, 1.0% of the hand on the wrong side of the object -&gt; score 4.8
+  x0.40 ( 3.4 cm): at rest -1.7 / -0.8 cm from the table, IoU 0.909, depth residual 0.89 cm; while held: keypoints 7.4 px, hand 0.7 cm off the depth map, 0.0 triangles through the object, 1.0% of the hand on the wrong side of the object -&gt; score 6.4
+  x0.30 ( 2.5 cm): at rest -1.1 / -0.6 cm from the table, IoU 0.894, depth residual 1.09 cm; while held: keypoints 7.5 px, hand 0.7 cm off the depth map, 0.0 triangles through the object, 1.0% of the hand on the wrong side of the object -&gt; score 8.2
+
+Depth: every frame&#x27;s depth is scaled so that its table lies on one plane (the camera is static, but the depth estimator&#x27;s scale drifts: in the frames&#x27; own depth the table is 0.17 cm rms off a plane within a frame, while its distance ranges from x0.976 to x1.045 of the reference over the clip, and the depth on the object moves with it). The tracked object and hand were moved along their viewing rays with it (object x0.963 to x1.021), and the mesh, sized in frame 0&#x27;s depth, was scaled x0.998.
+
+Table: plane of the depth points within 20 cm of the object in frames [0, 76] (8000 points, 0.14 cm rms off the plane); its normal is up, 3.2 deg from GeoCalib&#x27;s gravity estimate. table re-fitted from frames [0, 4, 8, 76, 80, 85]: 8000 depth points around the object, 0.14 cm rms off the plane (the patches&#x27; heights on it: -0.0, +0.0 cm); its normal turned 0.0 deg (now 3.2 deg from GeoCalib&#x27;s gravity). Up for edits and views is this normal.
+
+Verifier (v3 vs refined, blind A/B):
+- frames 0-12: kept (winner B, refined = B, confidence 0.62): The image overlays look nearly identical for A and B. In A the object sits about 1.7 cm below the table surface throughout the approach, while in B it is about 0.3 cm below, much closer to resting on the table. B does show some fingertip jitter from around frame 12 onward, with spikes of up to about 4 mm, but these are modest and fall mostly outside frames 0-12. Overall, B is more physically plausible.
+- frames 13-54: kept (winner B, refined = B, confidence 0.80): B holds the spatula with thumb or palm opposing the fingers on 100% of lifted frames; A does so on 0%. A&#x27;s contact distance also rises to about 1 cm during place, so its hand does not really grip the object in the air. B has slightly higher keypoint error and some fingertip-acceleration spikes, but its grip is physically plausible and neither shows interpenetration.
+- frames 55-70: kept (winner B, refined = B, confidence 0.60): The overlays of A and B look about equally aligned. During release, A&#x27;s spatula gradually sinks below the table, to about -1 cm. B keeps the object resting near table height with no drift, and its rotation stays at zero once the object is at rest. B shows a few small hand and fingertip acceleration bumps, but these are minor compared with A&#x27;s steady sinking into the table.
+- frames 71-85: kept (winner A, refined = A, confidence 0.70): In the rest phase, A keeps the object&#x27;s height close to the table (about -0.15 cm) and its rotation at zero. B&#x27;s object sits below the table (-0.6 to -1.2 cm) and keeps rotating at 0.5–1.8°/frame while it should be at rest, which is drift. A does show a small hand-acceleration spike around frame 73, but the object&#x27;s stability matters more here. The overlays for the two look similar.
+
+Merge of the kept and the reverted ranges: no seams to smooth. Finger jumps left (fastest fingertip over 12 mm/frame^2): none.
+
+Independent reviewer, before the agent could finish: overall acceptable; [medium] 0-12: Before the grasp, the object sits about 1–1.8 cm below the table surface instead of resting on it (object below table / not on table at rest). (hint: Raise the object&#x27;s initial pose so its lowest point touches the table plane. Re-fit its depth/scale against the table contact for the pre-grasp frames.); [medium] 69-85: After release, the object again ends up slightly inside the table (about -0.65 cm); frames 69-71 are flagged as not resting on the table. (hint: Snap the placed object to the table plane once released and keep its pose constant through the rest phase.); [low] 13-18: At the start of the held span, the wrist and fingertip paths show small kinks/zig-zags (black, magenta and yellow traces), and tip acceleration rises to about 2.1 during grasp and lift. (hint: Temporally smooth the hand pose around grasp onset.); [low] 20-29: During lift, the hand keypoint reprojection error rises to about 12 px, so the finger placement on the handle may be slightly off from the video pinch. (hint: Refine the hand fit against 2D keypoints during lift while keeping the thumb-index pinch contact on the handle.); [low] 50-59: Fingertip acceleration rises to about 2.25 at release, giving a slightly jerky hand opening. (hint: Smooth the finger trajectories over the release.)
+
+Independent reviewer on the final result (what is still wrong): (votes over 3 reviews: good, good, good) overall good; [low] 7-8: Depth flagged as off during the approach. Depth residual and bias are about 1.9 cm, so the object/hand sit slightly too close to the camera. The hand is not yet in contact, so the effect is limited. (hint: Re-weight the depth term or smooth the object depth over frames 0-12 so the bias goes toward zero before contact.); [low] 0-19: Object height is about -0.35 cm at rest before the lift, so the spatula sinks slightly into the table plane. (hint: Add a table-contact constraint that clamps the object&#x27;s lowest point to the support plane while it is at rest.); [low] 70-85: Object height is about -0.15 cm after placement, so it sits slightly below the table. Hand acceleration also rises after release (about 2-3 m/s² with the hand free), suggesting mild jitter. (hint: Snap the object onto the table plane after release and temporally smooth the free hand&#x27;s trajectory in the rest phase.); [low] 13-16: There is a small kink or hook at the start of the wrist and fingertip paths (thumb/index/red curves) as the grasp closes. Fingertip acceleration is about 2.1 there. (hint: Apply light temporal smoothing to the fingertip trajectories around grasp onset.)
+
+| metric (median over frames) | initial | automatic fit (v1) | final |
+|---|---|---|---|
+| coverage | 0.97 | 0.97 | 0.96 |
+| spill | 0.07 | 0.05 | 0.04 |
+| depth_res_cm | 0.33 | 0.35 | 0.48 |
+| hand_kp_px | 37.51 | 8.27 | 9.03 |
+| hand_depth_bias_cm | -5.03 | -0.94 | -0.26 |
+| contact_cm | 1.65 | 0.22 | 0.19 |
+| penetration_cm | 0.00 | 0.00 | 0.00 |
+| n_cross | 0.00 | 0.00 | 0.00 |
+| hand_over_obj | 0.01 | 0.00 | 0.00 |
+| obj_over_hand | 0.00 | 0.00 | 0.00 |
+| obj_height_cm | -0.84 | -0.76 | -0.15 |
+| ang_speed_deg_per_frame | 0.79 | 0.50 | 0.58 |
+| hand_accel_mm | 2.29 | 0.83 | 0.93 |
+| tip_accel_mm | 3.86 | 1.17 | 1.52 |
+| finger_accel_deg | 0.46 | 0.12 | 0.14 |
+| obj_ang_accel_deg | 0.99 | 0.23 | 0.33 |
+| thumb_gap_cm | 5.00 | 2.29 | 0.81 |
+| n_touching | 0.00 | 2.00 | 2.00 |
+| opposed | 0.00 | 0.00 | 0.00 |
+</pre>

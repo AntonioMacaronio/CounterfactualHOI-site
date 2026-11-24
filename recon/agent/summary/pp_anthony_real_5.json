@@ -1,0 +1,254 @@
+{
+ "video_id": "pp_anthony_real_5",
+ "frames": 77,
+ "phases": [
+  {
+   "start": 0,
+   "end": 9,
+   "label": "approach"
+  },
+  {
+   "start": 10,
+   "end": 24,
+   "label": "grasp"
+  },
+  {
+   "start": 25,
+   "end": 40,
+   "label": "lift"
+  },
+  {
+   "start": 41,
+   "end": 44,
+   "label": "carry"
+  },
+  {
+   "start": 45,
+   "end": 56,
+   "label": "place"
+  },
+  {
+   "start": 57,
+   "end": 68,
+   "label": "release"
+  },
+  {
+   "start": 69,
+   "end": 76,
+   "label": "rest"
+  }
+ ],
+ "hand_jitter_ref_mm": 3.169515368723725,
+ "depth_anchor": {
+  "frames": 77,
+  "frames_interpolated": 0,
+  "table_rms_cm": 0.1771237660400575,
+  "table_distance_vs_reference": [
+   0.9414237997289636,
+   0.9960313480394937,
+   1.0528397708149266
+  ],
+  "normal_spread_deg": 0.714528681819486,
+  "reference_spread_iqr": 0.04920160923400296,
+  "mesh_scale": 0.9556387057341488,
+  "object_factor": [
+   0.9520035877268221,
+   0.9984674727513759,
+   1.0528319400432753
+  ],
+  "object_factor_last": 0.9814584430204975,
+  "hand_factor": [
+   0.9533644079389766,
+   0.9968956550651423,
+   1.053485056667891
+  ],
+  "tilt_vs_geocalib_deg": 3.7957818383181534
+ },
+ "object_scale": [
+  1.0,
+  1.07,
+  1.0
+ ],
+ "object_extent_cm": [
+  [
+   13.18680289271068,
+   20.30869455958914,
+   8.2783920756806
+  ],
+  [
+   13.18680289271068,
+   21.73030317876038,
+   8.2783920756806
+  ]
+ ],
+ "all": {
+  "iou": [
+   0.8848346636259977,
+   0.894524959742351
+  ],
+  "coverage": [
+   0.9150943396226415,
+   0.9315557998900494
+  ],
+  "spill": [
+   0.03200656544932294,
+   0.04175475687103594
+  ],
+  "depth_res_cm": [
+   0.3943890333175659,
+   0.4066675901412964
+  ],
+  "hand_kp_px": [
+   41.68976090740242,
+   12.525274753485855
+  ],
+  "hand_depth_bias_cm": [
+   -3.6166131496429443,
+   -0.2769351005554199
+  ],
+  "penetration_cm": [
+   2.434320865540106,
+   0.0
+  ],
+  "contact_cm": [
+   0.0,
+   0.14996654469483345
+  ],
+  "n_cross": [
+   79.0,
+   0.0
+  ],
+  "hand_accel_mm": [
+   3.169515368723725,
+   1.4228460810907937
+  ],
+  "hand_rel_accel_mm": [
+   3.998779251926728,
+   0.716009114175843
+  ],
+  "tip_accel_mm": [
+   4.49911765406597,
+   1.5783323995630183
+  ],
+  "finger_accel_deg": [
+   0.4953591393107853,
+   0.15493592412473414
+  ],
+  "obj_accel_cm": [
+   0.1657960913622682,
+   0.06288062248357866
+  ],
+  "obj_ang_accel_deg": [
+   1.1429222762108486,
+   0.12192580775115303
+  ]
+ },
+ "held": {
+  "iou": [
+   0.8834796488427773,
+   0.8983990147783252
+  ],
+  "coverage": [
+   0.9083402146985962,
+   0.9350833628946434
+  ],
+  "spill": [
+   0.02964509394572025,
+   0.03805496828752643
+  ],
+  "depth_res_cm": [
+   0.3272801637649536,
+   0.44604241847991943
+  ],
+  "hand_kp_px": [
+   31.915762418703153,
+   13.689021355565997
+  ],
+  "hand_depth_bias_cm": [
+   -3.582686185836792,
+   -0.22451281547546387
+  ],
+  "penetration_cm": [
+   2.550253209570805,
+   0.0
+  ],
+  "contact_cm": [
+   0.0,
+   0.1498752268672501
+  ],
+  "n_cross": [
+   95.0,
+   0.0
+  ],
+  "hand_accel_mm": [
+   3.0854004225527776,
+   1.4583166524122326
+  ],
+  "hand_rel_accel_mm": [
+   3.7336563914145535,
+   0.496655015674595
+  ],
+  "tip_accel_mm": [
+   3.7600545026851715,
+   1.6462522692945885
+  ],
+  "finger_accel_deg": [
+   0.40386707214000495,
+   0.12453234777791086
+  ],
+  "obj_accel_cm": [
+   0.17161792936230036,
+   0.1032294334851021
+  ],
+  "obj_ang_accel_deg": [
+   1.251947876293086,
+   0.20512986993503277
+  ]
+ },
+ "rest_abs_height_cm": [
+  0.8535375570215331,
+  0.011807984074491129
+ ],
+ "rest_height_spread_cm": [
+  0.30068936994090967,
+  0.033021170812852496
+ ],
+ "grip_lifted": [
+  0.0,
+  1.0
+ ],
+ "reviewer": {
+  "overall": "good",
+  "problems": [],
+  "votes": [
+   "good",
+   "good",
+   "good"
+  ],
+  "n_high": 0,
+  "n_medium": 0,
+  "n_low": 0
+ },
+ "flagged_frames": [
+  77,
+  1
+ ],
+ "jump_threshold_mm": 13.497352962197912,
+ "jump_frames": [
+  2,
+  0
+ ],
+ "tip_accel_max_mm": [
+  20.99925000653411,
+  4.30817863767457
+ ],
+ "n_versions": 21,
+ "agent_minutes": 10.5,
+ "verifier": [
+  "verify [0, 9]: winner B (refined = B), confidence 0.75, keep True: B's bottle stays upright and rests on the table, sitting at about 0 cm height with almost no rotation while it is not held. A's bottle is tilted in the 3D views, sits about 0.3\u20130.4 cm below the table,",
+  "verify [10, 56]: winner B (refined = B), confidence 0.80, keep True: B has the thumb or palm opposing the fingers on every lifted frame and a lower keypoint error (14 vs 19 px). A's 3D views at frames 37 and 46 show the hand reaching to one side of the bottle with the ",
+  "verify [57, 68]: winner A (refined = A), confidence 0.75, keep True: A places the bottle on the table, with its height going to ~0 during release and rest, and the bottle stops rotating once released. B leaves the bottle hovering about 0.5\u20130.8 cm above the table and ke",
+  "verify [69, 76]: winner B (refined = B), confidence 0.80, keep True: In A the bottle is tilted noticeably in the 3D views and drifts and rotates (~1\u00b0/frame) while it should be resting, and it hovers about 0.5\u20130.8 cm above the table. In B the bottle stands upright on th"
+ ],
+ "reverted": 0
+}

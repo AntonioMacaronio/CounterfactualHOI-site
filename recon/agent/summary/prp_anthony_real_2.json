@@ -1,0 +1,269 @@
+{
+ "video_id": "prp_anthony_real_2",
+ "frames": 162,
+ "phases": [
+  {
+   "start": 0,
+   "end": 17,
+   "label": "approach"
+  },
+  {
+   "start": 18,
+   "end": 28,
+   "label": "grasp"
+  },
+  {
+   "start": 29,
+   "end": 45,
+   "label": "lift"
+  },
+  {
+   "start": 46,
+   "end": 75,
+   "label": "rotate"
+  },
+  {
+   "start": 76,
+   "end": 96,
+   "label": "place"
+  },
+  {
+   "start": 97,
+   "end": 150,
+   "label": "release"
+  },
+  {
+   "start": 151,
+   "end": 161,
+   "label": "rest"
+  }
+ ],
+ "hand_jitter_ref_mm": 2.061857450712459,
+ "depth_anchor": {
+  "frames": 162,
+  "frames_interpolated": 0,
+  "table_rms_cm": 0.15615789328052418,
+  "table_distance_vs_reference": [
+   0.9386614997380005,
+   0.9952765495909309,
+   1.055089927274272
+  ],
+  "normal_spread_deg": 0.5539324160302866,
+  "reference_spread_iqr": 0.030814303123239812,
+  "mesh_scale": 0.951676583623735,
+  "object_factor": [
+   0.9430795786770771,
+   1.0033137895810627,
+   1.0562592610980055
+  ],
+  "object_factor_last": 1.002024664167814,
+  "hand_factor": [
+   0.9443314312601825,
+   1.0031807489431404,
+   1.056328015917454
+  ],
+  "tilt_vs_geocalib_deg": 3.2642053328205476
+ },
+ "object_scale": [
+  1.0,
+  1.0,
+  1.0
+ ],
+ "object_extent_cm": [
+  [
+   10.443645335566314,
+   11.933727454458273,
+   10.410570178884527
+  ],
+  [
+   10.443645335566314,
+   11.933727454458273,
+   10.410570178884527
+  ]
+ ],
+ "all": {
+  "iou": [
+   0.9026308804360705,
+   0.9226184475806452
+  ],
+  "coverage": [
+   0.9482854246281356,
+   0.9626647223822444
+  ],
+  "spill": [
+   0.043363499245852186,
+   0.04061336320426266
+  ],
+  "depth_res_cm": [
+   0.3344237804412842,
+   0.35334378480911255
+  ],
+  "hand_kp_px": [
+   20.217612420110903,
+   6.821736742225918
+  ],
+  "hand_depth_bias_cm": [
+   -1.5843555331230164,
+   -0.33383965492248535
+  ],
+  "penetration_cm": [
+   0.9092516068442482,
+   0.0
+  ],
+  "contact_cm": [
+   0.0,
+   0.15036815129857084
+  ],
+  "n_cross": [
+   50.0,
+   0.0
+  ],
+  "hand_accel_mm": [
+   2.061857450712459,
+   0.7506600620735977
+  ],
+  "hand_rel_accel_mm": [
+   6.231368844641153,
+   1.4227763223145546
+  ],
+  "tip_accel_mm": [
+   3.1190750713658675,
+   1.3855006699114347
+  ],
+  "finger_accel_deg": [
+   0.43334382027557905,
+   0.1622862326447171
+  ],
+  "obj_accel_cm": [
+   0.09833020632196746,
+   0.04678885935385422
+  ],
+  "obj_ang_accel_deg": [
+   2.9483749933590895,
+   0.7083054289637691
+  ]
+ },
+ "held": {
+  "iou": [
+   0.9079147640791476,
+   0.9250288350634371
+  ],
+  "coverage": [
+   0.9668155711550734,
+   0.9755799755799756
+  ],
+  "spill": [
+   0.05336069779374038,
+   0.04381443298969072
+  ],
+  "depth_res_cm": [
+   0.30825138092041016,
+   0.3398597240447998
+  ],
+  "hand_kp_px": [
+   25.942656693345477,
+   7.400545806742494
+  ],
+  "hand_depth_bias_cm": [
+   -1.9000768661499023,
+   -0.32192468643188477
+  ],
+  "penetration_cm": [
+   0.9837437020377497,
+   0.0
+  ],
+  "contact_cm": [
+   0.0,
+   0.1498486238268258
+  ],
+  "n_cross": [
+   118.0,
+   0.0
+  ],
+  "hand_accel_mm": [
+   2.040632215929692,
+   0.8352211542232361
+  ],
+  "hand_rel_accel_mm": [
+   6.731106054819338,
+   1.471695613130512
+  ],
+  "tip_accel_mm": [
+   3.016313948586422,
+   1.5313249356295726
+  ],
+  "finger_accel_deg": [
+   0.3611548525034397,
+   0.1836363275831945
+  ],
+  "obj_accel_cm": [
+   0.21570169228543545,
+   0.10503034748322045
+  ],
+  "obj_ang_accel_deg": [
+   4.020923466231139,
+   1.0627119097296067
+  ]
+ },
+ "rest_abs_height_cm": [
+  0.36187590372256384,
+  1.1102230246251565e-14
+ ],
+ "rest_height_spread_cm": [
+  0.28804130291178454,
+  0.1011676406705797
+ ],
+ "grip_lifted": [
+  0.48936170212765956,
+  0.9787234042553191
+ ],
+ "reviewer": {
+  "overall": "acceptable",
+  "problems": [
+   {
+    "start": 52,
+    "end": 53,
+    "issue": "Flagged rotation jump: the object orientation changes abruptly between consecutive frames at the start of the in-hand rotation. Angular speed peaks at 9.15 deg/frame in 52-64, versus about 1.9 in the preceding lift.",
+    "severity": "medium",
+    "fix_hint": "Re-estimate the object pose around 50-56 with a temporal smoothness prior on rotation (e.g. slerp or SE(3) smoothing). Keep the hand-object contacts consistent through the jump."
+   },
+   {
+    "start": 26,
+    "end": 38,
+    "issue": "Hand keypoint reprojection error rises to about 11 px during early lift, so finger placement inside the tape hole may be slightly off from the video.",
+    "severity": "low",
+    "fix_hint": "Refine hand pose with a stronger 2D keypoint weight during the lift onset while preserving the contact constraints."
+   }
+  ],
+  "votes": [
+   "acceptable",
+   "acceptable",
+   "acceptable"
+  ],
+  "n_high": 0,
+  "n_medium": 1,
+  "n_low": 1
+ },
+ "flagged_frames": [
+  159,
+  3
+ ],
+ "jump_threshold_mm": 9.357225214097603,
+ "jump_frames": [
+  7,
+  0
+ ],
+ "tip_accel_max_mm": [
+  14.845749539900442,
+  6.703642134333431
+ ],
+ "n_versions": 13,
+ "agent_minutes": 9.0,
+ "verifier": [
+  "verify [0, 13]: winner B (refined = B), confidence 0.60, keep True: The two reconstructions are nearly identical in the overlays and the 3D views. A's object rotates by 1-2.7 deg/frame while the tape rests on the table during the approach, which is spurious jitter. B'",
+  "verify [14, 95]: winner A (refined = A), confidence 0.72, keep True: A has the thumb or palm opposing the fingers on 98% of the lifted frames, which is a real grip, while B shows no such grip. A also has no hand\u2013object interpenetration (B averages 0.2 triangles through",
+  "verify [151, 155]: winner B (refined = B), confidence 0.62, keep True: The hands are nearly identical in both reconstructions: same paths, same accelerations, no penetration. The difference is the tape roll during the rest phase. In A it keeps rotating slightly (about 0.",
+  "verify [142, 144]: winner B (refined = B), confidence 0.60, keep True: The two reconstructions are nearly identical in hand pose, contact and motion smoothness. The deciding difference is the object's height. A places the tape roll slightly below the table, about -0.1 to"
+ ],
+ "reverted": 0
+}

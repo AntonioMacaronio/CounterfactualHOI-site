@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CounterfactualHOI: Do-as-I-Do reconstructions (IMG_5710)</title>
+<style>
+  body { font-family: -apple-system, system-ui, sans-serif; margin: 24px; color: #222; background: #fafafa; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  p.sub { margin: 0 0 18px; color: #555; font-size: 14px; max-width: 1100px; }
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+  figure { margin: 0; background: #fff; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; }
+  iframe { width: 100%; height: 480px; border: 0; display: block; }
+  figcaption { padding: 8px 12px 10px; font-size: 13px; color: #444; border-top: 1px solid #eee; }
+  @media (max-width: 1000px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body style="margin:0"><style>
+  body { font-family: -apple-system, system-ui, sans-serif; margin: 0; color: #222; background: #fafafa; }
+  .nav { background: #1f2937; padding: 10px 24px; display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+  .nav b { color: #fff; margin-right: 12px; }
+  .nav a { color: #cbd5e1; text-decoration: none; font-size: 14px; }
+  .nav a:hover { color: #fff; }
+  </style><div class="nav"><b>CounterfactualHOI</b><a href="../../index.html">Home</a><a href="../../recon/daid/index.html">1 · Do-as-I-Do</a><a href="../../recon/choir/index.html">2 · Open-CHOIR</a><a href="../../recon/ours/index.html">3 · Our pipeline</a><a href="../../recon/agent/index.html">4 · Agent refinement</a><a href="../../recon/retarget/index.html">5 · Retargeted motions</a></div><div style="margin:24px">
+<h1>Do-as-I-Do 4D hand–object–table reconstructions of IMG_5710</h1>
+<p class="sub">Reference clip: the right hand picks up a gray AirPods case, spins it in the palm and sets it down.
+The three generated clips replace the case with another object via MiniMax H3 (PRISM-style text-only V2V).
+Each viewer shows the MANO hand (HaWoR, blue), the textured SAM3D object (Do-as-I-Do tracking), and the
+reconstructed table (fitted plane + point cloud), with the real camera's frustum and video frame.
+Drag to orbit, scroll to zoom; the playback bar is at the bottom of each viewer.</p>
+<div class="grid">
+    <figure>
+      <iframe src="real.html?initialCameraPosition=-0.6305%2C-0.2516%2C-0.1515&amp;initialCameraLookAt=-0.4337%2C0.1096%2C-0.1544&amp;initialCameraUp=-0.0093%2C-0.4641%2C0.8857&amp;initialCameraFov=1.3090" loading="lazy" title="Real reference video: AirPods case"></iframe>
+      <figcaption><b>Real reference video: AirPods case</b><br>table 0.97×0.58 m · silhouette IoU 0.82 · rotation flips (&gt;20°/frame) 4% · up = GeoCalib gravity, 25.8° from the table normal ⚠</figcaption>
+    </figure>
+    <figure>
+      <iframe src="apple.html?initialCameraPosition=0.3001%2C0.2153%2C0.2505&amp;initialCameraLookAt=-0.0158%2C0.2100%2C0.0048&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" loading="lazy" title="Generated (MiniMax H3): red apple"></iframe>
+      <figcaption><b>Generated (MiniMax H3): red apple</b><br>table 0.48×0.42 m · silhouette IoU 0.60 · rotation flips (&gt;20°/frame) 2% · up = GeoCalib gravity, 1.2° from the table normal</figcaption>
+    </figure>
+    <figure>
+      <iframe src="wood_block.html?initialCameraPosition=-0.4937%2C-0.0407%2C-0.0112&amp;initialCameraLookAt=-0.1401%2C0.4525%2C-0.0538&amp;initialCameraUp=0.0000%2C-0.5778%2C0.8162&amp;initialCameraFov=1.3090" loading="lazy" title="Generated (MiniMax H3): wooden block"></iframe>
+      <figcaption><b>Generated (MiniMax H3): wooden block</b><br>table 0.79×0.62 m · silhouette IoU 0.63 · rotation flips (&gt;20°/frame) 10% · up = GeoCalib gravity, 32.7° from the table normal ⚠</figcaption>
+    </figure>
+    <figure>
+      <iframe src="lemon.html?initialCameraPosition=0.2787%2C0.1809%2C0.1581&amp;initialCameraLookAt=-0.0075%2C0.1794%2C-0.0645&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" loading="lazy" title="Generated (MiniMax H3): lemon"></iframe>
+      <figcaption><b>Generated (MiniMax H3): lemon</b><br>table 0.52×0.35 m · silhouette IoU 0.77 · rotation flips (&gt;20°/frame) 2% · up = GeoCalib gravity, 2.1° from the table normal</figcaption>
+    </figure>
+</div>
+</div></body>
+</html>

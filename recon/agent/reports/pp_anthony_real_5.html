@@ -1,0 +1,96 @@
+<!doctype html><meta charset="utf-8"><title>pp_anthony_real_5 refinement report</title><pre style="white-space: pre-wrap; font: 14px/1.45 system-ui, sans-serif; max-width: 1000px; margin: 24px auto"># Refinement of pp_anthony_real_5
+
+Model global.anthropic.claude-opus-5-5, effort high; 22 versions; 1 pass; 10.8 min.
+
+Agent summary: Fixed both review findings: the bottle now stands upright with its base on the table before the grasp and after the release; the cost is a slightly looser outline fit. Final version is v21; the verifier compares it against v6, the automatic fit under the changed shape.
+
+Steps after the review:
+- Turned the bottle a further 9 deg about the world&#x27;s right axis over the whole clip, removing the remaining lean.
+- Re-fitted the object to its mask and depth with a tight rotation limit (2 deg), so the fit could fix position without tilting it back. Before this, the fit kept pulling the bottle into a lean.
+- Held it still on 0-16 (frame 10&#x27;s pose) and 60-76 (frame 70&#x27;s pose), then lowered each rest onto the table (0.3 and 0.4 cm).
+- Smoothed the object over 14-60 so the rest and held parts join without a jump, then re-fitted the hand over the whole clip with the grip term.
+
+Earlier changes still in the result: phases labeled (approach 0-9, grasp 10-24, lift 25-40, carry 41-44, place 45-56, release 57-68, rest 69-76); table re-fitted from rest frames (moved only 0.2 deg); bottle lengthened 7% along its long side (now 22.3x8.2x5.6 cm).
+
+Result:
+- Views from four sides at frames 5, 32, 50 and 72 show the bottle upright, at rest and while held.
+- Height above the table is about 0.0 cm in both rests (median 0.01-0.02 cm off). The bottle sits still there.
+- The hand grips it on opposite sides from frame 13 to 56, with fingertips within about 0.4 cm and no hand inside the bottle. Keypoint error is 10-15 px.
+- No fingertip or object jumps (fastest fingertip at most 4.3 mm/frame^2, a jump is 13) and no flags in the metrics table.
+
+Limitations:
+- Outline coverage dropped from 0.98 to 0.92-0.95; the mask and depth slightly prefer a small lean, but a bottle resting on a table stands upright.
+- The rendered top sits about 15 px short of the mask in rest frames.
+- The bottle starts to rise around frame 17, a few frames before the real lift (about 0.2 cm by frame 24), because of the smoothing.
+
+Phases: approach 0-9, grasp 10-24, lift 25-40, carry 41-44, place 45-56, release 57-68, rest 69-76
+
+Edits:
+- v0: initial (FoundationPose + Depth Pro 2)
+- v1: automatic fit over the whole clip: fit object to its mask + depth on 0-76: 77 frames (trust region 8.0 deg, 2.0 cm); smooth object poses on 0-76 (window 5); fit MANO (all, no contact) on 0-76: 77 frames, 600 steps; losses kp 2.92-&gt;1.50, depth 6.74-&gt;2.46, pen 73.23-&gt;0.01, occl 10.21-&gt;10.89, grip 0.00-&gt;0.00, smooth 8.10-&gt;1.56; hand shape fitted (size x0.946); occlusion order (hand behind the object where the video shows the object, in front where it shows the hand): as it is: 3.7% -&gt; 2.6% of the hand on the wrong side of the object, keypoints 26.3 -&gt; 20.3 px, 0.2 -&gt; 0.0 triangles through it: not kept; from its measured depth: 3.7% -&gt; 2.3% of the hand on the wrong side of the object, keypoints 26.3 -&gt; 26.8 px, 0.2 -&gt; 0.0 triangles through it: kept
+- v2: phases: approach 0-9, grasp 10-24, lift 25-40, carry 41-44, place 45-56, release 57-68, rest 69-76
+- v3: rotate object +20.0 deg about world_right on 0-76 (falloff 0)
+- v4: fit object to its mask + depth on 0-76: 77 frames (trust region 8.0 deg, 4.0 cm)
+- v5: scale object x1.07 along its seen_long extent (20.3 -&gt; 21.7 cm; the object is now 22.3 x 8.2 x 5.6 cm along its long / mid / short axes); poses shifted so the side facing the camera stays, then re-fitted to mask + depth; hand: fit MANO (all) on 0-76: 77 frames, 600 steps; losses kp 1.58-&gt;0.68, depth 1.99-&gt;2.26, pen 4.08-&gt;0.00, occl 3.36-&gt;4.52, grip 1.75-&gt;0.13, smooth 1.18-&gt;0.92
+- v6: automatic fit (v1) under the new object shape: object and hand re-fitted
+- v7: hold object static at frame 10&#x27;s pose on 0-22
+- v8: revert to v5
+- v9: hold object static at frame 10&#x27;s pose on 0-16
+- v10: hold object static at frame 70&#x27;s pose on 60-76
+- v11: snap object onto the table on 56-76 (constant; median shift +0.5 cm)
+- v12: smooth object poses on 48-64 (window 7)
+- v13: fit MANO (all) on 50-76: 27 frames, 600 steps; losses kp 0.57-&gt;0.57, depth 1.99-&gt;1.99, pen 0.08-&gt;0.00, occl 3.94-&gt;3.60, grip 0.00-&gt;0.00, smooth 0.65-&gt;0.67, join 0.19-&gt;0.02
+- v14: rotate object +9.0 deg about world_right on 0-76 (falloff 0)
+- v15: fit object to its mask + depth on 0-76: 77 frames (trust region 2.0 deg, 2.0 cm)
+- v16: hold object static at frame 10&#x27;s pose on 0-16
+- v17: hold object static at frame 70&#x27;s pose on 60-76
+- v18: snap object onto the table on 0-18 (constant; median shift +0.3 cm)
+- v19: snap object onto the table on 56-76 (constant; median shift +0.4 cm)
+- v20: smooth object poses on 14-60 (window 5)
+- v21: fit MANO (all) on 0-76: 77 frames, 600 steps; losses kp 0.68-&gt;0.57, depth 2.26-&gt;2.09, pen 2.08-&gt;0.00, occl 4.35-&gt;5.13, grip 0.15-&gt;0.09, smooth 0.93-&gt;0.80
+
+Object shape: x1.00 of the reconstructed mesh along the first frame&#x27;s viewing direction (the unseen extent), x1.07 / x1.00 across it; the object is 22.3 x 8.2 x 5.6 cm along its long / mid / short axes.
+object&#x27;s extent along the first frame&#x27;s viewing direction (the side that frame could not see), evidence per candidate (after re-fitting the object and the hand to it):
+  x1.80 (23.7 cm): at rest -5.3 / -4.4 cm from the table, IoU 0.936, depth residual 1.66 cm; while held: keypoints 30.2 px, hand 0.7 cm off the depth map, 0.0 triangles through the object, 1.5% of the hand on the wrong side of the object -&gt; score 22.4
+  x1.50 (19.8 cm): at rest -2.6 / -1.8 cm from the table, IoU 0.937, depth residual 0.40 cm; while held: keypoints 28.3 px, hand 0.5 cm off the depth map, 0.0 triangles through the object, 4.1% of the hand on the wrong side of the object -&gt; score 12.3
+  x1.25 (16.5 cm): at rest -0.9 / -0.2 cm from the table, IoU 0.938, depth residual 0.59 cm; while held: keypoints 23.6 px, hand 0.5 cm off the depth map, 0.0 triangles through the object, 1.9% of the hand on the wrong side of the object -&gt; score 6.5
+  x1.00 (13.2 cm): at rest +0.7 / +1.1 cm from the table, IoU 0.909, depth residual 0.68 cm; while held: keypoints 14.7 px, hand 0.4 cm off the depth map, 0.0 triangles through the object, 1.1% of the hand on the wrong side of the object -&gt; score 5.4
+
+Depth: every frame&#x27;s depth is scaled so that its table lies on one plane (the camera is static, but the depth estimator&#x27;s scale drifts: in the frames&#x27; own depth the table is 0.18 cm rms off a plane within a frame, while its distance ranges from x0.941 to x1.053 of the reference over the clip, and the depth on the object moves with it). The tracked object and hand were moved along their viewing rays with it (object x0.952 to x1.053), and the mesh, sized in frame 0&#x27;s depth, was scaled x0.956.
+
+Table: plane of the depth points within 20 cm of the object in frames [0, 70] (8000 points, 0.10 cm rms off the plane); its normal is up, 3.6 deg from GeoCalib&#x27;s gravity estimate. table re-fitted from frames [0, 4, 70, 76]: 8000 depth points around the object, 0.10 cm rms off the plane (the patches&#x27; heights on it: -0.0, +0.0 cm); its normal turned 0.2 deg (now 3.6 deg from GeoCalib&#x27;s gravity). Up for edits and views is this normal.
+
+Verifier (v6 vs refined, blind A/B):
+- frames 0-9: kept (winner B, refined = B, confidence 0.75): B&#x27;s bottle stays upright and rests on the table, sitting at about 0 cm height with almost no rotation while it is not held. A&#x27;s bottle is tilted in the 3D views, sits about 0.3–0.4 cm below the table, and drifts slightly in rotation. Hand motion is similarly smooth in both, and neither shows interpenetration. B&#x27;s object fit in the overlays is comparable to A&#x27;s, or a bit off at the top in later frames.
+- frames 10-56: kept (winner B, refined = B, confidence 0.80): B has the thumb or palm opposing the fingers on every lifted frame and a lower keypoint error (14 vs 19 px). A&#x27;s 3D views at frames 37 and 46 show the hand reaching to one side of the bottle with the fingers not wrapped around it, so the bottle would not be held. B&#x27;s object also rests stably at table height before the lift and returns to the table at release, while A&#x27;s object sits slightly below the table and then floats about 0.7 cm above it. A also shows jittery rotation and a fingertip acceleration spike around frame 41.
+- frames 57-68: kept (winner A, refined = A, confidence 0.75): A places the bottle on the table, with its height going to ~0 during release and rest, and the bottle stops rotating once released. B leaves the bottle hovering about 0.5–0.8 cm above the table and keeps it rotating at about 1–2°/frame while it should be at rest. B also tilts in the 3D views, has a small interpenetration at frame 66, and shows a fingertip jitter spike. The overlays of the two look similar, so A is the more physically plausible reconstruction.
+- frames 69-76: kept (winner B, refined = B, confidence 0.80): In A the bottle is tilted noticeably in the 3D views and drifts and rotates (~1°/frame) while it should be resting, and it hovers about 0.5–0.8 cm above the table. In B the bottle stands upright on the table with no rotation. The overlays fit similarly, and hand motion is similar in both, with slightly less fingertip jitter in B.
+
+Merge of the kept and the reverted ranges: no seams to smooth. Finger jumps left (fastest fingertip over 13 mm/frame^2): none.
+
+Independent reviewer, before the agent could finish: overall acceptable; [medium] 0-9: Before the grasp the bottle is rendered clearly tilted (leaning in the camera&#x27;s right and left views), while the video shows it standing upright on the table. It would not rest flat and stable in simulation. obj_height is also slightly negative (-0.13 cm). (hint: Constrain the resting object pose so the bottle&#x27;s base lies flat on the table plane and its orientation matches the upright bottle in the video.); [medium] 70-76: After placement the bottle again appears tilted in the 3D views rather than standing upright on its base as in the video. (hint: Snap the rest pose to a stable upright contact with the table after release.); [low] 30-39: Hand keypoint reprojection error rises to about 20 px during the lift, with a larger object depth bias (-0.36), so hand/object alignment to the video is weaker there. (hint: Refine the hand pose against the 2D keypoints in this span while keeping the current contact.); [low] 10-56: The wrist and fingertip paths show sharp kinks and hooks at one end of the held span (the black wrist path has a step-like corner; the fingertip paths curl). This suggests jitter around the grasp/release transitions. (hint: Temporally smooth hand trajectories near the grasp onset and release.)
+
+Independent reviewer on the final result (what is still wrong): (votes over 3 reviews: good, good, good) overall good; no problems
+
+| metric (median over frames) | initial | automatic fit (v1) | final |
+|---|---|---|---|
+| coverage | 0.92 | 0.94 | 0.93 |
+| spill | 0.03 | 0.03 | 0.04 |
+| depth_res_cm | 0.39 | 0.68 | 0.41 |
+| hand_kp_px | 41.69 | 14.79 | 12.53 |
+| hand_depth_bias_cm | -3.62 | -0.44 | -0.28 |
+| contact_cm | 0.00 | 0.14 | 0.15 |
+| penetration_cm | 2.43 | 0.00 | 0.00 |
+| n_cross | 79.00 | 0.00 | 0.00 |
+| hand_over_obj | 0.03 | 0.00 | 0.00 |
+| obj_over_hand | 0.00 | 0.00 | 0.00 |
+| obj_height_cm | 1.01 | 1.11 | 0.16 |
+| ang_speed_deg_per_frame | 0.87 | 0.58 | 0.34 |
+| hand_accel_mm | 3.17 | 1.69 | 1.42 |
+| tip_accel_mm | 4.50 | 2.39 | 1.58 |
+| finger_accel_deg | 0.50 | 0.26 | 0.15 |
+| obj_ang_accel_deg | 1.14 | 0.30 | 0.12 |
+| thumb_gap_cm | 4.41 | 1.64 | 0.35 |
+| n_touching | 4.00 | 3.00 | 4.00 |
+| opposed | 0.00 | 0.00 | 1.00 |
+</pre>

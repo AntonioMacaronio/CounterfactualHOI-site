@@ -1,0 +1,281 @@
+{
+ "video_id": "pp_anthony_real_2",
+ "frames": 135,
+ "phases": [
+  {
+   "start": 0,
+   "end": 31,
+   "label": "approach"
+  },
+  {
+   "start": 32,
+   "end": 51,
+   "label": "grasp"
+  },
+  {
+   "start": 52,
+   "end": 70,
+   "label": "lift"
+  },
+  {
+   "start": 71,
+   "end": 84,
+   "label": "carry"
+  },
+  {
+   "start": 85,
+   "end": 104,
+   "label": "place"
+  },
+  {
+   "start": 105,
+   "end": 114,
+   "label": "release"
+  },
+  {
+   "start": 115,
+   "end": 134,
+   "label": "rest"
+  }
+ ],
+ "hand_jitter_ref_mm": 2.1370600732879765,
+ "depth_anchor": {
+  "frames": 135,
+  "frames_interpolated": 0,
+  "table_rms_cm": 0.163217970067859,
+  "table_distance_vs_reference": [
+   0.9277187188669322,
+   0.9985784160940292,
+   1.064572005402039
+  ],
+  "normal_spread_deg": 0.6569413322152564,
+  "reference_spread_iqr": 0.0435168717684858,
+  "mesh_scale": 0.9444640124932763,
+  "object_factor": [
+   0.9382524423632677,
+   1.0030829952172895,
+   1.0748894447248611
+  ],
+  "object_factor_last": 0.9810785210409134,
+  "hand_factor": [
+   0.9392775443787128,
+   1.0035474325063494,
+   1.0746156418473498
+  ],
+  "tilt_vs_geocalib_deg": 3.3852181586056607
+ },
+ "object_scale": [
+  1.0,
+  1.0,
+  1.0
+ ],
+ "object_extent_cm": [
+  [
+   10.216316197947368,
+   12.097013805630871,
+   10.235319745237446
+  ],
+  [
+   10.216316197947368,
+   12.097013805630871,
+   10.235319745237446
+  ]
+ ],
+ "all": {
+  "iou": [
+   0.9176470588235294,
+   0.9355769230769231
+  ],
+  "coverage": [
+   0.9624765478424016,
+   0.9809663250366032
+  ],
+  "spill": [
+   0.03237674760853569,
+   0.02748259435690729
+  ],
+  "depth_res_cm": [
+   0.36296546459198,
+   0.2323746681213379
+  ],
+  "hand_kp_px": [
+   33.539230449868015,
+   8.150559004638495
+  ],
+  "hand_depth_bias_cm": [
+   -3.796452283859253,
+   -0.5666911602020264
+  ],
+  "penetration_cm": [
+   0.0,
+   0.0
+  ],
+  "contact_cm": [
+   1.2464071431765116,
+   0.16743748227517688
+  ],
+  "n_cross": [
+   0.0,
+   0.0
+  ],
+  "hand_accel_mm": [
+   2.1370600732879765,
+   0.9211625608747444
+  ],
+  "hand_rel_accel_mm": [
+   6.506109830357403,
+   1.3472963326558278
+  ],
+  "tip_accel_mm": [
+   3.1984480599286615,
+   1.3366151964276038
+  ],
+  "finger_accel_deg": [
+   0.38174733850137627,
+   0.14407062891694503
+  ],
+  "obj_accel_cm": [
+   0.10475375539037997,
+   0.02468482932352804
+  ],
+  "obj_ang_accel_deg": [
+   2.063457268954531,
+   0.4233524095201344
+  ]
+ },
+ "held": {
+  "iou": [
+   0.9033232628398792,
+   0.9525065963060686
+  ],
+  "coverage": [
+   0.9633967789165446,
+   0.9934036939313984
+  ],
+  "spill": [
+   0.032364840014711294,
+   0.027543150936467132
+  ],
+  "depth_res_cm": [
+   0.5085110664367676,
+   0.32996535301208496
+  ],
+  "hand_kp_px": [
+   24.688552613859795,
+   9.61575020027455
+  ],
+  "hand_depth_bias_cm": [
+   -3.7616074085235596,
+   -0.40575265884399414
+  ],
+  "penetration_cm": [
+   0.0,
+   0.0
+  ],
+  "contact_cm": [
+   0.20453462096256206,
+   0.14987982323573473
+  ],
+  "n_cross": [
+   0.0,
+   0.0
+  ],
+  "hand_accel_mm": [
+   2.2400479779581577,
+   0.8339246366378569
+  ],
+  "hand_rel_accel_mm": [
+   6.653525038721058,
+   0.961418398395276
+  ],
+  "tip_accel_mm": [
+   3.0648299637769707,
+   1.2549276896191632
+  ],
+  "finger_accel_deg": [
+   0.33856657233448595,
+   0.14235321015639618
+  ],
+  "obj_accel_cm": [
+   0.17149708727209628,
+   0.09057940230843943
+  ],
+  "obj_ang_accel_deg": [
+   2.8922905103898615,
+   0.4832684730649038
+  ]
+ },
+ "rest_abs_height_cm": [
+  0.27413651330747135,
+  0.28425815730917514
+ ],
+ "rest_height_spread_cm": [
+  0.3485710613208737,
+  0.3232317417796726
+ ],
+ "grip_lifted": [
+  0.0,
+  0.9696969696969697
+ ],
+ "reviewer": {
+  "overall": "good",
+  "problems": [
+   {
+    "start": 110,
+    "end": 120,
+    "issue": "In the frame 110 render the fingers still sit in the tape's core as in the video, yet contact distance for this span reads 100 cm (no contact). The release timing in the contact labels is unclear.",
+    "severity": "low",
+    "fix_hint": "Check contact detection at the place/rest transition so the release frame matches the video."
+   },
+   {
+    "start": 118,
+    "end": 120,
+    "issue": "Hand is flagged as off the depth map, so its depth is weakly constrained (hand depth residual -1.06 in 110-120).",
+    "severity": "low",
+    "fix_hint": "Rely on temporal smoothing or keypoint priors for hand depth in these frames."
+   },
+   {
+    "start": 110,
+    "end": 131,
+    "issue": "Hand and fingertip acceleration rise during the rest/withdrawal phase (about 1.5-2.0), higher than in the held span.",
+    "severity": "low",
+    "fix_hint": "Apply light temporal smoothing to the hand trajectory after release."
+   },
+   {
+    "start": 32,
+    "end": 34,
+    "issue": "Small kink at the start of the wrist and pinky paths at grasp onset.",
+    "severity": "low",
+    "fix_hint": "Smooth the wrist trajectory around the approach-to-grasp transition."
+   }
+  ],
+  "votes": [
+   "good",
+   "good",
+   "acceptable"
+  ],
+  "n_high": 0,
+  "n_medium": 0,
+  "n_low": 4
+ },
+ "flagged_frames": [
+  135,
+  5
+ ],
+ "jump_threshold_mm": 9.595344179785984,
+ "jump_frames": [
+  8,
+  0
+ ],
+ "tip_accel_max_mm": [
+  16.13986295212371,
+  3.581194985467648
+ ],
+ "n_versions": 3,
+ "agent_minutes": 2.9,
+ "verifier": [
+  "verify [35, 104]: winner B (refined = B), confidence 0.72, keep True: Both reconstructions are equally close to the keypoints (9 px) and neither pushes the hand through the object. They differ in the grip. In B the fingers reach into the roll's hole and the thumb or pal",
+  "verify [105, 107]: winner A (refined = B), confidence 0.65, keep False: Both reconstructions track the object identically and look very similar in the overlays and 3D views. B shows a hand and fingertip acceleration spike around frames 108-111 (about 3.5 and 4.7 mm, then "
+ ],
+ "reverted": 1
+}

@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CounterfactualHOI: Agent-refined 4D hand–object reconstructions of the real videos</title>
+<style>
+  body { font-family: -apple-system, system-ui, sans-serif; margin: 24px; color: #222; background: #fafafa; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  p.sub { margin: 0 0 14px; color: #555; font-size: 14px; max-width: 1150px; }
+  .tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+  .tab { font: inherit; font-size: 15px; padding: 6px 22px; border: 1px solid #bbb; border-radius: 6px;
+          background: #fff; cursor: pointer; }
+  .tab.active { background: #2d5be3; border-color: #2d5be3; color: #fff; }
+  .grid { display: none; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+  .grid.active { display: grid; }
+  figure { margin: 0; background: #fff; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; }
+  iframe { width: 100%; height: 480px; border: 0; display: block; }
+  .ph { height: 480px; display: flex; align-items: center; justify-content: center; color: #999; }
+  figcaption { padding: 8px 12px 10px; font-size: 13px; color: #444; border-top: 1px solid #eee; }
+  .cmp { display: none; } .cmp.active { display: block; }
+  .clips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .clip { font: inherit; font-size: 13px; padding: 4px 12px; border: 1px solid #bbb; border-radius: 14px; background: #fff; cursor: pointer; }
+  .clip.active { background: #1f2937; border-color: #1f2937; color: #fff; }
+  .pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .pair iframe { height: 560px; }
+  .note { font-size: 13px; color: #666; margin: 6px 0 10px; }
+  .qcfig img { width: 100%; display: block; }
+  .qcfig figcaption { border-top: 0; border-bottom: 1px solid #eee; }
+  @media (max-width: 1000px) { .grid.active, .pair { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body style="margin:0"><style>
+  body { font-family: -apple-system, system-ui, sans-serif; margin: 0; color: #222; background: #fafafa; }
+  .nav { background: #1f2937; padding: 10px 24px; display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+  .nav b { color: #fff; margin-right: 12px; }
+  .nav a { color: #cbd5e1; text-decoration: none; font-size: 14px; }
+  .nav a:hover { color: #fff; }
+  </style><div class="nav"><b>CounterfactualHOI</b><a href="../../index.html">Home</a><a href="../../recon/daid/index.html">1 · Do-as-I-Do</a><a href="../../recon/choir/index.html">2 · Open-CHOIR</a><a href="../../recon/ours/index.html">3 · Our pipeline</a><a href="../../recon/agent/index.html">4 · Agent refinement</a><a href="../../recon/retarget/index.html">5 · Retargeted motions</a></div><div style="margin:24px">
+<h1>Agent-refined 4D hand–object reconstructions of the real videos</h1>
+<p class="sub">One tab per recording set; the same five objects in each (small metal case, blue tape roll, black spatula, gray mug, dish soap bottle). The FoundationPose + Depth Pro 2 reconstructions after agentic refinement.
+An automatic gradient-free fit (hand to its keypoints, mask and depth; object to its mask and depth; each finger's
+flexion with no hand triangle through the object's surface) is followed by Claude (Opus 5.5), which looks at
+overlays on the video, the 3D scene from any side (hand red where it passes through the object, green where it
+touches it) and motion plots, labels the motion phases, and fixes what a per-frame fit cannot: contact while the
+object is held, fingers through it, a still object at rest, jumps. Every edit is a new version, checked before /
+after. A blind A/B verifier then compares each changed range with the automatic fit (overlays, 3D views from three
+sides, motion plot) and keeps the fit where the agent's edit loses. Captions: medians before → after. "QC frames"
+shows, per phase, the initial and refined overlays and the 3D scene from behind and from the left; "report" is
+the agent's own account of what it changed.
+Drag to orbit, scroll to zoom; the playback bar is at the bottom of each viewer.</p>
+<div class="tabs">
+  <button class="tab" data-tab="compare">before / after</button>
+  <button class="tab" data-tab="pp">pp</button>
+  <button class="tab" data-tab="prp">prp</button>
+</div>
+<section class="cmp" id="tab-compare">
+<div class="clips"><button class="clip" data-vid="pp_anthony_real_1">pp_1 · small metal case</button> <button class="clip" data-vid="pp_anthony_real_2">pp_2 · blue tape roll</button> <button class="clip" data-vid="pp_anthony_real_3">pp_3 · black spatula</button> <button class="clip" data-vid="pp_anthony_real_4">pp_4 · gray mug</button> <button class="clip" data-vid="pp_anthony_real_5">pp_5 · dish soap bottle</button> <button class="clip" data-vid="prp_anthony_real_1">prp_1 · small metal case</button> <button class="clip" data-vid="prp_anthony_real_2">prp_2 · blue tape roll</button> <button class="clip" data-vid="prp_anthony_real_3">prp_3 · black spatula</button> <button class="clip" data-vid="prp_anthony_real_4">prp_4 · gray mug</button> <button class="clip" data-vid="prp_anthony_real_5">prp_5 · dish soap bottle</button></div>
+<div class="pair">
+  <figure><iframe id="cmp-before" title="before"></iframe>
+    <figcaption><b>Before</b>: the initial reconstruction (FoundationPose + Depth Pro 2, hand tracker's hand)</figcaption></figure>
+  <figure><iframe id="cmp-after" title="after"></iframe>
+    <figcaption><b>After</b>: agent-refined</figcaption></figure>
+</div>
+<p class="note">The two viewers start from the same camera but play independently: drag each one's time slider.</p>
+<figure class="qcfig"><figcaption id="cmp-cap"></figcaption><img id="cmp-qc" alt="before / after frames"></figure>
+</section>
+<section class="grid" id="tab-pp">
+    <figure>
+      <iframe data-src="pp_anthony_real_1.html?initialCameraPosition=0.2728%2C0.1933%2C-0.0683&amp;initialCameraLookAt=0.1295%2C0.7489%2C-0.5322&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="pp_anthony_real_1 · small metal case"></iframe>
+      <figcaption><b>pp_anthony_real_1 · small metal case</b><br>113 frames · hand keypoint error 30.3 → 15.2 px · object mask IoU 0.94 → 0.96 · hand triangles through the object while held 0 → 0 · hand jitter while held 3.4 → 1.2 mm/frame² (hand tracker 3.3) · frames where a fingertip jumps (over 12 mm/frame²) 5 → 0 · lifted frames with a real grip 0% → 88% · verifier kept 6/8 chunks · 50 versions in 26 min · <b>reviewer: acceptable</b> (votes acceptable, acceptable, acceptable; 0 high, 6 medium problems left) · <a href="reports/pp_anthony_real_1.html" target="_blank">report</a> · <a href="qc/pp_anthony_real_1.jpg" target="_blank">QC frames</a></figcaption>
+    </figure>
+    <figure>
+      <iframe data-src="pp_anthony_real_2.html?initialCameraPosition=0.1443%2C0.1811%2C-0.0454&amp;initialCameraLookAt=0.0231%2C0.6516%2C-0.4381&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="pp_anthony_real_2 · blue tape roll"></iframe>
+      <figcaption><b>pp_anthony_real_2 · blue tape roll</b><br>135 frames · hand keypoint error 33.5 → 8.2 px · object mask IoU 0.92 → 0.94 · hand triangles through the object while held 0 → 0 · hand jitter while held 2.2 → 0.8 mm/frame² (hand tracker 2.1) · frames where a fingertip jumps (over 10 mm/frame²) 8 → 0 · lifted frames with a real grip 0% → 97% · verifier kept 1/2 chunks · 3 versions in 3 min · <b>reviewer: good</b> (votes good, good, acceptable; 0 high, 0 medium problems left) · <a href="reports/pp_anthony_real_2.html" target="_blank">report</a> · <a href="qc/pp_anthony_real_2.jpg" target="_blank">QC frames</a></figcaption>
+    </figure>
+    <figure>
+      <iframe data-src="pp_anthony_real_3.html?initialCameraPosition=0.2154%2C0.1907%2C-0.0517&amp;initialCameraLookAt=0.0832%2C0.7012%2C-0.4781&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="pp_anthony_real_3 · black spatula"></iframe>
+      <figcaption><b>pp_anthony_real_3 · black spatula</b><br>86 frames · hand keypoint error 37.5 → 9.0 px · object mask IoU 0.87 → 0.91 · hand triangles through the object while held 0 → 0 · hand jitter while held 2.1 → 1.0 mm/frame² (hand tracker 2.3) · frames where a fingertip jumps (over 12 mm/frame²) 3 → 0 · lifted frames with a real grip 0% → 100% · verifier kept 4/4 chunks · 14 versions in 8 min · <b>reviewer: good</b> (votes good, good, good; 0 high, 0 medium problems left) · <a href="reports/pp_anthony_real_3.html" target="_blank">report</a> · <a href="qc/pp_anthony_real_3.jpg" target="_blank">QC frames</a></figcaption>
+    </figure>
+    <figure>
+      <iframe data-src="pp_anthony_real_4.html?initialCameraPosition=0.2387%2C0.2113%2C0.0054&amp;initialCameraLookAt=0.1117%2C0.6965%2C-0.4001&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="pp_anthony_real_4 · gray mug"></iframe>
+      <figcaption><b>pp_anthony_real_4 · gray mug</b><br>122 frames · hand keypoint error 32.5 → 10.3 px · object mask IoU 0.90 → 0.92 · hand triangles through the object while held 143 → 0 · hand jitter while held 2.1 → 0.6 mm/frame² (hand tracker 2.4) · frames where a fingertip jumps (over 11 mm/frame²) 3 → 0 · lifted frames with a real grip 91% → 91% · verifier kept 5/6 chunks · 58 versions in 29 min · <b>reviewer: acceptable</b> (votes acceptable, acceptable, acceptable; 0 high, 2 medium problems left) · <a href="reports/pp_anthony_real_4.html" target="_blank">report</a> · <a href="qc/pp_anthony_real_4.jpg" target="_blank">QC frames</a></figcaption>
+    </figure>
+    <figure>
+      <iframe data-src="pp_anthony_real_5.html?initialCameraPosition=0.2154%2C0.2147%2C-0.0026&amp;initialCameraLookAt=0.0863%2C0.7102%2C-0.4165&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="pp_anthony_real_5 · dish soap bottle"></iframe>
+      <figcaption><b>pp_anthony_real_5 · dish soap bottle</b><br>77 frames · hand keypoint error 41.7 → 12.5 px · object mask IoU 0.88 → 0.89 · hand triangles through the object while held 95 → 0 · hand jitter while held 3.1 → 1.5 mm/frame² (hand tracker 3.2) · frames where a fingertip jumps (over 13 mm/frame²) 2 → 0 · lifted frames with a real grip 0% → 100% · verifier kept 4/4 chunks · 21 versions in 10 min · <b>reviewer: good</b> (votes good, good, good; 0 high, 0 medium problems left) · <a href="reports/pp_anthony_real_5.html" target="_blank">report</a> · <a href="qc/pp_anthony_real_5.jpg" target="_blank">QC frames</a></figcaption>
+    </figure>
+</section>
+<section class="grid" id="tab-prp">
+    <figure>
+      <iframe data-src="prp_anthony_real_1.html?initialCameraPosition=0.1557%2C0.1110%2C-0.0723&amp;initialCameraLookAt=0.0628%2C0.4803%2C-0.3801&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="prp_anthony_real_1 · small metal case"></iframe>
+      <figcaption><b>prp_anthony_real_1 · small metal case</b><br>264 frames · hand keypoint error 27.9 → 8.6 px · object mask IoU 0.85 → 0.94 · hand triangles through the object while held 45 → 0 · hand jitter while held 1.9 → 0.7 mm/frame² (hand tracker 2.1) · frames where a fingertip jumps (over 12 mm/frame²) 12 → 0 · lifted frames with a real grip 72% → 99% · verifier kept 9/10 chunks · 50 versions in 32 min · <b>reviewer: acceptable</b> (votes acceptable, acceptable, acceptable; 3 high, 3 medium problems left) · <a href="reports/prp_anthony_real_1.html" target="_blank">report</a> · <a href="qc/prp_anthony_real_1.jpg" target="_blank">QC frames</a></figcaption>
+    </figure>
+    <figure>
+      <iframe data-src="prp_anthony_real_2.html?initialCameraPosition=0.2244%2C0.2089%2C-0.0226&amp;initialCameraLookAt=0.0921%2C0.7205%2C-0.4498&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="prp_anthony_real_2 · blue tape roll"></iframe>
+      <figcaption><b>prp_anthony_real_2 · blue tape roll</b><br>162 frames · hand keypoint error 20.2 → 6.8 px · object mask IoU 0.90 → 0.92 · hand triangles through the object while held 118 → 0 · hand jitter while held 2.0 → 0.8 mm/frame² (hand tracker 2.1) · frames where a fingertip jumps (over 9 mm/frame²) 7 → 0 · lifted frames with a real grip 49% → 98% · verifier kept 4/4 chunks · 13 versions in 9 min · <b>reviewer: acceptable</b> (votes acceptable, acceptable, acceptable; 0 high, 1 medium problems left) · <a href="reports/prp_anthony_real_2.html" target="_blank">report</a> · <a href="qc/prp_anthony_real_2.jpg" target="_blank">QC frames</a></figcaption>
+    </figure>
+    <figure>
+      <iframe data-src="prp_anthony_real_3.html?initialCameraPosition=0.1657%2C0.1332%2C-0.0828&amp;initialCameraLookAt=0.0555%2C0.5635%2C-0.4419&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="prp_anthony_real_3 · black spatula"></iframe>
+      <figcaption><b>prp_anthony_real_3 · black spatula</b><br>204 frames · hand keypoint error 24.9 → 9.8 px · object mask IoU 0.92 → 0.94 · hand triangles through the object while held 53 → 0 · hand jitter while held 2.3 → 0.6 mm/frame² (hand tracker 2.4) · frames where a fingertip jumps (over 10 mm/frame²) 6 → 0 · lifted frames with a real grip 62% → 98% · verifier kept 8/10 chunks · 39 versions in 29 min · <b>reviewer: bad</b> (votes bad, bad, bad; 3 high, 4 medium problems left) · <a href="reports/prp_anthony_real_3.html" target="_blank">report</a> · <a href="qc/prp_anthony_real_3.jpg" target="_blank">QC frames</a></figcaption>
+    </figure>
+    <figure>
+      <iframe data-src="prp_anthony_real_4.html?initialCameraPosition=0.1835%2C0.1263%2C-0.0563&amp;initialCameraLookAt=0.0858%2C0.5084%2C-0.3751&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="prp_anthony_real_4 · gray mug"></iframe>
+      <figcaption><b>prp_anthony_real_4 · gray mug</b><br>273 frames · hand keypoint error 19.6 → 14.3 px · object mask IoU 0.90 → 0.94 · hand triangles through the object while held 230 → 2 · hand jitter while held 1.6 → 0.7 mm/frame² (hand tracker 1.8) · frames where a fingertip jumps (over 8 mm/frame²) 21 → 0 · lifted frames with a real grip 79% → 88% · verifier kept 6/6 chunks · 60 versions in 34 min · <b>reviewer: bad</b> (votes bad, bad, bad; 2 high, 7 medium problems left) · <a href="reports/prp_anthony_real_4.html" target="_blank">report</a> · <a href="qc/prp_anthony_real_4.jpg" target="_blank">QC frames</a></figcaption>
+    </figure>
+    <figure>
+      <iframe data-src="prp_anthony_real_5.html?initialCameraPosition=0.1271%2C0.1743%2C-0.0176&amp;initialCameraLookAt=0.0198%2C0.5891%2C-0.3639&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="prp_anthony_real_5 · dish soap bottle"></iframe>
+      <figcaption><b>prp_anthony_real_5 · dish soap bottle</b><br>259 frames · hand keypoint error 24.9 → 9.1 px · object mask IoU 0.87 → 0.94 · hand triangles through the object while held 172 → 0 · hand jitter while held 2.1 → 0.7 mm/frame² (hand tracker 2.3) · frames where a fingertip jumps (over 11 mm/frame²) 6 → 0 · lifted frames with a real grip 95% → 100% · verifier kept 4/6 chunks · 52 versions in 37 min · <b>reviewer: acceptable</b> (votes acceptable, acceptable, acceptable; 0 high, 3 medium problems left) · <a href="reports/prp_anthony_real_5.html" target="_blank">report</a> · <a href="qc/prp_anthony_real_5.jpg" target="_blank">QC frames</a></figcaption>
+    </figure>
+</section>
+<script>
+  const CMP = {"pp_anthony_real_1": {"before": "../ours/pp_anthony_real_1.html?initialCameraPosition=0.2728%2C0.1933%2C-0.0683&initialCameraLookAt=0.1295%2C0.7489%2C-0.5322&initialCameraUp=0.0000%2C0.0000%2C1.0000", "after": "pp_anthony_real_1.html?initialCameraPosition=0.2728%2C0.1933%2C-0.0683&initialCameraLookAt=0.1295%2C0.7489%2C-0.5322&initialCameraUp=0.0000%2C0.0000%2C1.0000", "cap": "113 frames \u00b7 hand keypoint error 30.3 \u2192 15.2 px \u00b7 object mask IoU 0.94 \u2192 0.96 \u00b7 hand triangles through the object while held 0 \u2192 0 \u00b7 hand jitter while held 3.4 \u2192 1.2 mm/frame\u00b2 (hand tracker 3.3) \u00b7 frames where a fingertip jumps (over 12 mm/frame\u00b2) 5 \u2192 0 \u00b7 lifted frames with a real grip 0% \u2192 88% \u00b7 verifier kept 6/8 chunks \u00b7 50 versions in 26 min \u00b7 <b>reviewer: acceptable</b> (votes acceptable, acceptable, acceptable; 0 high, 6 medium problems left) \u00b7 <a href=\"reports/pp_anthony_real_1.html\" target=\"_blank\">report</a> \u00b7 <a href=\"qc/pp_anthony_real_1.jpg\" target=\"_blank\">QC frames</a>", "qc": "qc/pp_anthony_real_1.jpg"}, "pp_anthony_real_2": {"before": "../ours/pp_anthony_real_2.html?initialCameraPosition=0.1443%2C0.1811%2C-0.0454&initialCameraLookAt=0.0231%2C0.6516%2C-0.4381&initialCameraUp=0.0000%2C0.0000%2C1.0000", "after": "pp_anthony_real_2.html?initialCameraPosition=0.1443%2C0.1811%2C-0.0454&initialCameraLookAt=0.0231%2C0.6516%2C-0.4381&initialCameraUp=0.0000%2C0.0000%2C1.0000", "cap": "135 frames \u00b7 hand keypoint error 33.5 \u2192 8.2 px \u00b7 object mask IoU 0.92 \u2192 0.94 \u00b7 hand triangles through the object while held 0 \u2192 0 \u00b7 hand jitter while held 2.2 \u2192 0.8 mm/frame\u00b2 (hand tracker 2.1) \u00b7 frames where a fingertip jumps (over 10 mm/frame\u00b2) 8 \u2192 0 \u00b7 lifted frames with a real grip 0% \u2192 97% \u00b7 verifier kept 1/2 chunks \u00b7 3 versions in 3 min \u00b7 <b>reviewer: good</b> (votes good, good, acceptable; 0 high, 0 medium problems left) \u00b7 <a href=\"reports/pp_anthony_real_2.html\" target=\"_blank\">report</a> \u00b7 <a href=\"qc/pp_anthony_real_2.jpg\" target=\"_blank\">QC frames</a>", "qc": "qc/pp_anthony_real_2.jpg"}, "pp_anthony_real_3": {"before": "../ours/pp_anthony_real_3.html?initialCameraPosition=0.2154%2C0.1907%2C-0.0517&initialCameraLookAt=0.0832%2C0.7012%2C-0.4781&initialCameraUp=0.0000%2C0.0000%2C1.0000", "after": "pp_anthony_real_3.html?initialCameraPosition=0.2154%2C0.1907%2C-0.0517&initialCameraLookAt=0.0832%2C0.7012%2C-0.4781&initialCameraUp=0.0000%2C0.0000%2C1.0000", "cap": "86 frames \u00b7 hand keypoint error 37.5 \u2192 9.0 px \u00b7 object mask IoU 0.87 \u2192 0.91 \u00b7 hand triangles through the object while held 0 \u2192 0 \u00b7 hand jitter while held 2.1 \u2192 1.0 mm/frame\u00b2 (hand tracker 2.3) \u00b7 frames where a fingertip jumps (over 12 mm/frame\u00b2) 3 \u2192 0 \u00b7 lifted frames with a real grip 0% \u2192 100% \u00b7 verifier kept 4/4 chunks \u00b7 14 versions in 8 min \u00b7 <b>reviewer: good</b> (votes good, good, good; 0 high, 0 medium problems left) \u00b7 <a href=\"reports/pp_anthony_real_3.html\" target=\"_blank\">report</a> \u00b7 <a href=\"qc/pp_anthony_real_3.jpg\" target=\"_blank\">QC frames</a>", "qc": "qc/pp_anthony_real_3.jpg"}, "pp_anthony_real_4": {"before": "../ours/pp_anthony_real_4.html?initialCameraPosition=0.2387%2C0.2113%2C0.0054&initialCameraLookAt=0.1117%2C0.6965%2C-0.4001&initialCameraUp=0.0000%2C0.0000%2C1.0000", "after": "pp_anthony_real_4.html?initialCameraPosition=0.2387%2C0.2113%2C0.0054&initialCameraLookAt=0.1117%2C0.6965%2C-0.4001&initialCameraUp=0.0000%2C0.0000%2C1.0000", "cap": "122 frames \u00b7 hand keypoint error 32.5 \u2192 10.3 px \u00b7 object mask IoU 0.90 \u2192 0.92 \u00b7 hand triangles through the object while held 143 \u2192 0 \u00b7 hand jitter while held 2.1 \u2192 0.6 mm/frame\u00b2 (hand tracker 2.4) \u00b7 frames where a fingertip jumps (over 11 mm/frame\u00b2) 3 \u2192 0 \u00b7 lifted frames with a real grip 91% \u2192 91% \u00b7 verifier kept 5/6 chunks \u00b7 58 versions in 29 min \u00b7 <b>reviewer: acceptable</b> (votes acceptable, acceptable, acceptable; 0 high, 2 medium problems left) \u00b7 <a href=\"reports/pp_anthony_real_4.html\" target=\"_blank\">report</a> \u00b7 <a href=\"qc/pp_anthony_real_4.jpg\" target=\"_blank\">QC frames</a>", "qc": "qc/pp_anthony_real_4.jpg"}, "pp_anthony_real_5": {"before": "../ours/pp_anthony_real_5.html?initialCameraPosition=0.2154%2C0.2147%2C-0.0026&initialCameraLookAt=0.0863%2C0.7102%2C-0.4165&initialCameraUp=0.0000%2C0.0000%2C1.0000", "after": "pp_anthony_real_5.html?initialCameraPosition=0.2154%2C0.2147%2C-0.0026&initialCameraLookAt=0.0863%2C0.7102%2C-0.4165&initialCameraUp=0.0000%2C0.0000%2C1.0000", "cap": "77 frames \u00b7 hand keypoint error 41.7 \u2192 12.5 px \u00b7 object mask IoU 0.88 \u2192 0.89 \u00b7 hand triangles through the object while held 95 \u2192 0 \u00b7 hand jitter while held 3.1 \u2192 1.5 mm/frame\u00b2 (hand tracker 3.2) \u00b7 frames where a fingertip jumps (over 13 mm/frame\u00b2) 2 \u2192 0 \u00b7 lifted frames with a real grip 0% \u2192 100% \u00b7 verifier kept 4/4 chunks \u00b7 21 versions in 10 min \u00b7 <b>reviewer: good</b> (votes good, good, good; 0 high, 0 medium problems left) \u00b7 <a href=\"reports/pp_anthony_real_5.html\" target=\"_blank\">report</a> \u00b7 <a href=\"qc/pp_anthony_real_5.jpg\" target=\"_blank\">QC frames</a>", "qc": "qc/pp_anthony_real_5.jpg"}, "prp_anthony_real_1": {"before": "../ours/prp_anthony_real_1.html?initialCameraPosition=0.1557%2C0.1110%2C-0.0723&initialCameraLookAt=0.0628%2C0.4803%2C-0.3801&initialCameraUp=0.0000%2C0.0000%2C1.0000", "after": "prp_anthony_real_1.html?initialCameraPosition=0.1557%2C0.1110%2C-0.0723&initialCameraLookAt=0.0628%2C0.4803%2C-0.3801&initialCameraUp=0.0000%2C0.0000%2C1.0000", "cap": "264 frames \u00b7 hand keypoint error 27.9 \u2192 8.6 px \u00b7 object mask IoU 0.85 \u2192 0.94 \u00b7 hand triangles through the object while held 45 \u2192 0 \u00b7 hand jitter while held 1.9 \u2192 0.7 mm/frame\u00b2 (hand tracker 2.1) \u00b7 frames where a fingertip jumps (over 12 mm/frame\u00b2) 12 \u2192 0 \u00b7 lifted frames with a real grip 72% \u2192 99% \u00b7 verifier kept 9/10 chunks \u00b7 50 versions in 32 min \u00b7 <b>reviewer: acceptable</b> (votes acceptable, acceptable, acceptable; 3 high, 3 medium problems left) \u00b7 <a href=\"reports/prp_anthony_real_1.html\" target=\"_blank\">report</a> \u00b7 <a href=\"qc/prp_anthony_real_1.jpg\" target=\"_blank\">QC frames</a>", "qc": "qc/prp_anthony_real_1.jpg"}, "prp_anthony_real_2": {"before": "../ours/prp_anthony_real_2.html?initialCameraPosition=0.2244%2C0.2089%2C-0.0226&initialCameraLookAt=0.0921%2C0.7205%2C-0.4498&initialCameraUp=0.0000%2C0.0000%2C1.0000", "after": "prp_anthony_real_2.html?initialCameraPosition=0.2244%2C0.2089%2C-0.0226&initialCameraLookAt=0.0921%2C0.7205%2C-0.4498&initialCameraUp=0.0000%2C0.0000%2C1.0000", "cap": "162 frames \u00b7 hand keypoint error 20.2 \u2192 6.8 px \u00b7 object mask IoU 0.90 \u2192 0.92 \u00b7 hand triangles through the object while held 118 \u2192 0 \u00b7 hand jitter while held 2.0 \u2192 0.8 mm/frame\u00b2 (hand tracker 2.1) \u00b7 frames where a fingertip jumps (over 9 mm/frame\u00b2) 7 \u2192 0 \u00b7 lifted frames with a real grip 49% \u2192 98% \u00b7 verifier kept 4/4 chunks \u00b7 13 versions in 9 min \u00b7 <b>reviewer: acceptable</b> (votes acceptable, acceptable, acceptable; 0 high, 1 medium problems left) \u00b7 <a href=\"reports/prp_anthony_real_2.html\" target=\"_blank\">report</a> \u00b7 <a href=\"qc/prp_anthony_real_2.jpg\" target=\"_blank\">QC frames</a>", "qc": "qc/prp_anthony_real_2.jpg"}, "prp_anthony_real_3": {"before": "../ours/prp_anthony_real_3.html?initialCameraPosition=0.1657%2C0.1332%2C-0.0828&initialCameraLookAt=0.0555%2C0.5635%2C-0.4419&initialCameraUp=0.0000%2C0.0000%2C1.0000", "after": "prp_anthony_real_3.html?initialCameraPosition=0.1657%2C0.1332%2C-0.0828&initialCameraLookAt=0.0555%2C0.5635%2C-0.4419&initialCameraUp=0.0000%2C0.0000%2C1.0000", "cap": "204 frames \u00b7 hand keypoint error 24.9 \u2192 9.8 px \u00b7 object mask IoU 0.92 \u2192 0.94 \u00b7 hand triangles through the object while held 53 \u2192 0 \u00b7 hand jitter while held 2.3 \u2192 0.6 mm/frame\u00b2 (hand tracker 2.4) \u00b7 frames where a fingertip jumps (over 10 mm/frame\u00b2) 6 \u2192 0 \u00b7 lifted frames with a real grip 62% \u2192 98% \u00b7 verifier kept 8/10 chunks \u00b7 39 versions in 29 min \u00b7 <b>reviewer: bad</b> (votes bad, bad, bad; 3 high, 4 medium problems left) \u00b7 <a href=\"reports/prp_anthony_real_3.html\" target=\"_blank\">report</a> \u00b7 <a href=\"qc/prp_anthony_real_3.jpg\" target=\"_blank\">QC frames</a>", "qc": "qc/prp_anthony_real_3.jpg"}, "prp_anthony_real_4": {"before": "../ours/prp_anthony_real_4.html?initialCameraPosition=0.1835%2C0.1263%2C-0.0563&initialCameraLookAt=0.0858%2C0.5084%2C-0.3751&initialCameraUp=0.0000%2C0.0000%2C1.0000", "after": "prp_anthony_real_4.html?initialCameraPosition=0.1835%2C0.1263%2C-0.0563&initialCameraLookAt=0.0858%2C0.5084%2C-0.3751&initialCameraUp=0.0000%2C0.0000%2C1.0000", "cap": "273 frames \u00b7 hand keypoint error 19.6 \u2192 14.3 px \u00b7 object mask IoU 0.90 \u2192 0.94 \u00b7 hand triangles through the object while held 230 \u2192 2 \u00b7 hand jitter while held 1.6 \u2192 0.7 mm/frame\u00b2 (hand tracker 1.8) \u00b7 frames where a fingertip jumps (over 8 mm/frame\u00b2) 21 \u2192 0 \u00b7 lifted frames with a real grip 79% \u2192 88% \u00b7 verifier kept 6/6 chunks \u00b7 60 versions in 34 min \u00b7 <b>reviewer: bad</b> (votes bad, bad, bad; 2 high, 7 medium problems left) \u00b7 <a href=\"reports/prp_anthony_real_4.html\" target=\"_blank\">report</a> \u00b7 <a href=\"qc/prp_anthony_real_4.jpg\" target=\"_blank\">QC frames</a>", "qc": "qc/prp_anthony_real_4.jpg"}, "prp_anthony_real_5": {"before": "../ours/prp_anthony_real_5.html?initialCameraPosition=0.1271%2C0.1743%2C-0.0176&initialCameraLookAt=0.0198%2C0.5891%2C-0.3639&initialCameraUp=0.0000%2C0.0000%2C1.0000", "after": "prp_anthony_real_5.html?initialCameraPosition=0.1271%2C0.1743%2C-0.0176&initialCameraLookAt=0.0198%2C0.5891%2C-0.3639&initialCameraUp=0.0000%2C0.0000%2C1.0000", "cap": "259 frames \u00b7 hand keypoint error 24.9 \u2192 9.1 px \u00b7 object mask IoU 0.87 \u2192 0.94 \u00b7 hand triangles through the object while held 172 \u2192 0 \u00b7 hand jitter while held 2.1 \u2192 0.7 mm/frame\u00b2 (hand tracker 2.3) \u00b7 frames where a fingertip jumps (over 11 mm/frame\u00b2) 6 \u2192 0 \u00b7 lifted frames with a real grip 95% \u2192 100% \u00b7 verifier kept 4/6 chunks \u00b7 52 versions in 37 min \u00b7 <b>reviewer: acceptable</b> (votes acceptable, acceptable, acceptable; 0 high, 3 medium problems left) \u00b7 <a href=\"reports/prp_anthony_real_5.html\" target=\"_blank\">report</a> \u00b7 <a href=\"qc/prp_anthony_real_5.jpg\" target=\"_blank\">QC frames</a>", "qc": "qc/prp_anthony_real_5.jpg"}};
+  let cmpVid = Object.keys(CMP)[0];
+  function loadCmp(on) {
+    const b = document.getElementById('cmp-before'), a = document.getElementById('cmp-after');
+    if (!b) return;
+    if (!on) { b.removeAttribute('src'); a.removeAttribute('src'); return; }
+    const d = CMP[cmpVid];
+    b.src = d.before; a.src = d.after;
+    document.getElementById('cmp-cap').innerHTML = '<b>' + cmpVid + '</b> · ' + d.cap;
+    const qc = document.getElementById('cmp-qc');
+    qc.style.display = d.qc ? 'block' : 'none'; if (d.qc) qc.src = d.qc;
+    document.querySelectorAll('.clip').forEach(c => c.classList.toggle('active', c.dataset.vid === cmpVid));
+  }
+  document.querySelectorAll('.clip').forEach(c => c.addEventListener('click', () => { cmpVid = c.dataset.vid; loadCmp(true); }));
+  function show(name) {
+    document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+    const cmp = document.getElementById('tab-compare');
+    if (cmp) { cmp.classList.toggle('active', name === 'compare'); loadCmp(name === 'compare'); }
+    document.querySelectorAll('.grid').forEach(g => {
+      const on = g.id === 'tab-' + name;
+      g.classList.toggle('active', on);
+      // Load this tab's viewers, unload the other tab's (keeps the number of live WebGL contexts at 5).
+      g.querySelectorAll('iframe').forEach(f => {
+        if (on && !f.getAttribute('src')) f.src = f.dataset.src;
+        if (!on && f.getAttribute('src')) f.removeAttribute('src');
+      });
+    });
+    history.replaceState(null, '', '#' + name);
+  }
+  document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => show(b.dataset.tab)));
+  const want = location.hash.slice(1);
+  show(['pp', 'prp', 'compare'].includes(want) && (want !== 'compare' || Object.keys(CMP).length) ? want
+       : (Object.keys(CMP).length ? 'compare' : 'pp'));
+</script>
+</div></body>
+</html>

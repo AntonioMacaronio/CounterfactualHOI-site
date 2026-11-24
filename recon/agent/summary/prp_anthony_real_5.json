@@ -1,0 +1,299 @@
+{
+ "video_id": "prp_anthony_real_5",
+ "frames": 259,
+ "phases": [
+  {
+   "start": 0,
+   "end": 20,
+   "label": "approach"
+  },
+  {
+   "start": 21,
+   "end": 44,
+   "label": "grasp"
+  },
+  {
+   "start": 45,
+   "end": 70,
+   "label": "lift"
+  },
+  {
+   "start": 71,
+   "end": 185,
+   "label": "rotate"
+  },
+  {
+   "start": 186,
+   "end": 228,
+   "label": "place"
+  },
+  {
+   "start": 229,
+   "end": 248,
+   "label": "release"
+  },
+  {
+   "start": 249,
+   "end": 258,
+   "label": "rest"
+  }
+ ],
+ "hand_jitter_ref_mm": 2.2741747982680782,
+ "depth_anchor": {
+  "frames": 259,
+  "frames_interpolated": 0,
+  "table_rms_cm": 0.1946012295408316,
+  "table_distance_vs_reference": [
+   0.9307295366628431,
+   0.9949458445040175,
+   1.068345114667608
+  ],
+  "normal_spread_deg": 0.8144178136371796,
+  "reference_spread_iqr": 0.07721123224656397,
+  "mesh_scale": 0.9549243757278755,
+  "object_factor": [
+   0.9441323652956503,
+   1.008207750824512,
+   1.0592463248411632
+  ],
+  "object_factor_last": 0.9821765195605713,
+  "hand_factor": [
+   0.9459059683921177,
+   1.0078161885359482,
+   1.058594236115138
+  ],
+  "tilt_vs_geocalib_deg": 3.3830017385217337
+ },
+ "object_scale": [
+  1.125,
+  1.0,
+  1.0
+ ],
+ "object_extent_cm": [
+  [
+   11.402701195489724,
+   18.940566949243138,
+   7.169667704905983
+  ],
+  [
+   12.82803884492594,
+   18.940566949243138,
+   7.169667704905983
+  ]
+ ],
+ "all": {
+  "iou": [
+   0.8718975180144115,
+   0.93530409498425
+  ],
+  "coverage": [
+   0.8978341719536207,
+   0.9587765957446809
+  ],
+  "spill": [
+   0.029306930693069305,
+   0.025603296056503827
+  ],
+  "depth_res_cm": [
+   0.42632222175598145,
+   0.5562663078308105
+  ],
+  "hand_kp_px": [
+   24.895388729689355,
+   9.077005391136169
+  ],
+  "hand_depth_bias_cm": [
+   -1.686328649520874,
+   0.21621733903884888
+  ],
+  "penetration_cm": [
+   1.9797212910101194,
+   0.0
+  ],
+  "contact_cm": [
+   0.0,
+   0.1498099428800287
+  ],
+  "n_cross": [
+   154.0,
+   0.0
+  ],
+  "hand_accel_mm": [
+   2.2741747982680782,
+   0.6939391780283436
+  ],
+  "hand_rel_accel_mm": [
+   3.7826288326489883,
+   1.37103290194625
+  ],
+  "tip_accel_mm": [
+   3.67339778017222,
+   0.9383658393781582
+  ],
+  "finger_accel_deg": [
+   0.5524180777692449,
+   0.1763713829393988
+  ],
+  "obj_accel_cm": [
+   0.19522795753924507,
+   0.07536294099696836
+  ],
+  "obj_ang_accel_deg": [
+   1.8596385614573951,
+   1.0294926030292324
+  ]
+ },
+ "held": {
+  "iou": [
+   0.8636587538805154,
+   0.9380320639521083
+  ],
+  "coverage": [
+   0.8914980526011684,
+   0.9591947682436455
+  ],
+  "spill": [
+   0.026254900040141436,
+   0.02440134063011144
+  ],
+  "depth_res_cm": [
+   0.4093542695045471,
+   0.5191564559936523
+  ],
+  "hand_kp_px": [
+   22.74187962965481,
+   9.072672051173363
+  ],
+  "hand_depth_bias_cm": [
+   -1.5686631202697754,
+   0.48669278621673584
+  ],
+  "penetration_cm": [
+   2.073996541414635,
+   0.0
+  ],
+  "contact_cm": [
+   0.0,
+   0.14980372056793667
+  ],
+  "n_cross": [
+   171.5,
+   0.0
+  ],
+  "hand_accel_mm": [
+   2.111687026070708,
+   0.669656384248286
+  ],
+  "hand_rel_accel_mm": [
+   3.7500941939505004,
+   1.2823097309590052
+  ],
+  "tip_accel_mm": [
+   3.5512796619160225,
+   0.8794387303188176
+  ],
+  "finger_accel_deg": [
+   0.5475978623793331,
+   0.16764110806878751
+  ],
+  "obj_accel_cm": [
+   0.2326637149657259,
+   0.0828158329112712
+  ],
+  "obj_ang_accel_deg": [
+   2.2221378348280467,
+   1.1543166271595338
+  ]
+ },
+ "rest_abs_height_cm": [
+  1.0460150979130556,
+  0.3406335525193316
+ ],
+ "rest_height_spread_cm": [
+  0.13023693282212534,
+  0.19104796764653487
+ ],
+ "grip_lifted": [
+  0.950354609929078,
+  1.0
+ ],
+ "reviewer": {
+  "overall": "acceptable",
+  "problems": [
+   {
+    "start": 131,
+    "end": 136,
+    "issue": "During the in-hand rotation the object's orientation jumps at frame 134. Angular speed peaks at 5.27 in 126-146. Over 131-136 the hand is rendered hidden behind the bottle while the video shows it in front, so the hand/object depth ordering is wrong.",
+    "severity": "medium",
+    "fix_hint": "Re-estimate the object pose around 126-146 with a temporal rotation smoothness prior. Enforce the video's occlusion order: hand in front of the bottle."
+   },
+   {
+    "start": 137,
+    "end": 152,
+    "issue": "The hand drifts off the depth map while it is cradling the rotating bottle. Depth residual is 0.80 with a bias of about -0.6, so the hand depth relative to the object is unreliable in this span.",
+    "severity": "medium",
+    "fix_hint": "Add a depth-consistency term for the hand and keep the hand\u2013object relative pose fixed by contact while the grip is stable."
+   },
+   {
+    "start": 228,
+    "end": 247,
+    "issue": "During place and release the hand is drawn in front of the object where the video shows the object. The hand also leaves its keypoints at 229-231, and keypoint error rises to 18.5 px over 231-251. Finger placement on the cap and shoulder during release is therefore poorly constrained.",
+    "severity": "medium",
+    "fix_hint": "Re-fit the hand to the 2D keypoints with occlusion-aware rendering over 225-250 and correct the hand depth so the bottle occludes it where the video shows."
+   },
+   {
+    "start": 232,
+    "end": 241,
+    "issue": "The hand is off the depth map during release. Hand depth error is -1.35 and fingertip acceleration rises to 1.7-2.3.",
+    "severity": "low",
+    "fix_hint": "Smooth the hand depth trajectory through release and weight the depth term more strongly."
+   },
+   {
+    "start": 21,
+    "end": 110,
+    "issue": "The wrist and fingertip paths over the held span are visibly jagged, with zig-zags in the red, green, yellow and black tracks, rather than smooth curves. This indicates frame-to-frame jitter.",
+    "severity": "low",
+    "fix_hint": "Apply temporal smoothing or acceleration regularization to the hand pose over the held span."
+   },
+   {
+    "start": 15,
+    "end": 16,
+    "issue": "The hand is briefly off the depth map during the approach.",
+    "severity": "low",
+    "fix_hint": "Interpolate the hand depth across these frames."
+   }
+  ],
+  "votes": [
+   "acceptable",
+   "acceptable",
+   "acceptable"
+  ],
+  "n_high": 0,
+  "n_medium": 3,
+  "n_low": 3
+ },
+ "flagged_frames": [
+  259,
+  46
+ ],
+ "jump_threshold_mm": 11.020193340516661,
+ "jump_frames": [
+  6,
+  0
+ ],
+ "tip_accel_max_mm": [
+  21.978936048708896,
+  4.4968666362630305
+ ],
+ "n_versions": 52,
+ "agent_minutes": 36.7,
+ "verifier": [
+  "verify [0, 20]: winner A (refined = B), confidence 0.60, keep False: The two reconstructions look nearly identical in frames 0-20 and in the 3D views. The plots separate them. B keeps the object perfectly still (zero rotation, constant height), which is good for a rest",
+  "verify [21, 89]: winner A (refined = A), confidence 0.72, keep True: A keeps the thumb or palm opposed to the fingers on all lifted frames, so the bottle is actually gripped throughout. B has that opposition on only 53% of lifted frames; in its 3D views at frame 34 the",
+  "verify [116, 156]: winner B (refined = B), confidence 0.70, keep True: B has the thumb or palm opposing the fingers on 98% of the lifted frames, against 71% for A, so B actually grips the bottle throughout the hold. B's interpenetration is small: 0.7 triangles on average",
+  "verify [174, 228]: winner A (refined = A), confidence 0.62, keep True: Both reconstructions grip the bottle with thumb or palm opposing the fingers on all lifted frames, and both average 20 px keypoint error. B has far less interpenetration (0.3 vs 6.3 triangles). Howeve",
+  "verify [229, 248]: winner B (refined = B), confidence 0.55, keep True: A keeps the bottle jittering in rotation (1\u20132.5\u00b0/frame) and sinking about 0.6 cm into the table while it should be resting during the release. B keeps the object stable on the table. B does have a bri",
+  "verify [249, 258]: winner B (refined = A), confidence 0.65, keep False: Both reconstructions match the video closely and look nearly identical in the overlays and 3D views. A shows a penetration spike of about 12 triangles around frame 244, a fingertip acceleration spike "
+ ],
+ "reverted": 2
+}

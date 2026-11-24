@@ -1,0 +1,317 @@
+{
+ "video_id": "pp_anthony_real_1",
+ "frames": 113,
+ "phases": [
+  {
+   "start": 0,
+   "end": 17,
+   "label": "approach"
+  },
+  {
+   "start": 18,
+   "end": 39,
+   "label": "grasp"
+  },
+  {
+   "start": 40,
+   "end": 56,
+   "label": "lift"
+  },
+  {
+   "start": 57,
+   "end": 73,
+   "label": "place"
+  },
+  {
+   "start": 74,
+   "end": 96,
+   "label": "release"
+  },
+  {
+   "start": 97,
+   "end": 112,
+   "label": "rest"
+  }
+ ],
+ "hand_jitter_ref_mm": 3.311393548457353,
+ "depth_anchor": {
+  "frames": 113,
+  "frames_interpolated": 0,
+  "table_rms_cm": 0.1959882161090392,
+  "table_distance_vs_reference": [
+   0.9480123577884692,
+   0.9861243991772131,
+   1.039053279606913
+  ],
+  "normal_spread_deg": 0.7612559758850288,
+  "reference_spread_iqr": 0.06852221821189686,
+  "mesh_scale": 1.0032784458366661,
+  "object_factor": [
+   0.9688170429366011,
+   1.0036811551558995,
+   1.0522568404331492
+  ],
+  "object_factor_last": 1.0137883215740446,
+  "hand_factor": [
+   0.9691336131088272,
+   1.0033824122188375,
+   1.0522067020764765
+  ],
+  "tilt_vs_geocalib_deg": 3.6239535359222463
+ },
+ "object_scale": [
+  0.5,
+  1.0,
+  1.0
+ ],
+ "object_extent_cm": [
+  [
+   8.537984400581692,
+   14.29441109569359,
+   5.039826136150539
+  ],
+  [
+   4.268992200290846,
+   14.29441109569359,
+   5.039826136150539
+  ]
+ ],
+ "all": {
+  "iou": [
+   0.935672514619883,
+   0.9587737843551797
+  ],
+  "coverage": [
+   0.9786223277909739,
+   0.9814665592264303
+  ],
+  "spill": [
+   0.03230890464933018,
+   0.017718715393133997
+  ],
+  "depth_res_cm": [
+   0.3952234983444214,
+   0.4248976707458496
+  ],
+  "hand_kp_px": [
+   30.269954964642757,
+   15.17209907761604
+  ],
+  "hand_depth_bias_cm": [
+   -5.43508243560791,
+   -0.7557988166809082
+  ],
+  "penetration_cm": [
+   0.0,
+   0.0
+  ],
+  "contact_cm": [
+   2.602219941037516,
+   0.13584847322997926
+  ],
+  "n_cross": [
+   0.0,
+   0.0
+  ],
+  "hand_accel_mm": [
+   3.311393548457353,
+   1.0275094081654086
+  ],
+  "hand_rel_accel_mm": [
+   4.2184708707991225,
+   1.15830410012603
+  ],
+  "tip_accel_mm": [
+   3.9655935395713677,
+   1.6092886123425763
+  ],
+  "finger_accel_deg": [
+   0.3690914355283363,
+   0.16392012535907685
+  ],
+  "obj_accel_cm": [
+   0.08869815537390156,
+   0.03680768679310567
+  ],
+  "obj_ang_accel_deg": [
+   0.8193316542638922,
+   0.28884400688509304
+  ]
+ },
+ "held": {
+  "iou": [
+   0.9368665601858575,
+   0.9628240955213174
+  ],
+  "coverage": [
+   0.9837377534745956,
+   0.9852666152371602
+  ],
+  "spill": [
+   0.03544887788117742,
+   0.015127251930225908
+  ],
+  "depth_res_cm": [
+   0.40768682956695557,
+   0.4183635115623474
+  ],
+  "hand_kp_px": [
+   23.32877622734962,
+   21.30831800093959
+  ],
+  "hand_depth_bias_cm": [
+   -5.34942889213562,
+   -0.4707947373390198
+  ],
+  "penetration_cm": [
+   0.0,
+   0.0
+  ],
+  "contact_cm": [
+   1.2185277933622798,
+   0.12851291420383182
+  ],
+  "n_cross": [
+   0.0,
+   0.0
+  ],
+  "hand_accel_mm": [
+   3.4101086973409327,
+   1.2295402514852114
+  ],
+  "hand_rel_accel_mm": [
+   3.9562667883949434,
+   1.148579042414609
+  ],
+  "tip_accel_mm": [
+   3.9411788336015694,
+   2.416942886409392
+  ],
+  "finger_accel_deg": [
+   0.363565097899041,
+   0.262664543864146
+  ],
+  "obj_accel_cm": [
+   0.14352520835192117,
+   0.1072832989650223
+  ],
+  "obj_ang_accel_deg": [
+   0.8746088610044456,
+   0.39672556299993633
+  ]
+ },
+ "rest_abs_height_cm": [
+  1.1307033085472984,
+  0.2336503279592006
+ ],
+ "rest_height_spread_cm": [
+  0.15562156099819813,
+  0.25482967736907836
+ ],
+ "grip_lifted": [
+  0.0,
+  0.8823529411764706
+ ],
+ "reviewer": {
+  "overall": "acceptable",
+  "problems": [
+   {
+    "start": 23,
+    "end": 25,
+    "issue": "Thumb passes through the object's surface at grasp onset; red penetration is visible on the thumb in the frame 25 left view. The hand is also drawn in front of the object where the video shows the object (23-24).",
+    "severity": "medium",
+    "fix_hint": "Add a penetration penalty at grasp onset and push the thumb out to the object surface, keeping contact without interpenetration."
+   },
+   {
+    "start": 20,
+    "end": 29,
+    "issue": "Fingertip acceleration spikes (4.51) during grasp closure; the magenta and other fingertip paths show sharp kinks and a small loop near the grasp point.",
+    "severity": "low",
+    "fix_hint": "Temporally smooth the fingertip trajectories during closure."
+   },
+   {
+    "start": 26,
+    "end": 28,
+    "issue": "Hand drifts off its 2D keypoints (about 17-24 px error).",
+    "severity": "low",
+    "fix_hint": "Increase the keypoint reprojection weight in these frames."
+   },
+   {
+    "start": 55,
+    "end": 59,
+    "issue": "Hand is off its keypoints during the lift (about 27 px error), with a hand depth bias near -0.9 cm.",
+    "severity": "medium",
+    "fix_hint": "Refit the hand to the keypoints while keeping the grip contacts fixed relative to the object."
+   },
+   {
+    "start": 66,
+    "end": 70,
+    "issue": "Hand is drawn in front of the object where the video shows the object in front, which is an occlusion/depth ordering error near placement.",
+    "severity": "low",
+    "fix_hint": "Use the object mask occlusion term to push the hand behind the object surface."
+   },
+   {
+    "start": 71,
+    "end": 80,
+    "issue": "Hand penetrates the object during release, up to about 1.5 cm (flagged 71-74 and 77-80). The hand is also off the depth map (72-86), with hand depth bias around -1.8 cm.",
+    "severity": "medium",
+    "fix_hint": "Correct the hand depth against the depth map and resolve the penetration so fingers lift off the surface cleanly."
+   },
+   {
+    "start": 74,
+    "end": 76,
+    "issue": "Object is not resting on the table after placement; it sits in the table or above it.",
+    "severity": "medium",
+    "fix_hint": "Constrain the object to table contact once it is placed, and fix the object depth/pose."
+   },
+   {
+    "start": 84,
+    "end": 86,
+    "issue": "Ring finger passes through the object's surface; red is visible in the frame 85 side view.",
+    "severity": "medium",
+    "fix_hint": "Apply collision resolution on the ring finger during release."
+   },
+   {
+    "start": 92,
+    "end": 97,
+    "issue": "Hand penetrates the object again (about 0.9 cm) and is off the depth map (93-97).",
+    "severity": "medium",
+    "fix_hint": "Refit the hand depth and add a non-penetration constraint while the hand withdraws."
+   }
+  ],
+  "votes": [
+   "acceptable",
+   "acceptable",
+   "acceptable"
+  ],
+  "n_high": 0,
+  "n_medium": 6,
+  "n_low": 3
+ },
+ "flagged_frames": [
+  113,
+  44
+ ],
+ "jump_threshold_mm": 11.896780618714104,
+ "jump_frames": [
+  5,
+  0
+ ],
+ "tip_accel_max_mm": [
+  16.268741439682938,
+  8.298727116484034
+ ],
+ "n_versions": 50,
+ "agent_minutes": 25.8,
+ "verifier": [
+  "verify [0, 17]: winner A (refined = A), confidence 0.68, keep True: During the approach, A keeps the object resting on the table (height \u22480) with almost no rotation. B's object floats about 0.5\u20130.8 cm above the table and keeps rotating by about 1\u00b0/frame while it shoul",
+  "verify [18, 73]: winner B (refined = B), confidence 0.70, keep True: The deciding question is whether the object is actually held while lifted. In A, the fingertips only rest on top of the lifted device and nothing opposes them; the measured thumb-or-palm-against-finge",
+  "verify [74, 96]: winner A (refined = A), confidence 0.60, keep True: Both overlays line up reasonably well with the video. A settles the object onto the table (height about 0), while B leaves it floating about 0.2\u20130.6 cm above it. A's object rotation is calmer during r",
+  "verify [97, 112]: winner A (refined = A), confidence 0.60, keep True: Both overlays look nearly identical. In A the object sits closer to the table: its height stays near 0 to 0.3 cm, while B's drifts up to about 1 cm during the rest phase. A's object rotation speed is ",
+  "verify [0, 17]: winner A (refined = A), confidence 0.62, keep True: Over frames 0-17 the two overlays and hand poses are nearly identical. In A the resting object holds still, with rotation speed near zero and a constant height just above the table. In B the resting o",
+  "verify [18, 73]: winner B (refined = B), confidence 0.70, keep True: In A the fingertips only rest on top of the lifted device, with no opposing thumb or palm on 0% of lifted frames, so the object would fall. B places the thumb against the fingers on 88% of lifted fram",
+  "verify [74, 96]: winner B (refined = A), confidence 0.62, keep False: B's overlays align better with the hand. A's blue hand outline at frames 74\u201388 has odd shapes around the fingers, while B's mesh follows the fingers more closely. In the plots, A shows a 10-triangle i",
+  "verify [97, 112]: winner B (refined = A), confidence 0.60, keep False: Both overlays match the video similarly. A has a hand-acceleration spike around frame 105, while B's hand motion is smoother. B's object height stays closer to the table during the rest phase (about 0"
+ ],
+ "reverted": 2
+}

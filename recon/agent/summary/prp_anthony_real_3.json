@@ -1,0 +1,324 @@
+{
+ "video_id": "prp_anthony_real_3",
+ "frames": 204,
+ "phases": [
+  {
+   "start": 0,
+   "end": 14,
+   "label": "approach"
+  },
+  {
+   "start": 15,
+   "end": 30,
+   "label": "grasp"
+  },
+  {
+   "start": 31,
+   "end": 55,
+   "label": "lift"
+  },
+  {
+   "start": 56,
+   "end": 140,
+   "label": "rotate"
+  },
+  {
+   "start": 141,
+   "end": 175,
+   "label": "place"
+  },
+  {
+   "start": 176,
+   "end": 192,
+   "label": "release"
+  },
+  {
+   "start": 193,
+   "end": 203,
+   "label": "rest"
+  }
+ ],
+ "hand_jitter_ref_mm": 2.4300820554451072,
+ "depth_anchor": {
+  "frames": 204,
+  "frames_interpolated": 0,
+  "table_rms_cm": 0.17362345516129604,
+  "table_distance_vs_reference": [
+   0.9050194486385703,
+   1.003432278489143,
+   1.0273170176291628
+  ],
+  "normal_spread_deg": 0.8336505245701074,
+  "reference_spread_iqr": 0.15979569761085743,
+  "mesh_scale": 0.9978024943953979,
+  "object_factor": [
+   0.9796543297812073,
+   0.9961887257465425,
+   1.0925867235941344
+  ],
+  "object_factor_last": 1.0545982419981987,
+  "hand_factor": [
+   0.9798736986322183,
+   0.9956180888257895,
+   1.0924608360088017
+  ],
+  "tilt_vs_geocalib_deg": 3.553763487535599
+ },
+ "object_scale": [
+  1.0,
+  1.0,
+  1.0
+ ],
+ "object_extent_cm": [
+  [
+   9.672500290704777,
+   20.60816917599154,
+   5.949973549524286
+  ],
+  [
+   9.672500290704777,
+   20.60816917599154,
+   5.949973549524286
+  ]
+ ],
+ "all": {
+  "iou": [
+   0.9163320433521869,
+   0.9437567417853369
+  ],
+  "coverage": [
+   0.9690437219301229,
+   0.9832819317785959
+  ],
+  "spill": [
+   0.05218981470281758,
+   0.03512625926152185
+  ],
+  "depth_res_cm": [
+   0.41321516036987305,
+   0.5441874265670776
+  ],
+  "hand_kp_px": [
+   24.945924764934226,
+   9.75857121059098
+  ],
+  "hand_depth_bias_cm": [
+   -2.9048279523849487,
+   -0.27667731046676636
+  ],
+  "penetration_cm": [
+   0.022571863069890938,
+   0.0
+  ],
+  "contact_cm": [
+   0.0,
+   0.15031833475797232
+  ],
+  "n_cross": [
+   24.0,
+   0.0
+  ],
+  "hand_accel_mm": [
+   2.4300820554451072,
+   0.6340626811453769
+  ],
+  "hand_rel_accel_mm": [
+   4.081598340279944,
+   0.9813125039990875
+  ],
+  "tip_accel_mm": [
+   3.471171167965764,
+   0.9529020031557491
+  ],
+  "finger_accel_deg": [
+   0.4029049534322472,
+   0.1426334895184506
+  ],
+  "obj_accel_cm": [
+   0.16998685400451113,
+   0.06360958918379525
+  ],
+  "obj_ang_accel_deg": [
+   1.5529063069991933,
+   0.44897879091665216
+  ]
+ },
+ "held": {
+  "iou": [
+   0.9192307692307692,
+   0.9446728971962617
+  ],
+  "coverage": [
+   0.9721627408993576,
+   0.9822767552828903
+  ],
+  "spill": [
+   0.05109034267912772,
+   0.031161473087818695
+  ],
+  "depth_res_cm": [
+   0.4043668508529663,
+   0.4985809326171875
+  ],
+  "hand_kp_px": [
+   23.584804843607706,
+   9.773804832977012
+  ],
+  "hand_depth_bias_cm": [
+   -2.0049214363098145,
+   -0.16996562480926514
+  ],
+  "penetration_cm": [
+   0.1779180098310866,
+   0.0
+  ],
+  "contact_cm": [
+   0.0,
+   0.15012977428080324
+  ],
+  "n_cross": [
+   53.0,
+   0.0
+  ],
+  "hand_accel_mm": [
+   2.2903070614488543,
+   0.6339414145174852
+  ],
+  "hand_rel_accel_mm": [
+   3.8405596803132664,
+   0.9964238766167987
+  ],
+  "tip_accel_mm": [
+   3.275081072180855,
+   0.9304784067901576
+  ],
+  "finger_accel_deg": [
+   0.39555318000862777,
+   0.14439124848417642
+  ],
+  "obj_accel_cm": [
+   0.2035292648957211,
+   0.07841708917851244
+  ],
+  "obj_ang_accel_deg": [
+   1.7595099834944659,
+   0.4795406853253211
+  ]
+ },
+ "rest_abs_height_cm": [
+  1.0360221229413158,
+  0.17689004347689607
+ ],
+ "rest_height_spread_cm": [
+  0.06862033886821939,
+  0.3353209422632397
+ ],
+ "grip_lifted": [
+  0.6181818181818182,
+  0.9818181818181818
+ ],
+ "reviewer": {
+  "overall": "bad",
+  "problems": [
+   {
+    "start": 33,
+    "end": 34,
+    "issue": "Grip becomes non-opposing right as lift-off begins: thumb/palm and fingers are not on opposite sides of the handle when the object starts to rise.",
+    "severity": "high",
+    "fix_hint": "Constrain the thumb to oppose the fingers on the handle from the last grasp frame through lift-off. Optimize the contacts so the handle is pinched before obj_height rises."
+   },
+   {
+    "start": 54,
+    "end": 57,
+    "issue": "Rotation jump: the object orientation changes abruptly (ang_speed peaks at ~5.9 deg/frame in 51-67), which is inconsistent with a smooth in-hand rotation.",
+    "severity": "high",
+    "fix_hint": "Re-fit the object pose over 54-57 with a temporal smoothness prior on rotation, and check for a symmetry flip of the spatula."
+   },
+   {
+    "start": 101,
+    "end": 103,
+    "issue": "Hand passes through the object's surface during the rotate phase.",
+    "severity": "high",
+    "fix_hint": "Add a penetration penalty and push the fingers out to the handle surface while keeping contact."
+   },
+   {
+    "start": 102,
+    "end": 118,
+    "issue": "High angular speed (6.47) together with tip trajectory zig-zags in the paths image (frames 15-104) indicates jittery fingertip and object motion during rotation.",
+    "severity": "medium",
+    "fix_hint": "Temporally smooth the fingertip and object pose trajectories, for example with low-pass filtering plus a contact-consistency term."
+   },
+   {
+    "start": 15,
+    "end": 17,
+    "issue": "Hand is not touching the object at the start of the grasp: a gap remains just before the grasp phase.",
+    "severity": "low",
+    "fix_hint": "Close the approach so the fingers make contact by frame 17."
+   },
+   {
+    "start": 21,
+    "end": 27,
+    "issue": "Hand is rendered in front of the object where the video shows the object occluding it, so the depth ordering of hand vs spatula is wrong.",
+    "severity": "medium",
+    "fix_hint": "Use occlusion masks or depth ordering to move the hand behind or around the object surface."
+   },
+   {
+    "start": 170,
+    "end": 203,
+    "issue": "Large negative depth bias (about -1.2 to -1.6) during release and rest: hand and object sit at the wrong depth relative to the observed depth.",
+    "severity": "medium",
+    "fix_hint": "Re-align the global depth scale and offset for the release and rest frames to the depth map."
+   },
+   {
+    "start": 187,
+    "end": 203,
+    "issue": "Hand drifts off the depth map (187-195) and off its keypoints (202-203) during rest, with elevated hand acceleration.",
+    "severity": "low",
+    "fix_hint": "Refit the hand to keypoints and depth in the rest frames, and smooth the wrist motion."
+   },
+   {
+    "start": 187,
+    "end": 203,
+    "issue": "Object height at rest is negative (-0.40), so the spatula sinks below the table plane.",
+    "severity": "medium",
+    "fix_hint": "Constrain the object to rest on the table plane once released."
+   }
+  ],
+  "votes": [
+   "bad",
+   "bad",
+   "bad"
+  ],
+  "n_high": 3,
+  "n_medium": 4,
+  "n_low": 2
+ },
+ "flagged_frames": [
+  204,
+  31
+ ],
+ "jump_threshold_mm": 10.413513503897292,
+ "jump_frames": [
+  6,
+  0
+ ],
+ "tip_accel_max_mm": [
+  16.029143615408405,
+  3.727629608421795
+ ],
+ "n_versions": 39,
+ "agent_minutes": 29.2,
+ "verifier": [
+  "verify [17, 59]: winner A (refined = A), confidence 0.75, keep True: A holds the spatula with the thumb or palm opposing the fingers on 93% of the lifted frames and has no interpenetration. B shows a large spike of hand triangles through the object around frames 46-51,",
+  "verify [89, 175]: winner B (refined = B), confidence 0.80, keep True: B keeps the spatula gripped, with the thumb or palm opposing the fingers on all lifted frames. It has far less interpenetration: 2.8 hand triangles through the object on average versus 25.8 for A, who",
+  "verify [176, 192]: winner B (refined = A), confidence 0.70, keep False: Both reconstructions fit the video about equally well. A shows acceleration spikes in the hand and fingertips around frame 191, followed by a drop, and an angular speed spike at frame 194. B's motion ",
+  "verify [193, 194]: winner B (refined = A), confidence 0.70, keep False: The two reconstructions look nearly identical in the overlays and the 3D views. The plots separate them. A has a hand and fingertip acceleration spike around frame 191, then a sudden drop, which point",
+  "verify [203, 203]: winner B (refined = B), confidence 0.60, keep True: The two reconstructions are nearly identical in the overlays and the 3D views, and the hand paths match. The difference is the object's rotation while it rests on the table. A shows a small but nonzer",
+  "verify [0, 14]: winner A (refined = A), confidence 0.62, keep True: The two reconstructions are very similar in their overlays and 3D views. The main difference is the object's height above the table. A's lowest point sits at about -0.1 cm, which is essentially restin",
+  "verify [15, 37]: winner A (refined = A), confidence 0.65, keep True: Grip quality, interpenetration and keypoint error are essentially identical for the two. However, B's object sits about 1 cm below the table surface during the approach and grasp phases, so it penetra",
+  "verify [143, 175]: winner B (refined = B), confidence 0.75, keep True: Both reconstructions grip the spatula handle similarly, with matching object poses. A has large interpenetration spikes (up to about 65 triangles near frame 172, plus 40 around frame 157) and visible ",
+  "verify [176, 192]: winner A (refined = A), confidence 0.72, keep True: The image overlays look about the same, but the plots favour A. A keeps the spatula near the table surface (about \u22120.4 to +0.2 cm), while B sinks it about 1 cm into the table. B also shows a burst of ",
+  "verify [193, 203]: winner A (refined = A), confidence 0.60, keep True: Both reconstructions look nearly identical in the overlays and the 3D views. The main difference is the object's height. A rests about 0.3\u20130.4 cm below the table, while B sinks about 1.0\u20131.15 cm into "
+ ],
+ "reverted": 2
+}

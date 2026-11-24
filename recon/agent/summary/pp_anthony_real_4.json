@@ -1,0 +1,285 @@
+{
+ "video_id": "pp_anthony_real_4",
+ "frames": 122,
+ "phases": [
+  {
+   "start": 0,
+   "end": 28,
+   "label": "approach"
+  },
+  {
+   "start": 29,
+   "end": 40,
+   "label": "grasp"
+  },
+  {
+   "start": 41,
+   "end": 58,
+   "label": "lift"
+  },
+  {
+   "start": 59,
+   "end": 75,
+   "label": "carry"
+  },
+  {
+   "start": 76,
+   "end": 98,
+   "label": "place"
+  },
+  {
+   "start": 99,
+   "end": 110,
+   "label": "release"
+  },
+  {
+   "start": 111,
+   "end": 121,
+   "label": "rest"
+  }
+ ],
+ "hand_jitter_ref_mm": 2.394019801685514,
+ "depth_anchor": {
+  "frames": 122,
+  "frames_interpolated": 0,
+  "table_rms_cm": 0.16319309113082586,
+  "table_distance_vs_reference": [
+   0.9262132793812443,
+   0.9986103313691421,
+   1.0390938651624564
+  ],
+  "normal_spread_deg": 1.1022164565573367,
+  "reference_spread_iqr": 0.045058499668120075,
+  "mesh_scale": 0.9791789133096515,
+  "object_factor": [
+   0.969065713789841,
+   0.996326816044341,
+   1.0466073874971344
+  ],
+  "object_factor_last": 0.9967599846919587,
+  "hand_factor": [
+   0.9696565189539147,
+   0.9960033097430524,
+   1.0462560887132475
+  ],
+  "tilt_vs_geocalib_deg": 3.480886878163312
+ },
+ "object_scale": [
+  1.0,
+  1.0,
+  1.0
+ ],
+ "object_extent_cm": [
+  [
+   13.499406356597662,
+   14.480512568056735,
+   14.11219649601686
+  ],
+  [
+   13.499406356597662,
+   14.480512568056735,
+   14.11219649601686
+  ]
+ ],
+ "all": {
+  "iou": [
+   0.896443613688974,
+   0.9221013880619449
+  ],
+  "coverage": [
+   0.9205818014821803,
+   0.9481271715298458
+  ],
+  "spill": [
+   0.034864621685176844,
+   0.025752932742026557
+  ],
+  "depth_res_cm": [
+   0.33558905124664307,
+   0.2572476863861084
+  ],
+  "hand_kp_px": [
+   32.47586964999998,
+   10.272841643682083
+  ],
+  "hand_depth_bias_cm": [
+   -1.519256830215454,
+   -0.5126804113388062
+  ],
+  "penetration_cm": [
+   0.3629770472620687,
+   0.0
+  ],
+  "contact_cm": [
+   0.0,
+   0.12926548101631422
+  ],
+  "n_cross": [
+   124.0,
+   0.0
+  ],
+  "hand_accel_mm": [
+   2.394019801685514,
+   0.8439269942965364
+  ],
+  "hand_rel_accel_mm": [
+   2.926939275721802,
+   0.8787243812190773
+  ],
+  "tip_accel_mm": [
+   3.5660409911775917,
+   1.2189411432144799
+  ],
+  "finger_accel_deg": [
+   0.4050997113991708,
+   0.16841366233117072
+  ],
+  "obj_accel_cm": [
+   0.09033047516290213,
+   0.0379823914363591
+  ],
+  "obj_ang_accel_deg": [
+   0.7465854118668596,
+   0.22529837525517574
+  ]
+ },
+ "held": {
+  "iou": [
+   0.9051548040976379,
+   0.923175350257444
+  ],
+  "coverage": [
+   0.9303892940963312,
+   0.94701340451215
+  ],
+  "spill": [
+   0.030753628641363065,
+   0.023690068246349866
+  ],
+  "depth_res_cm": [
+   0.3414064645767212,
+   0.24966299533843994
+  ],
+  "hand_kp_px": [
+   31.364603951488903,
+   11.856568170885591
+  ],
+  "hand_depth_bias_cm": [
+   -1.532474160194397,
+   -0.47173798084259033
+  ],
+  "penetration_cm": [
+   0.3980949796249237,
+   0.0
+  ],
+  "contact_cm": [
+   0.0,
+   0.10147559790071849
+  ],
+  "n_cross": [
+   143.0,
+   0.0
+  ],
+  "hand_accel_mm": [
+   2.120773570627068,
+   0.5913994611996054
+  ],
+  "hand_rel_accel_mm": [
+   2.650605916412163,
+   0.6719105138603862
+  ],
+  "tip_accel_mm": [
+   2.5599089281019904,
+   0.9003140739744462
+  ],
+  "finger_accel_deg": [
+   0.19198084172935045,
+   0.15356140987995873
+  ],
+  "obj_accel_cm": [
+   0.11566378449665968,
+   0.0827725027093876
+  ],
+  "obj_ang_accel_deg": [
+   1.0739735007982802,
+   0.3076646586729709
+  ]
+ },
+ "rest_abs_height_cm": [
+  0.16848811653309426,
+  0.43153022203915314
+ ],
+ "rest_height_spread_cm": [
+  0.3959966163899542,
+  0.14096720733959567
+ ],
+ "grip_lifted": [
+  0.9142857142857143,
+  0.9142857142857143
+ ],
+ "reviewer": {
+  "overall": "acceptable",
+  "problems": [
+   {
+    "start": 103,
+    "end": 106,
+    "issue": "During release the index finger passes through the mug handle; red penetration is visible at frame 105 in all 3D views, and the flag reports index penetration. The per-frame penetration column reads 0.00 here, which contradicts the flag and the image.",
+    "severity": "medium",
+    "fix_hint": "Add a penetration penalty on the index finger against the handle mesh during release and pull the finger out of the handle loop before opening."
+   },
+   {
+    "start": 32,
+    "end": 102,
+    "issue": "The hand is rendered behind the object where the video shows it in front of or around the handle. This is a depth-ordering error across the whole grasp, lift, carry and place span. Hand depth bias reaches about -0.8 to -1.2 during carry and place.",
+    "severity": "medium",
+    "fix_hint": "Constrain hand depth with the occlusion order from the video masks, keeping the visible fingers in front of the mug surface, and correct the negative hand depth bias."
+   },
+   {
+    "start": 113,
+    "end": 116,
+    "issue": "After release the hand leaves the depth map. The hand depth reading at 110-119 is unreliable (about -1.08), and fingertip acceleration is elevated (2.45-3.28 m/s\u00b2 from 100 to 119).",
+    "severity": "low",
+    "fix_hint": "Fall back to temporal smoothing or a 2D keypoint prior when depth is missing, and smooth the post-release fingertip trajectory."
+   },
+   {
+    "start": 95,
+    "end": 105,
+    "issue": "Fingertip paths show small hooks and kinks at the end of the held span, near the place/release transition, rather than smooth curves.",
+    "severity": "low",
+    "fix_hint": "Apply temporal smoothing to the fingertip trajectories around the release onset."
+   }
+  ],
+  "votes": [
+   "acceptable",
+   "acceptable",
+   "acceptable"
+  ],
+  "n_high": 0,
+  "n_medium": 2,
+  "n_low": 2
+ },
+ "flagged_frames": [
+  121,
+  78
+ ],
+ "jump_threshold_mm": 10.698122973532776,
+ "jump_frames": [
+  3,
+  0
+ ],
+ "tip_accel_max_mm": [
+  13.216363273817223,
+  4.414166380122515
+ ],
+ "n_versions": 58,
+ "agent_minutes": 29.0,
+ "verifier": [
+  "verify [34, 98]: winner A (refined = A), confidence 0.70, keep True: A holds the mug with thumb against fingers on 91% of the lifted frames and has almost no interpenetration (0.1 triangles on average). B has a penetration spike of about 20-25 triangles during the carr",
+  "verify [99, 108]: winner B (refined = A), confidence 0.58, keep True: Both reconstructions are close in video alignment and object pose. B's index-fingertip path is tighter, and its hand-acceleration curve is smoother, without A's jumps around frames 98 and 111. B's int",
+  "verify [0, 28]: winner B (refined = A), confidence 0.62, keep False: In B the rendered mug matches the segmentation mask better. In A the handle is visibly offset to the right in frames 9, 18 and 28, and the hand-handle alignment is worse at the grasp. B shows some rot",
+  "verify [29, 98]: winner B (refined = B), confidence 0.60, keep True: Both reconstructions put the hand at the mug's handle, and both mug outlines align reasonably with the mask. B pinches the handle between the thumb and fingers on 91% of the lifted frames, while A nev",
+  "verify [99, 110]: winner B (refined = B), confidence 0.60, keep True: The image overlays and 3D views are very similar for A and B, and both show comparable hand\u2013mug interpenetration around frames 102\u2013108. The plots separate them: A's mug dips slightly below the table d",
+  "verify [111, 121]: winner B (refined = A), confidence 0.55, keep True: Both reconstructions are nearly identical over frames 111-121. Overlays and 3D views look similar, with no interpenetration and the mug resting at a similar height. A shows a small hand and fingertip "
+ ],
+ "reverted": 1
+}

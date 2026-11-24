@@ -1,0 +1,35 @@
+{
+  "video_id": "pp_anthony_real_2",
+  "frames": 135,
+  "fps": 30.0,
+  "object_pose_max_err_m": 0.0,
+  "gravity_up_cam": [
+    0.005926603178642693,
+    -0.8266621022068548,
+    -0.5626674365464084
+  ],
+  "gravity_pitch_deg": -30.85713834924388,
+  "gravity_roll_deg": -0.27664979537921136,
+  "table_tilt_vs_gravity_deg": 3.3852181586056607,
+  "table_inlier_frac": 0.5335666666666666,
+  "scene_points": 116462,
+  "scene_scale": 1.0,
+  "object_height_above_table_first_last_m": [
+    0.0011574061672635638,
+    -1.896918144983495e-05
+  ],
+  "method": "foundationpose+depthpro2",
+  "up": "table normal",
+  "depth_scale_from_hand": 1.0085708856867828,
+  "object_size_m": [
+    0.12384075981241968,
+    0.029012773907530428,
+    0.12362294343891037
+  ],
+  "iou_first_last": [
+    0.9292597362227453,
+    0.8876539830276485
+  ],
+  "iou_visible_frames_mean": 0.6942676822772431,
+  "reregistered_frames": 0
+}

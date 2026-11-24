@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CounterfactualHOI: FoundationPose + Depth Pro 2 4D hand–object reconstructions of the real videos</title>
+<style>
+  body { font-family: -apple-system, system-ui, sans-serif; margin: 24px; color: #222; background: #fafafa; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  p.sub { margin: 0 0 14px; color: #555; font-size: 14px; max-width: 1150px; }
+  .tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+  .tab { font: inherit; font-size: 15px; padding: 6px 22px; border: 1px solid #bbb; border-radius: 6px;
+          background: #fff; cursor: pointer; }
+  .tab.active { background: #2d5be3; border-color: #2d5be3; color: #fff; }
+  .grid { display: none; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+  .grid.active { display: grid; }
+  figure { margin: 0; background: #fff; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; }
+  iframe { width: 100%; height: 480px; border: 0; display: block; }
+  .ph { height: 480px; display: flex; align-items: center; justify-content: center; color: #999; }
+  figcaption { padding: 8px 12px 10px; font-size: 13px; color: #444; border-top: 1px solid #eee; }
+  .cmp { display: none; } .cmp.active { display: block; }
+  .clips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .clip { font: inherit; font-size: 13px; padding: 4px 12px; border: 1px solid #bbb; border-radius: 14px; background: #fff; cursor: pointer; }
+  .clip.active { background: #1f2937; border-color: #1f2937; color: #fff; }
+  .pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .pair iframe { height: 560px; }
+  .note { font-size: 13px; color: #666; margin: 6px 0 10px; }
+  .qcfig img { width: 100%; display: block; }
+  .qcfig figcaption { border-top: 0; border-bottom: 1px solid #eee; }
+  @media (max-width: 1000px) { .grid.active, .pair { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body style="margin:0"><style>
+  body { font-family: -apple-system, system-ui, sans-serif; margin: 0; color: #222; background: #fafafa; }
+  .nav { background: #1f2937; padding: 10px 24px; display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+  .nav b { color: #fff; margin-right: 12px; }
+  .nav a { color: #cbd5e1; text-decoration: none; font-size: 14px; }
+  .nav a:hover { color: #fff; }
+  </style><div class="nav"><b>CounterfactualHOI</b><a href="../../index.html">Home</a><a href="../../recon/daid/index.html">1 · Do-as-I-Do</a><a href="../../recon/choir/index.html">2 · Open-CHOIR</a><a href="../../recon/ours/index.html">3 · Our pipeline</a><a href="../../recon/agent/index.html">4 · Agent refinement</a><a href="../../recon/retarget/index.html">5 · Retargeted motions</a></div><div style="margin:24px">
+<h1>FoundationPose + Depth Pro 2 4D hand–object reconstructions of the real videos</h1>
+<p class="sub">One tab per recording set; the same five objects in each (small metal case, blue tape roll, black spatula, gray mug, dish soap bottle). Pipeline: Depth Pro 2 metric video depth, scaled so it agrees with the
+Dyn-HaMR MANO hand (the hand's known size is the metric reference); per-frame SAM3 masks of the object and hand
+(text prompts); the object's textured SAM3D mesh (from the first frame), sized and tracked through the video by
+FoundationPose on that depth; the hand moved per frame onto the depth map. Each viewer shows the hand (blue), the
+textured object, the frame-0 depth points of the scene (hand/object pixels removed) and the real camera's frustum
+with the current video frame. Hand, object and table come from the same metric depth; the scene is rotated so
+GeoCalib's gravity points down (grid = table height). "QC frames"
+shows 12 video frames per clip with the tracked object rendered (orange), its SAM3 mask (green) and the hand (blue).
+Drag to orbit, scroll to zoom; the playback bar is at the bottom of each viewer.</p>
+<div class="tabs">
+  <button class="tab" data-tab="pp">pp</button>
+  <button class="tab" data-tab="prp">prp</button>
+</div>
+
+<section class="grid" id="tab-pp">
+    <figure>
+      <iframe data-src="pp_anthony_real_1.html?initialCameraPosition=0.2661%2C0.1902%2C-0.0601&amp;initialCameraLookAt=0.1317%2C0.7321%2C-0.5114&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="pp_anthony_real_1 · small metal case"></iframe>
+      <figcaption><b>pp_anthony_real_1 · small metal case</b><br>113 frames @ 30 fps · up = the table's normal (GeoCalib's gravity estimate is 2.8° from it) · object bottom vs table: start -1.0 cm, end -0.4 cm · mask IoU first/last 0.92/0.95 · <a href="qc/pp_anthony_real_1.jpg" target="_blank">QC frames</a></figcaption>
+    </figure>
+    <figure>
+      <iframe data-src="pp_anthony_real_2.html?initialCameraPosition=0.1440%2C0.1737%2C-0.0478&amp;initialCameraLookAt=0.0272%2C0.6328%2C-0.4308&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="pp_anthony_real_2 · blue tape roll"></iframe>
+      <figcaption><b>pp_anthony_real_2 · blue tape roll</b><br>135 frames @ 30 fps · up = the table's normal (GeoCalib's gravity estimate is 3.3° from it) · object bottom vs table: start -0.1 cm, end +1.8 cm · mask IoU first/last 0.93/0.89 · <a href="qc/pp_anthony_real_2.jpg" target="_blank">QC frames</a></figcaption>
+    </figure>
+    <figure>
+      <iframe data-src="pp_anthony_real_3.html?initialCameraPosition=0.2142%2C0.1839%2C-0.0534&amp;initialCameraLookAt=0.0873%2C0.6857%2C-0.4718&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="pp_anthony_real_3 · black spatula"></iframe>
+      <figcaption><b>pp_anthony_real_3 · black spatula</b><br>86 frames @ 30 fps · up = the table's normal (GeoCalib's gravity estimate is 2.9° from it) · object bottom vs table: start -1.4 cm, end -0.5 cm · mask IoU first/last 0.89/0.80 · <a href="qc/pp_anthony_real_3.jpg" target="_blank">QC frames</a></figcaption>
+    </figure>
+    <figure>
+      <iframe data-src="pp_anthony_real_4.html?initialCameraPosition=0.2373%2C0.2090%2C0.0034&amp;initialCameraLookAt=0.1098%2C0.6897%2C-0.3986&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="pp_anthony_real_4 · gray mug"></iframe>
+      <figcaption><b>pp_anthony_real_4 · gray mug</b><br>122 frames @ 30 fps · up = the table's normal (GeoCalib's gravity estimate is 3.6° from it) · object bottom vs table: start -0.0 cm, end +1.1 cm · mask IoU first/last 0.84/0.85 · <a href="qc/pp_anthony_real_4.jpg" target="_blank">QC frames</a></figcaption>
+    </figure>
+    <figure>
+      <iframe data-src="pp_anthony_real_5.html?initialCameraPosition=0.2127%2C0.2054%2C-0.0070&amp;initialCameraLookAt=0.0882%2C0.6874%2C-0.4095&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="pp_anthony_real_5 · dish soap bottle"></iframe>
+      <figcaption><b>pp_anthony_real_5 · dish soap bottle</b><br>77 frames @ 30 fps · up = the table's normal (GeoCalib's gravity estimate is 3.7° from it) · object bottom vs table: start +0.9 cm, end +2.1 cm · mask IoU first/last 0.91/0.89 · <a href="qc/pp_anthony_real_5.jpg" target="_blank">QC frames</a></figcaption>
+    </figure>
+</section>
+<section class="grid" id="tab-prp">
+    <figure>
+      <iframe data-src="prp_anthony_real_1.html?initialCameraPosition=0.1539%2C0.1099%2C-0.0690&amp;initialCameraLookAt=0.0639%2C0.4728%2C-0.3712&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="prp_anthony_real_1 · small metal case"></iframe>
+      <figcaption><b>prp_anthony_real_1 · small metal case</b><br>264 frames @ 30 fps · up = the table's normal (GeoCalib's gravity estimate is 3.4° from it) · object bottom vs table: start -0.5 cm, end +1.5 cm · mask IoU first/last 0.94/0.84 · <a href="qc/prp_anthony_real_1.jpg" target="_blank">QC frames</a></figcaption>
+    </figure>
+    <figure>
+      <iframe data-src="prp_anthony_real_2.html?initialCameraPosition=0.2225%2C0.2049%2C-0.0218&amp;initialCameraLookAt=0.0944%2C0.7086%2C-0.4420&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="prp_anthony_real_2 · blue tape roll"></iframe>
+      <figcaption><b>prp_anthony_real_2 · blue tape roll</b><br>162 frames @ 30 fps · up = the table's normal (GeoCalib's gravity estimate is 3.1° from it) · object bottom vs table: start +0.1 cm, end +2.5 cm · mask IoU first/last 0.91/0.92 · <a href="qc/prp_anthony_real_2.jpg" target="_blank">QC frames</a></figcaption>
+    </figure>
+    <figure>
+      <iframe data-src="prp_anthony_real_3.html?initialCameraPosition=0.1600%2C0.1251%2C-0.0831&amp;initialCameraLookAt=0.0544%2C0.5390%2C-0.4284&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="prp_anthony_real_3 · black spatula"></iframe>
+      <figcaption><b>prp_anthony_real_3 · black spatula</b><br>204 frames @ 30 fps · up = the table's normal (GeoCalib's gravity estimate is 3.4° from it) · object bottom vs table: start -1.0 cm, end +2.0 cm · mask IoU first/last 0.91/0.84 · <a href="qc/prp_anthony_real_3.jpg" target="_blank">QC frames</a></figcaption>
+    </figure>
+    <figure>
+      <iframe data-src="prp_anthony_real_4.html?initialCameraPosition=0.1739%2C0.1215%2C-0.0496&amp;initialCameraLookAt=0.0812%2C0.4810%2C-0.3497&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="prp_anthony_real_4 · gray mug"></iframe>
+      <figcaption><b>prp_anthony_real_4 · gray mug</b><br>273 frames @ 30 fps · up = the table's normal (GeoCalib's gravity estimate is 3.9° from it) · object bottom vs table: start +0.6 cm, end +1.0 cm · mask IoU first/last 0.94/0.95 · <a href="qc/prp_anthony_real_4.jpg" target="_blank">QC frames</a></figcaption>
+    </figure>
+    <figure>
+      <iframe data-src="prp_anthony_real_5.html?initialCameraPosition=0.1245%2C0.1708%2C-0.0159&amp;initialCameraLookAt=0.0209%2C0.5766%2C-0.3545&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="prp_anthony_real_5 · dish soap bottle"></iframe>
+      <figcaption><b>prp_anthony_real_5 · dish soap bottle</b><br>259 frames @ 30 fps · up = the table's normal (GeoCalib's gravity estimate is 3.3° from it) · object bottom vs table: start +1.3 cm, end +2.3 cm · mask IoU first/last 0.92/0.89 · <a href="qc/prp_anthony_real_5.jpg" target="_blank">QC frames</a></figcaption>
+    </figure>
+</section>
+<script>
+  const CMP = {};
+  let cmpVid = Object.keys(CMP)[0];
+  function loadCmp(on) {
+    const b = document.getElementById('cmp-before'), a = document.getElementById('cmp-after');
+    if (!b) return;
+    if (!on) { b.removeAttribute('src'); a.removeAttribute('src'); return; }
+    const d = CMP[cmpVid];
+    b.src = d.before; a.src = d.after;
+    document.getElementById('cmp-cap').innerHTML = '<b>' + cmpVid + '</b> · ' + d.cap;
+    const qc = document.getElementById('cmp-qc');
+    qc.style.display = d.qc ? 'block' : 'none'; if (d.qc) qc.src = d.qc;
+    document.querySelectorAll('.clip').forEach(c => c.classList.toggle('active', c.dataset.vid === cmpVid));
+  }
+  document.querySelectorAll('.clip').forEach(c => c.addEventListener('click', () => { cmpVid = c.dataset.vid; loadCmp(true); }));
+  function show(name) {
+    document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+    const cmp = document.getElementById('tab-compare');
+    if (cmp) { cmp.classList.toggle('active', name === 'compare'); loadCmp(name === 'compare'); }
+    document.querySelectorAll('.grid').forEach(g => {
+      const on = g.id === 'tab-' + name;
+      g.classList.toggle('active', on);
+      // Load this tab's viewers, unload the other tab's (keeps the number of live WebGL contexts at 5).
+      g.querySelectorAll('iframe').forEach(f => {
+        if (on && !f.getAttribute('src')) f.src = f.dataset.src;
+        if (!on && f.getAttribute('src')) f.removeAttribute('src');
+      });
+    });
+    history.replaceState(null, '', '#' + name);
+  }
+  document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => show(b.dataset.tab)));
+  const want = location.hash.slice(1);
+  show(['pp', 'prp', 'compare'].includes(want) && (want !== 'compare' || Object.keys(CMP).length) ? want
+       : (Object.keys(CMP).length ? 'compare' : 'pp'));
+</script>
+</div></body>
+</html>

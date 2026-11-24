@@ -1,0 +1,98 @@
+<!doctype html><meta charset="utf-8"><title>prp_anthony_real_2 refinement report</title><pre style="white-space: pre-wrap; font: 14px/1.45 system-ui, sans-serif; max-width: 1000px; margin: 24px auto"># Refinement of prp_anthony_real_2
+
+Model global.anthropic.claude-opus-5-5, effort high; 14 versions; 2 passes; 9.6 min.
+
+Agent summary: Result is v7, built on the automatic fit (v1). I left frames 52-53 unchanged. That is where the tape really flips over in the hand, not a pose error.
+- Reviewer&#x27;s point (52-53): in the video the hand turns the tape from edge-on (frame 50) to face-on (frame 57). That is about 12°/frame at the peak, well above the 1-2°/frame elsewhere, but it is real motion. In v7 the rotation speed rises and falls smoothly through it, and the object&#x27;s angular acceleration stays under about 4°/frame² (v0 had spikes of 17). The hand&#x27;s acceleration relative to the object stays under about 3 mm/frame², so the grip does not jump. The overlay matches the real tape in every frame from 49 to 59. Interpolating or smoothing more would make the object lag behind the video and slide in the grip.
+- Phases: approach 0-13, grasp 14-28, lift 29-45, rotate 46-75, place 76-97, release 98-150, rest 151-161. Release covers the time the tape is back on the table with the hand still touching it.
+- Shape: unchanged. The automatic thickness check kept the roll at 12 cm across and 2.9 cm thick; at rest it sits within 0.1-0.2 cm of the table.
+- Grip: hand re-fitted with the grip term on 14-97, then again on 64-97 with a stronger grip to close two short gaps. From frame 18 to 97 the grip is opposed except for one or two frames around 70-71. Contact is about 0.15 cm with no hand triangles through the object, and 3D views of frames 35, 55, 70 and 88 from four sides show no red. Keypoint error fell to about 5 px over 60-100.
+- Rest: object held still on 0-13 and 151-161. The hold at 0-13 caused a small jump at 13-14, smoothed out over 9-22.
+- Smoothness: no finger jumps; the fastest fingertip peaks at 6.7 mm/frame² near frame 96, under the 9 mm/frame² limit.
+- Still flagged at 14-15: the hand does not touch the tape yet, which is right for the first frames of the grasp.
+- Not changed: on 98-150 the tape is on the table and turns slightly (about 1-2°/frame), either nudged by the hand or tracking noise, so I left it. The grip is opposed only in short stretches there, which doesn&#x27;t matter because the table supports the tape.
+
+Second pass, on the reviewer&#x27;s findings: The result is v13 (same as v11). It fixes the grasp-contact and table-height problems. I left the rotation flag at frames 52-53 in place, because it marks real, fast but smooth motion; smoothing it made the fit worse.
+
+1. **Frames 14-15, hand not touching (fixed by relabelling).** From three sides in 3D, the fingers are still coming down toward the ring at these frames (thumb about 4 cm away, the other fingers over 5 cm). Contact closes over frames 16-19, so the grasp phase now starts at 18 (approach 0-17, grasp 18-28). The flag is gone and no poses changed.
+
+2. **Frames 143-161, object below the table (fixed).** I snapped the object onto the table frame by frame over 100-161, a shift of at most 0.2 cm. Its height is now 0.00 cm through release and rest, and the outline fit is about the same (coverage 0.95 → 0.94).
+   - The move pushed a fingertip about 0.1 cm into the roll at frames 142-143. Re-fitting the fingers over 134-152 removed it with no added jitter: the fastest fingertip peaks at 2.0 mm/frame², far below the 9 that counts as a jump.
+
+3. **Frames 52-53, rotation flag (left in place).** The flag fires on the high turning speed alone; there is no pop between frames:
+   - The outlines on 50-55 follow the real roll as the hand turns it from edge-on to face-on.
+   - Per frame the speed goes 8.4, 10.7, 12.2, 12.2, 10.9, 11.4, 10.8 deg/frame, a smooth build-up to a level stretch. The change in speed stays at about 2-3 deg, against about 17 deg in the initial reconstruction.
+   - I tried the suggested fix (smoothing the object over 44-62, window 7). The flag stayed, the outline lagged the real roll (coverage at frames 47-50 fell from 0.97-0.98 to 0.89-0.92), and the thumb went through the object at 53-54. So I reverted it.
+
+   My tools can&#x27;t remove this flag without either slowing a real rotation below what the video shows or breaking the grip.
+
+One small thing I left: before the grasp the object sits about 0.1 cm into the table, which is within how precise the evidence is.
+
+Phases: approach 0-17, grasp 18-28, lift 29-45, rotate 46-75, place 76-96, release 97-150, rest 151-161
+
+Edits:
+- v0: initial (FoundationPose + Depth Pro 2)
+- v1: automatic fit over the whole clip: fit object to its mask + depth on 0-161: 162 frames (trust region 8.0 deg, 2.0 cm); smooth object poses on 0-161 (window 5); fit MANO (all, no contact) on 0-161: 162 frames, 600 steps; losses kp 1.92-&gt;0.30, depth 3.59-&gt;0.92, pen 7.99-&gt;0.00, occl 4.72-&gt;1.40, grip 0.00-&gt;0.00, smooth 4.61-&gt;0.46; hand shape fitted (size x0.968); occlusion order (hand behind the object where the video shows the object, in front where it shows the hand): fine as fitted (1.0% of the hand on the wrong side)
+- v2: phases: approach 0-13, grasp 14-28, lift 29-45, rotate 46-75, place 76-97, release 98-150, rest 151-161
+- v3: fit MANO (all) on 14-97: 84 frames, 600 steps; losses kp 0.35-&gt;0.26, depth 1.14-&gt;0.94, pen 0.01-&gt;0.00, occl 2.47-&gt;1.36, grip 0.93-&gt;0.42, smooth 0.52-&gt;0.41, join 0.43-&gt;0.03
+- v4: hold object static at frame 8&#x27;s pose on 0-13
+- v5: hold object static at frame 156&#x27;s pose on 151-161
+- v6: smooth object poses on 9-22 (window 7)
+- v7: fit MANO (all) on 64-97: 34 frames, 600 steps; losses kp 0.17-&gt;0.16, depth 1.06-&gt;1.10, pen 0.01-&gt;0.01, occl 0.23-&gt;0.32, grip 0.12-&gt;0.09, smooth 0.24-&gt;0.45, join 0.16-&gt;0.16
+- v8: result of pass 1: v7 with the ranges the verifier rejected set back to v1
+- v9: phases: approach 0-17, grasp 18-28, lift 29-45, rotate 46-75, place 76-96, release 97-150, rest 151-161
+- v10: snap object onto the table on 100-161 (per_frame; median shift -0.1 cm)
+- v11: fit MANO (fingers) on 134-152: 19 frames, 600 steps; losses kp 0.13-&gt;0.14, depth 0.38-&gt;0.38, pen 0.20-&gt;0.00, occl 0.00-&gt;0.00, grip 0.00-&gt;0.00, smooth 0.45-&gt;0.43, join 0.53-&gt;0.45
+- v12: smooth object poses on 44-62 (window 7)
+- v13: revert to v11
+
+Object shape: x1.00 of the reconstructed mesh along the first frame&#x27;s viewing direction (the unseen extent), x1.00 / x1.00 across it; the object is 12.0 x 11.9 x 2.9 cm along its long / mid / short axes.
+object&#x27;s extent along the first frame&#x27;s viewing direction (the side that frame could not see), evidence per candidate (after re-fitting the object and the hand to it):
+  x1.00 (10.4 cm): at rest -0.1 / -0.1 cm from the table, IoU 0.923, depth residual 0.32 cm; while held: keypoints 7.5 px, hand 0.4 cm off the depth map, 0.0 triangles through the object, 1.7% of the hand on the wrong side of the object
+
+Depth: every frame&#x27;s depth is scaled so that its table lies on one plane (the camera is static, but the depth estimator&#x27;s scale drifts: in the frames&#x27; own depth the table is 0.16 cm rms off a plane within a frame, while its distance ranges from x0.939 to x1.055 of the reference over the clip, and the depth on the object moves with it). The tracked object and hand were moved along their viewing rays with it (object x0.943 to x1.056), and the mesh, sized in frame 0&#x27;s depth, was scaled x0.952.
+
+Table: the one plane every frame&#x27;s depth is scaled onto (the table, in all frames) (0.16 cm rms off it within a frame); its normal is up, 3.3 deg from GeoCalib&#x27;s gravity estimate.
+
+Verifier (v1 vs refined, blind A/B):
+- frames 0-13: kept (winner B, refined = B, confidence 0.60): The two reconstructions are nearly identical in the overlays and the 3D views. A&#x27;s object rotates by 1-2.7 deg/frame while the tape rests on the table during the approach, which is spurious jitter. B&#x27;s object stays still until near contact. B shows a small spike in hand acceleration around frames 14-15, but it is modest. Overall, B&#x27;s resting object is more physically plausible.
+- frames 14-95: kept (winner A, refined = A, confidence 0.72): A has the thumb or palm opposing the fingers on 98% of the lifted frames, which is a real grip, while B shows no such grip. A also has no hand–object interpenetration (B averages 0.2 triangles through the object) and a slightly lower keypoint error (8 vs 9 px). B&#x27;s fingertips are more jittery during the place phase, with a crossing spike near frame 83. A&#x27;s overlays also match the video&#x27;s grip through the tape hole better.
+- frames 151-155: kept (winner B, refined = B, confidence 0.62): The hands are nearly identical in both reconstructions: same paths, same accelerations, no penetration. The difference is the tape roll during the rest phase. In A it keeps rotating slightly (about 0.2–1.2°/frame) and its lowest point drifts downward. In B it settles after a single 3° correction at frame 151 and then stays still at a constant height. That matches a real object resting on the table. The image overlays fit the video about equally well for both.
+
+Merge of the kept and the reverted ranges: no seams to smooth. Finger jumps left (fastest fingertip over 9 mm/frame^2): none.
+
+Independent reviewer, before the agent could finish: overall acceptable; [medium] 52-53: The object&#x27;s rotation jumps at the start of the in-hand rotation (angular speed spikes to about 9 deg/frame in 52-64, versus 1-2 elsewhere). The object pose is discontinuous here, so the grip-relative pose changes abruptly. (hint: Re-estimate the object pose over 50-56 with a temporal smoothness prior, or interpolate its rotation across the jump while keeping the hand contacts fixed.); [low] 14-15: The hand is flagged as not touching the object at the start of the grasp, a brief contact dropout as the fingers settle. (hint: Snap the fingertips to the tape surface or hole rim over 14-15 so contact starts continuously.); [low] 143-161: The resting object height is slightly negative (about -0.18 to -0.20 cm), so the tape sits a little below the table plane. (hint: Constrain the object&#x27;s bottom face to the table plane (height 0) during the rest and release frames.); [low] 14-97: The fingertip paths show small zig-zags, most visible on the red and magenta tips during the place descent, indicating mild jitter. (hint: Apply temporal smoothing to the fingertip and wrist trajectories, preserving contact positions.)
+
+Reviewer on this pass&#x27;s result (the next pass works on it): overall acceptable; [medium] 52-53: The object&#x27;s rotation jumps between consecutive frames at the start of the in-hand rotation. The 52-64 phase has the highest angular speed (9.15 deg/frame against roughly 1-5 elsewhere), so the object pose snaps rather than turning smoothly while held. (hint: Smooth or re-fit the object rotation over frames 50-56, for example with SLERP between neighbouring poses or a temporal rotation prior. Keep the fingers in contact while the pose is corrected.); [low] 14-15: The hand is flagged as not touching the object for two frames in the grasp phase. This is a brief contact dropout as the fingers reach into the ring, before the lift begins. (hint: Enforce continuous fingertip contact from frame 13 onward, or interpolate the hand pose across 14-15 from the neighbouring frames.); [low] 143-161: After release the tape roll sits slightly below the table plane: object height is -0.18 to -0.20 cm at rest. (hint: Snap the object&#x27;s resting pose onto the table plane (height 0) for the final rest frames.)
+
+Verifier (v8 vs refined, blind A/B):
+- frames 142-144: kept (winner B, refined = B, confidence 0.60): The two reconstructions are nearly identical in hand pose, contact and motion smoothness. The deciding difference is the object&#x27;s height. A places the tape roll slightly below the table, about -0.1 to -0.2 cm and drifting downward. B keeps it exactly on the table at 0. B is therefore slightly more physically plausible.
+
+Merge of the kept and the reverted ranges: no seams to smooth. Finger jumps left (fastest fingertip over 9 mm/frame^2): none.
+
+Independent reviewer, before the agent could finish: overall acceptable; [medium] 52-53: Flagged rotation jump: the object orientation pops between consecutive frames at the start of the rotate phase. Angular speed peaks at 9.15 in 52-64, far above the neighbouring phases (1.89 and 5.19). The object would teleport relative to the grasping fingers. (hint: Re-solve the object pose over 50-56 with a temporal smoothness prior on rotation and keep the in-hand relative pose consistent. Then interpolate across the jump.); [low] 0-25: The object sits slightly below the table plane before and during the grasp (obj_height -0.10 and -0.09), so it is marginally sunk into the support surface. (hint: Snap the resting object height to the table plane (0) for all frames before lift-off.); [low] 26-38: Hand keypoint reprojection error is elevated at lift onset (11.1 px), so finger placement in the hole may be less accurate than in other phases. (hint: Refine the hand pose against 2D keypoints during lift onset while keeping contact with the inner rim.); [low] 156-161: Hand keypoint error rises to 11.75 px at rest. The hand is already away from the object, so this has little impact. (hint: Optionally refine the hand fit in the final frames.)
+
+Independent reviewer on the final result (what is still wrong): (votes over 3 reviews: acceptable, acceptable, acceptable) overall acceptable; [medium] 52-53: Flagged rotation jump: the object orientation changes abruptly between consecutive frames at the start of the in-hand rotation. Angular speed peaks at 9.15 deg/frame in 52-64, versus about 1.9 in the preceding lift. (hint: Re-estimate the object pose around 50-56 with a temporal smoothness prior on rotation (e.g. slerp or SE(3) smoothing). Keep the hand-object contacts consistent through the jump.); [low] 26-38: Hand keypoint reprojection error rises to about 11 px during early lift, so finger placement inside the tape hole may be slightly off from the video. (hint: Refine hand pose with a stronger 2D keypoint weight during the lift onset while preserving the contact constraints.)
+
+| metric (median over frames) | initial | automatic fit (v1) | final |
+|---|---|---|---|
+| coverage | 0.95 | 0.96 | 0.96 |
+| spill | 0.04 | 0.04 | 0.04 |
+| depth_res_cm | 0.33 | 0.32 | 0.35 |
+| hand_kp_px | 20.22 | 7.32 | 6.82 |
+| hand_depth_bias_cm | -1.58 | -0.43 | -0.33 |
+| contact_cm | 0.00 | 0.15 | 0.15 |
+| penetration_cm | 0.91 | 0.00 | 0.00 |
+| n_cross | 50.00 | 0.00 | 0.00 |
+| hand_over_obj | 0.01 | 0.00 | 0.00 |
+| obj_over_hand | 0.00 | 0.00 | 0.00 |
+| obj_height_cm | -0.09 | 0.04 | 0.00 |
+| ang_speed_deg_per_frame | 2.07 | 1.26 | 1.11 |
+| hand_accel_mm | 2.06 | 0.79 | 0.75 |
+| tip_accel_mm | 3.12 | 1.39 | 1.39 |
+| finger_accel_deg | 0.43 | 0.16 | 0.16 |
+| obj_ang_accel_deg | 2.95 | 0.77 | 0.71 |
+| thumb_gap_cm | 2.56 | 0.31 | 0.27 |
+| n_touching | 3.00 | 3.00 | 3.00 |
+| opposed | 0.00 | 0.00 | 1.00 |
+</pre>
