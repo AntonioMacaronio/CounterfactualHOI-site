@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CounterfactualHOI: robot embodiment (Dexmate Vega 1 Pro, right arm (wrist with force/torque sensor))</title>
+<style>
+  body { font-family: -apple-system, system-ui, sans-serif; margin: 24px; color: #222; background: #fafafa; }
+  h1 { font-size: 20px; margin: 0 0 4px; } h2 { font-size: 18px; margin: 26px 0 6px; }
+  p.sub { margin: 0 0 12px; color: #444; font-size: 14px; max-width: 1150px; line-height: 1.5; }
+  p.status { font-size: 14px; color: #333; background: #fff7e6; border: 1px solid #f0d9a8; border-radius: 6px; padding: 8px 12px; max-width: 1150px; }
+  .tabs { display: flex; gap: 6px; margin: 14px 0; }
+  .tab { font: inherit; font-size: 15px; padding: 6px 22px; border: 1px solid #bbb; border-radius: 6px; background: #fff; cursor: pointer; }
+  .tab.active { background: #2d5be3; border-color: #2d5be3; color: #fff; }
+  .cmp { display: none; } .cmp.active { display: block; }
+  .clips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .clip { font: inherit; font-size: 13px; padding: 4px 12px; border: 1px solid #bbb; border-radius: 14px; background: #fff; cursor: pointer; }
+  .clip.active { background: #1f2937; border-color: #1f2937; color: #fff; } .clip.pending { color: #999; }
+  figure { margin: 0 0 12px; background: #fff; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; max-width: 1400px; }
+  iframe { width: 100%; height: 640px; border: 0; display: block; background: #f3f3f3; }
+  figure img { width: 100%; display: block; }
+  figcaption { padding: 8px 12px 10px; font-size: 13px; color: #444; border-top: 1px solid #eee; line-height: 1.5; }
+  table { border-collapse: collapse; font-size: 13px; background: #fff; margin: 8px 0; }
+  th, td { border: 1px solid #ddd; padding: 4px 10px; text-align: left; vertical-align: top; }
+  table.spec th { background: #f1f5f9; white-space: nowrap; } table.sum th { background: #f1f5f9; }
+  table.sum td { text-align: right; } table.sum td:first-child { text-align: left; }
+  .mount { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; max-width: 1150px; }
+  ul { font-size: 14px; max-width: 1150px; }
+  @media (max-width: 1000px) { .mount { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body style="margin:0"><style>
+  body { font-family: -apple-system, system-ui, sans-serif; margin: 0; color: #222; background: #fafafa; }
+  .nav { background: #1f2937; padding: 10px 24px; display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+  .nav b { color: #fff; margin-right: 12px; }
+  .nav a { color: #cbd5e1; text-decoration: none; font-size: 14px; }
+  .nav a:hover { color: #fff; }
+  </style><div class="nav"><b>CounterfactualHOI</b><a href="../../index.html">Home</a><a href="../../recon/daid/index.html">1 · Do-as-I-Do</a><a href="../../recon/choir/index.html">2 · Open-CHOIR</a><a href="../../recon/ours/index.html">3 · Our pipeline</a><a href="../../recon/agent/index.html">4 · Agent refinement</a><a href="../../recon/retarget/index.html">5 · Retargeted motions</a><a href="../../recon/embodiment/index.html">6 · Robot embodiment</a></div><div style="margin:24px">
+<h1>Robot embodiment: Dexmate Vega 1 Pro arm + Sharpa Wave hand + wrist D405</h1>
+<p class="sub">The robot the §1.4 policy controls, playing each clip. Each clip's motion is FlashDexRetarget's
+kinematic reference: the Sharpa hand on a floating wrist following the round-10 reconstruction, the motion that tab 5's
+RL policy is trained to track. The arm's 7 joint angles come from an inverse kinematics step with collision avoidance
+(<a href="https://github.com/chungmin99/pyroki">PyRoki</a>): it keeps the five fingertips where the reference has
+them and keeps the arm, the camera mount and the camera off the table and off the robot's own body, within the arm's
+joint and speed limits. Where the hardware behind the palm would be inside the table, it lifts and tilts the palm and
+re-bends the fingers. <b>Orange ghost</b>: the reference's floating hand; where it differs from the robot's hand, the
+solver moved the palm. <b>Blue frustum</b>: the wrist D405, <b>orange frustum</b>: the exo
+D435, each with the depth image the policy gets at that step (near is bright, dark red is invalid: out of range or seen
+by one imager only). This is kinematic: the changed hand pose has not been simulated again, so whether the object is
+still held is not checked here. Drag to orbit, scroll to zoom; the viewer plays in a loop.</p>
+<p class="status">With the palm held exactly where the reference has it, 2 of 10 clips are usable in every frame (85.5% of the frames): in the others the last arm links, the mount or the camera would be inside the table. Anchoring the fingertips instead and letting the palm lift and tilt makes <b>8 of 10</b> clips usable in every frame (<b>99.6%</b> of the frames). On the rollouts of tab 5's RL policy (the round-10 run at 110M steps, physically simulated, so the wrist jitters and the object can slip) the same solver gives 4 of 10 clips (95.6% of the frames); those are not shown here.</p>
+<table class="spec"><tr><th>Arm</th><td>Dexmate Vega 1 Pro, right arm (wrist with force/torque sensor): 7 joints move; chassis, torso, head and left arm are held at one posture</td></tr><tr><th>Hand</th><td>Sharpa Wave, right, 22 joints, on the arm's flange through the camera mount plate (clocked 285° about the tool axis)</td></tr><tr><th>Controlled joints</th><td>7 + 22 = 29</td></tr><tr><th>Wrist camera</th><td>Intel RealSense D405 on the palm side of the wrist, looking along the fingers (housing centre 54 mm below the hand's axis, 18 mm behind the palm's wrist end); 848×480 at 60 fps, depth 0.07–0.50 m, policy image 106×60</td></tr><tr><th>Exo camera</th><td>Intel RealSense D435 / D435i on a stand at the table's left-front corner, (-0.54, -0.28, 1.23) m, 0.90 m from the workspace, 25° down; depth 0.30–1.50 m, policy image 106×60 of a 530×300 window of the stream</td></tr><tr><th>Camera mount</th><td>one flat plate, 64 mm × 8 mm with a 53 × 44 mm tab for the camera, 113 g in aluminium</td></tr></table>
+<div class="tabs">
+  <button class="tab" data-tab="pp">pp · pick and place</button>
+  <button class="tab" data-tab="prp">prp · pick, rotate in the hand, place</button>
+</div>
+<section class="cmp" id="tab-pp">
+<div class="clips"><button class="clip" data-vid="pp_anthony_real_1" data-set="pp">pp_1 · small metal case</button> <button class="clip" data-vid="pp_anthony_real_2" data-set="pp">pp_2 · blue tape roll</button> <button class="clip" data-vid="pp_anthony_real_3" data-set="pp">pp_3 · black spatula</button> <button class="clip" data-vid="pp_anthony_real_4" data-set="pp">pp_4 · gray mug</button> <button class="clip" data-vid="pp_anthony_real_5" data-set="pp">pp_5 · dish soap bottle</button></div>
+<figure><iframe title="embodiment"></iframe><figcaption class="cap"></figcaption></figure>
+<figure class="stills"><img alt="stills"><figcaption>At the middle of the carry: the whole scene, the wrist from its palm
+side (the D405 under the wrist, the mount plate between arm and hand), and the scene from where the exo camera stands.</figcaption></figure>
+</section>
+<section class="cmp" id="tab-prp">
+<div class="clips"><button class="clip" data-vid="prp_anthony_real_1" data-set="prp">prp_1 · small metal case</button> <button class="clip" data-vid="prp_anthony_real_2" data-set="prp">prp_2 · blue tape roll</button> <button class="clip" data-vid="prp_anthony_real_3" data-set="prp">prp_3 · black spatula</button> <button class="clip" data-vid="prp_anthony_real_4" data-set="prp">prp_4 · gray mug</button> <button class="clip" data-vid="prp_anthony_real_5" data-set="prp">prp_5 · dish soap bottle</button></div>
+<figure><iframe title="embodiment"></iframe><figcaption class="cap"></figcaption></figure>
+<figure class="stills"><img alt="stills"><figcaption>At the middle of the carry: the whole scene, the wrist from its palm
+side (the D405 under the wrist, the mount plate between arm and hand), and the scene from where the exo camera stands.</figcaption></figure>
+</section>
+<h2>Every clip</h2>
+<p class="sub">A frame is usable when the fingertips are within 3 mm of the reference's, the arm and the wrist
+hardware are above the table, the fingers are no deeper in the table and the hand no deeper in the object than the
+reference's own (2 mm slack), and no arm joint is faster than its limit. Measured on the exact meshes.</p>
+<table class="sum"><tr><th>clip</th><th>usable frames</th><th>palm moved, max</th><th>fingertips off, p95 / max</th><th>fingers re-bent, max</th><th>wrist hardware above table, min</th><th>arm above table, min</th></tr><tr><td>pp_1</td><td>100.0%</td><td>8 mm, 5°</td><td>2.1 / 2.2 mm</td><td>19°</td><td>2 mm</td><td>27 mm</td></tr><tr><td>pp_2</td><td>100.0%</td><td>48 mm, 27°</td><td>1.6 / 1.9 mm</td><td>52°</td><td>1 mm</td><td>8 mm</td></tr><tr><td>pp_3</td><td>100.0%</td><td>14 mm, 8°</td><td>0.4 / 0.5 mm</td><td>22°</td><td>1 mm</td><td>8 mm</td></tr><tr><td>pp_4</td><td>100.0%</td><td>4 mm, 2°</td><td>0.0 / 0.1 mm</td><td>5°</td><td>24 mm</td><td>8 mm</td></tr><tr><td>pp_5</td><td>100.0%</td><td>7 mm, 5°</td><td>0.0 / 0.1 mm</td><td>11°</td><td>18 mm</td><td>8 mm</td></tr><tr><td>prp_1</td><td>100.0%</td><td>5 mm, 4°</td><td>0.0 / 0.2 mm</td><td>9°</td><td>44 mm</td><td>25 mm</td></tr><tr><td>prp_2</td><td>98.4%</td><td>49 mm, 18°</td><td>1.8 / 15.4 mm</td><td>88°</td><td>-2 mm</td><td>7 mm</td></tr><tr><td>prp_3</td><td>100.0%</td><td>17 mm, 11°</td><td>0.2 / 0.7 mm</td><td>17°</td><td>2 mm</td><td>8 mm</td></tr><tr><td>prp_4</td><td>98.7%</td><td>34 mm, 19°</td><td>1.6 / 2.4 mm</td><td>55°</td><td>-1 mm</td><td>3 mm</td></tr><tr><td>prp_5</td><td>100.0%</td><td>11 mm, 9°</td><td>0.1 / 1.3 mm</td><td>32°</td><td>5 mm</td><td>8 mm</td></tr></table>
+
+<h2>The wrist camera mount</h2>
+<p class="sub">One flat plate between the arm's wrist and the Sharpa flange, with a tab on the palm side; the D405 is
+screwed to the tab through its two rear M3 threads, so the whole mount can be cut from 8 mm
+aluminium sheet. On this arm the plate is also the adapter from the wrist's six-hole pattern to the Sharpa's ISO 9409-1-50-4-M6 flange. The wrist's hole pattern is measured on the vendor's model, not on a drawing: check it on the robot before machining. <a href="mount/d405_mount.step">STEP file</a> (mm).</p>
+<div class="mount"><figure><img src="mount/d405_mount_iso.png" alt="mount, isometric"><figcaption>Isometric (hidden lines grey)</figcaption></figure>
+<figure><img src="mount/d405_mount_top.png" alt="mount, top"><figcaption>From the hand's side: the bolt holes to the arm and to the Sharpa flange, and the camera's two M3 screws on the tab</figcaption></figure></div>
+<ul><li>4x M4 x 9 socket head cap screw, head sunk 4.6 mm (plate to the arm&#x27;s wrist)</li><li>4x M6 x 10 socket head cap screw (Sharpa flange 4 mm + 6 mm into the plate&#x27;s M6 threads; tap the four 5.0 mm holes M6)</li><li>2x M3 x 8 socket head cap screw into the D405&#x27;s rear threads (head sunk 3 mm; 3 mm of thread in the camera, its limit is 4 mm)</li><li>no dowel pin: the Sharpa flange&#x27;s pin hole would break into an M4 counterbore</li><li>the D405&#x27;s USB 3 Micro-B socket faces the thumb side: use a right-angle plug with its two M2 locking screws and tie the cable to the two 3.2 mm holes beside it</li></ul>
+<script>
+  const D = {"pp_anthony_real_1": {"src": "pp_anthony_real_1.html", "still": "pp_anthony_real_1.png", "cap": "<b>100.0%</b> of the frames usable. Palm moved from the reference's by 0.0 mm median, 8 mm / 5\u00b0 at most; fingertips within 2.1 mm of the reference's in 95% of frames (2.2 mm at most); fingers re-bent by up to 19\u00b0. Lowest point above the table: arm 27 mm, wrist hardware (last arm links, mount, camera) 2 mm. Hand inside the object at most 6.2 mm (the reference's own hand: 6.2 mm). Fastest arm joint 1.00\u00d7 its speed limit."}, "pp_anthony_real_2": {"src": "pp_anthony_real_2.html", "still": "pp_anthony_real_2.png", "cap": "<b>100.0%</b> of the frames usable. Palm moved from the reference's by 2.9 mm median, 48 mm / 27\u00b0 at most; fingertips within 1.6 mm of the reference's in 95% of frames (1.9 mm at most); fingers re-bent by up to 52\u00b0. Lowest point above the table: arm 8 mm, wrist hardware (last arm links, mount, camera) 1 mm. Hand inside the object at most 5.3 mm (the reference's own hand: 5.3 mm). Fastest arm joint 1.00\u00d7 its speed limit."}, "pp_anthony_real_3": {"src": "pp_anthony_real_3.html", "still": "pp_anthony_real_3.png", "cap": "<b>100.0%</b> of the frames usable. Palm moved from the reference's by 0.0 mm median, 14 mm / 8\u00b0 at most; fingertips within 0.4 mm of the reference's in 95% of frames (0.5 mm at most); fingers re-bent by up to 22\u00b0. Lowest point above the table: arm 8 mm, wrist hardware (last arm links, mount, camera) 1 mm. Hand inside the object at most 8.1 mm (the reference's own hand: 8.1 mm). Fastest arm joint 1.00\u00d7 its speed limit."}, "pp_anthony_real_4": {"src": "pp_anthony_real_4.html", "still": "pp_anthony_real_4.png", "cap": "<b>100.0%</b> of the frames usable. Palm moved from the reference's by 0.0 mm median, 4 mm / 2\u00b0 at most; fingertips within 0.0 mm of the reference's in 95% of frames (0.1 mm at most); fingers re-bent by up to 5\u00b0. Lowest point above the table: arm 8 mm, wrist hardware (last arm links, mount, camera) 24 mm. Hand inside the object at most 3.9 mm (the reference's own hand: 3.9 mm). Fastest arm joint 1.00\u00d7 its speed limit."}, "pp_anthony_real_5": {"src": "pp_anthony_real_5.html", "still": "pp_anthony_real_5.png", "cap": "<b>100.0%</b> of the frames usable. Palm moved from the reference's by 0.0 mm median, 7 mm / 5\u00b0 at most; fingertips within 0.0 mm of the reference's in 95% of frames (0.1 mm at most); fingers re-bent by up to 11\u00b0. Lowest point above the table: arm 8 mm, wrist hardware (last arm links, mount, camera) 18 mm. Hand inside the object at most 9.7 mm (the reference's own hand: 9.7 mm). Fastest arm joint 1.00\u00d7 its speed limit."}, "prp_anthony_real_1": {"src": "prp_anthony_real_1.html", "still": "prp_anthony_real_1.png", "cap": "<b>100.0%</b> of the frames usable. Palm moved from the reference's by 0.5 mm median, 5 mm / 4\u00b0 at most; fingertips within 0.0 mm of the reference's in 95% of frames (0.2 mm at most); fingers re-bent by up to 9\u00b0. Lowest point above the table: arm 25 mm, wrist hardware (last arm links, mount, camera) 44 mm. Hand inside the object at most 7.6 mm (the reference's own hand: 7.6 mm). Fastest arm joint 1.00\u00d7 its speed limit."}, "prp_anthony_real_2": {"src": "prp_anthony_real_2.html", "still": "prp_anthony_real_2.png", "cap": "<b>98.4%</b> of the frames usable. Palm moved from the reference's by 1.2 mm median, 49 mm / 18\u00b0 at most; fingertips within 1.8 mm of the reference's in 95% of frames (15.4 mm at most); fingers re-bent by up to 88\u00b0. Lowest point above the table: arm 7 mm, wrist hardware (last arm links, mount, camera) -2 mm. Hand inside the object at most 5.5 mm (the reference's own hand: 5.5 mm). Fastest arm joint 1.04\u00d7 its speed limit."}, "prp_anthony_real_3": {"src": "prp_anthony_real_3.html", "still": "prp_anthony_real_3.png", "cap": "<b>100.0%</b> of the frames usable. Palm moved from the reference's by 0.3 mm median, 17 mm / 11\u00b0 at most; fingertips within 0.2 mm of the reference's in 95% of frames (0.7 mm at most); fingers re-bent by up to 17\u00b0. Lowest point above the table: arm 8 mm, wrist hardware (last arm links, mount, camera) 2 mm. Hand inside the object at most 5.6 mm (the reference's own hand: 5.6 mm). Fastest arm joint 1.00\u00d7 its speed limit."}, "prp_anthony_real_4": {"src": "prp_anthony_real_4.html", "still": "prp_anthony_real_4.png", "cap": "<b>98.7%</b> of the frames usable. Palm moved from the reference's by 8.5 mm median, 34 mm / 19\u00b0 at most; fingertips within 1.6 mm of the reference's in 95% of frames (2.4 mm at most); fingers re-bent by up to 55\u00b0. Lowest point above the table: arm 3 mm, wrist hardware (last arm links, mount, camera) -1 mm. Hand inside the object at most 4.1 mm (the reference's own hand: 4.1 mm). Fastest arm joint 1.03\u00d7 its speed limit."}, "prp_anthony_real_5": {"src": "prp_anthony_real_5.html", "still": "prp_anthony_real_5.png", "cap": "<b>100.0%</b> of the frames usable. Palm moved from the reference's by 0.0 mm median, 11 mm / 9\u00b0 at most; fingertips within 0.1 mm of the reference's in 95% of frames (1.3 mm at most); fingers re-bent by up to 32\u00b0. Lowest point above the table: arm 8 mm, wrist hardware (last arm links, mount, camera) 5 mm. Hand inside the object at most 6.1 mm (the reference's own hand: 6.1 mm). Fastest arm joint 1.00\u00d7 its speed limit."}};
+  const cur = {};
+  function load(set, on) {
+    const sec = document.getElementById('tab-' + set);
+    const f = sec.querySelector('iframe'), im = sec.querySelector('.stills img');
+    if (!on) { f.removeAttribute('src'); return; }
+    const vid = cur[set], d = D[vid];
+    if (d.src) f.src = d.src; else f.removeAttribute('src');
+    if (d.still) { im.src = d.still; im.parentElement.style.display = ''; } else im.parentElement.style.display = 'none';
+    sec.querySelector('.cap').innerHTML = '<b>' + vid + '</b>: ' + d.cap;
+    sec.querySelectorAll('.clip').forEach(c => c.classList.toggle('active', c.dataset.vid === vid));
+  }
+  document.querySelectorAll('.clip').forEach(c => c.addEventListener('click', () => { cur[c.dataset.set] = c.dataset.vid; load(c.dataset.set, true); }));
+  function show(name) {
+    document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+    document.querySelectorAll('.cmp').forEach(s => {
+      const set = s.id.slice(4), on = set === name;
+      s.classList.toggle('active', on);
+      if (!cur[set]) cur[set] = Object.keys(D).find(v => v.startsWith(set + '_') && D[v].src) || Object.keys(D).find(v => v.startsWith(set + '_'));
+      load(set, on);
+    });
+    history.replaceState(null, '', '#' + name);
+  }
+  document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => show(b.dataset.tab)));
+  show(location.hash.slice(1) === 'prp' ? 'prp' : 'pp');
+</script>
+</div></body>
+</html>

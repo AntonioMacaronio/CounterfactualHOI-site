@@ -32,12 +32,12 @@
 </style>
 </head>
 <body>
-<div class="nav"><b>CounterfactualHOI</b><a href="index.html">Home</a><a href="recon/daid/index.html">1 · Do-as-I-Do</a><a href="recon/choir/index.html">2 · Open-CHOIR</a><a href="recon/ours/index.html">3 · Our pipeline</a><a href="recon/agent/index.html">4 · Agent refinement</a><a href="recon/retarget/index.html">5 · Retargeted motions</a></div>
+<div class="nav"><b>CounterfactualHOI</b><a href="index.html">Home</a><a href="recon/daid/index.html">1 · Do-as-I-Do</a><a href="recon/choir/index.html">2 · Open-CHOIR</a><a href="recon/ours/index.html">3 · Our pipeline</a><a href="recon/agent/index.html">4 · Agent refinement</a><a href="recon/retarget/index.html">5 · Retargeted motions</a><a href="recon/embodiment/index.html">6 · Robot embodiment</a></div>
 <main>
 <h1>CounterfactualHOI</h1>
 <p class="sub">Training a dexterous hand policy from RGB, using counterfactual (video-generated) demonstrations of
 picking up, in-hand manipulating and setting down objects. Alvin, Anthony, Hyunsoo, Jayaram. Updated
-2026-11-24.</p>
+2026-11-27.</p>
 
 <p><b>Pipeline.</b> 1.0 generate counterfactual videos with MiniMax H3 <span class="status done">100 videos</span> ·
 1.1 reconstruct the hand and object in 4D <span class="status done">10/10 real videos</span> ·
@@ -186,6 +186,19 @@ pose; the visual mesh and the trajectories are unchanged. The viewers show the p
 to the refined reconstruction it tracks. The policy was trained on an earlier refinement round (r7), which is what its page shows on the left. Its hand jitters: nothing in that run's reward penalised fast changes of the action. A run on round 10 (section 4 above), with a small reward on the action's rate of change, is paused at 116M of 300M steps, and this section will switch to it when it has finished. At 100M steps its actions change 6 times less from step to step than the same run without that reward (action rate 0.24 against 1.48). Its mean progress over the last 4 evaluations both runs have is 36% against 41%, a difference within what single evaluations vary by.
 <b>Status: the final policy of this run</b> (300M environment steps). Its object follows the reconstruction to 0.75 cm and 7° on average and ends 2.0 cm / 12° from it. Evaluations late in training differ from one another by more than they gain (mean progress 56%–72% over the last 100M steps), so the progress numbers below are one sample. Over the 10 clips the policy tracks a median <b>68%</b> of each clip before the object first leaves 5 cm / 20° of the reconstruction (AdaDex's progress); <b>3/10</b> clips stay within it for the whole clip; the object is within 2 cm of the reconstruction on a median 96% of frames (Do-as-I-Do's sampling-based retargeting of the round-5 reconstructions: 39%).</p>
 <p class="more"><a href="recon/retarget/index.html">→ Refined reconstruction (left) vs retargeted motion (right), pp and prp tabs</a></p>
+
+
+<h2>6 · Robot embodiment (Dexmate Vega 1 Pro arm, Sharpa Wave hand, wrist D405)</h2>
+<p>The robot the policy will control: the right 7-DoF arm of a Dexmate Vega 1 Pro (the rest of the robot held still)
+with the Sharpa Wave hand on its flange, a RealSense D405 on the palm side of the wrist on a flat mount plate between arm
+and hand, and a fixed exo D435 at the table's left-front corner. Each clip plays FlashDexRetarget's kinematic reference
+(the floating-wrist Sharpa motion that section 5's policy tracks); the arm's joint angles come from inverse kinematics
+with collision avoidance (<a href="https://github.com/chungmin99/pyroki">PyRoki</a>) that keeps the arm, the mount
+and the camera off the table and off the robot's own body. Holding the palm exactly where the reference has it, the arm can follow 2 of 10 clips in every frame: in the others the last arm links, the camera mount or the camera would be inside the table. Keeping the fingertips instead and letting the palm lift and tilt (and the fingers re-bend), <b>8 of 10</b> clips work in every frame (99.6% of all frames). This is kinematic: the changed hand poses have not
+been simulated again. The orange ghost is the reference's floating hand; each camera's frustum carries the depth image
+the policy gets at that step.</p>
+<figure class="card feature"><iframe src="recon/embodiment/prp_anthony_real_4.html?initialCameraPosition=-1.3500%2C0.7500%2C1.6500&amp;initialCameraLookAt=0.2000%2C-0.1500%2C0.9500&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="embodiment prp_anthony_real_4" loading="lazy"></iframe><figcaption><b>Robot embodiment · prp_anthony_real_4</b>: Drag to orbit, scroll to zoom; playback bar at the bottom.</figcaption></figure>
+<p class="more"><a href="recon/embodiment/index.html">→ All 10 clips, with the numbers per clip, the embodiment's cameras and the wrist camera mount (drawings, STEP file)</a></p>
 
 <h2>First retargeting test (IMG_5710)</h2>
 <p>Do-as-I-Do retargeting run on the Do-as-I-Do reconstruction of IMG_5710. Dataset processing, scene generation
