@@ -195,8 +195,9 @@ and hand, and a fixed exo D435 at the table's left-front corner. Each clip plays
 (the floating-wrist Sharpa motion that section 5's policy tracks); the arm's joint angles come from inverse kinematics
 with collision avoidance (<a href="https://github.com/chungmin99/pyroki">PyRoki</a>) that keeps the arm, the mount
 and the camera off the table and off the robot's own body. Holding the palm exactly where the reference has it, the arm can follow 2 of 10 clips in every frame: in the others the last arm links, the camera mount or the camera would be inside the table. Keeping the fingertips instead and letting the palm lift and tilt (and the fingers re-bend), <b>8 of 10</b> clips work in every frame (99.6% of all frames). This is kinematic: the changed hand poses have not
-been simulated again. The orange ghost is the reference's floating hand; each camera's frustum carries the depth image
-the policy gets at that step.</p>
+been simulated again. The orange ghost is the reference's floating hand; the wrist and exo cameras' frustums carry
+the depth image the policy gets at that step, and a green frustum shows the robot's own view from its head camera
+(checkboxes at the viewer's top right hide each one).</p>
 <figure class="card feature"><iframe src="recon/embodiment/prp_anthony_real_4.html?initialCameraPosition=-1.3500%2C0.7500%2C1.6500&amp;initialCameraLookAt=0.2000%2C-0.1500%2C0.9500&amp;initialCameraUp=0.0000%2C0.0000%2C1.0000" title="embodiment prp_anthony_real_4" loading="lazy"></iframe><figcaption><b>Robot embodiment · prp_anthony_real_4</b>: Drag to orbit, scroll to zoom; playback bar at the bottom.</figcaption></figure>
 <p class="more"><a href="recon/embodiment/index.html">→ All 10 clips, with the numbers per clip, the embodiment's cameras and the wrist camera mount (drawings, STEP file)</a></p>
 

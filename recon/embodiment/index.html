@@ -45,7 +45,9 @@ joint and speed limits. Where the hardware behind the palm would be inside the t
 re-bends the fingers. <b>Orange ghost</b>: the reference's floating hand; where it differs from the robot's hand, the
 solver moved the palm. <b>Blue frustum</b>: the wrist D405, <b>orange frustum</b>: the exo
 D435, each with the depth image the policy gets at that step (near is bright, dark red is invalid: out of range or seen
-by one imager only). This is kinematic: the changed hand pose has not been simulated again, so whether the object is
+by one imager only). <b>Green frustum</b>: the robot's own point of view, its head camera (the Vega's ZED, nominal
+90° × 60° field of view), with a shaded view of the scene from there; it is not a policy input. The checkboxes at the
+top right of the viewer hide and show each frustum; the choice carries over when you switch clips. This is kinematic: the changed hand pose has not been simulated again, so whether the object is
 still held is not checked here. The robot is the vendors' CAD in their colours, thinned for the browser to within 1 mm
 (arm, hand, mount) and 2 mm (the frozen body). Drag to orbit, scroll to zoom; the viewer plays in a loop.</p>
 <p class="status">With the palm held exactly where the reference has it, 2 of 10 clips are usable in every frame (85.5% of the frames): in the others the last arm links, the mount or the camera would be inside the table. Anchoring the fingertips instead and letting the palm lift and tilt makes <b>8 of 10</b> clips usable in every frame (<b>99.6%</b> of the frames). On the rollouts of tab 5's RL policy (the round-10 run at 110M steps, physically simulated, so the wrist jitters and the object can slip) the same solver gives 4 of 10 clips (95.6% of the frames); those are not shown here.</p>
