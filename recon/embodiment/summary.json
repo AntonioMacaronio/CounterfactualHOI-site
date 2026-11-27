@@ -4,13 +4,13 @@
  "ik_result": "data_r10_flat_reference_fingertips",
  "clips": 10,
  "clips_fully_usable": 8,
- "frames_usable_pct": 99.64179104477611,
+ "frames_usable_pct": 98.95522388059702,
  "palm_mode": {
-  "clips_fully_usable": 2,
-  "frames_usable_pct": 85.49253731343283
+  "clips_fully_usable": 3,
+  "frames_usable_pct": 70.26865671641791
  },
  "rollouts": {
-  "clips_fully_usable": 4,
-  "frames_usable_pct": 95.55091071961779
+  "clips_fully_usable": 7,
+  "frames_usable_pct": 96.74529710361301
  }
 }

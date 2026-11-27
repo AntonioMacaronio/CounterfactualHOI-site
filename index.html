@@ -194,7 +194,7 @@ with the Sharpa Wave hand on its flange, a RealSense D405 on the palm side of th
 and hand, and a fixed exo D435 at the table's left-front corner. Each clip plays FlashDexRetarget's kinematic reference
 (the floating-wrist Sharpa motion that section 5's policy tracks); the arm's joint angles come from inverse kinematics
 with collision avoidance (<a href="https://github.com/chungmin99/pyroki">PyRoki</a>) that keeps the arm, the mount
-and the camera off the table and off the robot's own body. Holding the palm exactly where the reference has it, the arm can follow 2 of 10 clips in every frame: in the others the last arm links, the camera mount or the camera would be inside the table. Keeping the fingertips instead and letting the palm lift and tilt (and the fingers re-bend), <b>8 of 10</b> clips work in every frame (99.6% of all frames). This is kinematic: the changed hand poses have not
+and the camera off the table and off the robot's own body. Holding the palm exactly where the reference has it, the arm can follow 3 of 10 clips in every frame: in the others the last arm links, the camera mount or the camera would be inside the table. Keeping the fingertips instead and letting the palm lift and tilt (and the fingers re-bend), <b>8 of 10</b> clips work in every frame (99.0% of all frames). This is kinematic: the changed hand poses have not
 been simulated again. The orange ghost is the reference's floating hand; the wrist and exo cameras' frustums carry
 the depth image the policy gets at that step, and a green frustum shows the robot's own view from its head camera
 (checkboxes at the viewer's top right hide each one).</p>
